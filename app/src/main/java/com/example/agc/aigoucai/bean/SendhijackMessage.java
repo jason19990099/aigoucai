@@ -1,4 +1,4 @@
-package com.example.agc.aigoucai;
+package com.example.agc.aigoucai.bean;
 
 import com.example.agc.aigoucai.util.LogUtil;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;

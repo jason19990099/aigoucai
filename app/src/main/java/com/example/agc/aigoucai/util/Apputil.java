@@ -1,4 +1,4 @@
-package com.example.agc.aigoucai;
+package com.example.agc.aigoucai.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
