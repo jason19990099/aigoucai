@@ -1,4 +1,4 @@
-package com.example.agc.aigoucai.webview;
+package com.example.agc.aigoucai.activity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -41,7 +41,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.agc.aigoucai.Apputil;
+import com.example.agc.aigoucai.util.Apputil;
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.bean.base;
 import com.example.agc.aigoucai.util.ChangeByte;

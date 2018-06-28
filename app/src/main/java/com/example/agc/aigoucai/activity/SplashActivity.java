@@ -1,4 +1,4 @@
-package com.example.agc.aigoucai;
+package com.example.agc.aigoucai.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 
+import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.bean.DataInfo;
 import com.example.agc.aigoucai.util.LogUtil;
 import com.example.agc.aigoucai.util.SystemUtil;

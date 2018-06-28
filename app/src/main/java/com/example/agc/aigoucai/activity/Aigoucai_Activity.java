@@ -19,7 +19,6 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.agc.aigoucai.SelectLinesActivity;
 import com.example.agc.aigoucai.R;
 import com.just.library.AgentWeb;
 

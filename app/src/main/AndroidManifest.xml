@@ -12,7 +12,7 @@
 
     <application
         tools:replace="android:icon, android:theme"
-        android:name="com.example.agc.aigoucai.MyApplication"
+        android:name="com.example.agc.aigoucai.activity.MyApplication"
         android:allowBackup="true"
         android:label="@string/app_name"
         android:icon="@mipmap/icon500"
@@ -20,7 +20,7 @@
         android:theme="@style/AppTheme.NoActionBar">
 
         <activity
-            android:name="com.example.agc.aigoucai.SplashActivity"
+            android:name="com.example.agc.aigoucai.activity.SplashActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
             <intent-filter>
@@ -35,12 +35,12 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name="com.example.agc.aigoucai.webview.MainWebviewActivity"
+            android:name="com.example.agc.aigoucai.activity.MainWebviewActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name="com.example.agc.aigoucai.SelectLinesActivity"
+            android:name="com.example.agc.aigoucai.activity.SelectLinesActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
