@@ -4,18 +4,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
-import android.util.Log;
 
+import com.example.agc.aigoucai.activity.SelectLinesActivity;
 import com.example.agc.aigoucai.util.LogUtil;
-import com.example.agc.aigoucai.webview.MainWebviewActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Iterator;
-import java.util.logging.Logger;
 
 import cn.jpush.android.api.JPushInterface;
 

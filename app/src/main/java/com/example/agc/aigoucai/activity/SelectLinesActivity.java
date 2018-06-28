@@ -1,4 +1,4 @@
-package com.example.agc.aigoucai;
+package com.example.agc.aigoucai.activity;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,6 +22,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.agc.aigoucai.R;
+import com.example.agc.aigoucai.bean.SendhijackMessage;
+import com.example.agc.aigoucai.bean.TestSendData;
 import com.example.agc.aigoucai.http.Http;
 import com.example.agc.aigoucai.util.CustomDialog2;
 import com.example.agc.aigoucai.util.FormatTransfer;
@@ -30,7 +33,6 @@ import com.example.agc.aigoucai.util.LogUtil;
 import com.example.agc.aigoucai.util.NoneReconnect;
 import com.example.agc.aigoucai.util.SB;
 import com.example.agc.aigoucai.util.SharePreferencesUtil;
-import com.example.agc.aigoucai.webview.MainWebviewActivity;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.SocketActionAdapter;
