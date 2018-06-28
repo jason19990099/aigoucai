@@ -150,20 +150,17 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
             @Override
             public void onSocketDisconnection(Context context, ConnectionInfo info, String action, Exception e) {
                 super.onSocketDisconnection(context, info, action, e);
-                Log.e("链接断开", "===");
+
                 if (e != null) {
                     if (e instanceof RedirectException) {
-
-                        Log.e("===", "正在重定向连接...");
+                        LogUtil.e("==onSocketDisconnection=异常断开===正在重定向连接===");
                         mManager.switchConnectionInfo(mInfo);
                         mManager.connect();
                     } else {
-
-                        Log.e("异常断开:", e.getMessage());
+                        LogUtil.e("==onSocketDisconnection=异常断开======"+ e.getMessage());
                     }
                 } else {
-//                    Toast.makeText(context, "正常断开", LENGTH_SHORT).show();
-//                    logSend("正常断开");
+                       LogUtil.e("==onSocketDisconnection=正常断开======");
                 }
 
             }
@@ -284,10 +281,10 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
             Log.e("=================", "socket未连接，正在连接中.....");
             mManager.connect();
             mManager.send(new TestSendData());
-            Log.e("=================", "重連已經發送數據...");
         } else {
             mManager.send(new TestSendData());
         }
+        Log.e("=================", "重連已經發送數據...");
 
         if (null != adapter_url)
             adapter_url.notifyDataSetChanged();
@@ -449,6 +446,9 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         super.onRestart();
         refresh();
     }
+
+
+
 
     @Override
     protected void onDestroy() {
