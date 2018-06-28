@@ -1,4 +1,4 @@
-package com.example.agc.aigoucai;
+package com.example.agc.aigoucai.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
