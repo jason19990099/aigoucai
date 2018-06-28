@@ -6,7 +6,7 @@ import android.content.Intent;
 /**
  * 使用系統自帶的分享
  */
-public class ShareUti {
+public class ShareUtils {
 
     /**
      * 分享文字内容

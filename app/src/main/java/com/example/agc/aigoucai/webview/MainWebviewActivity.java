@@ -44,13 +44,12 @@ import android.widget.Toast;
 import com.example.agc.aigoucai.Apputil;
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.bean.base;
-import com.example.agc.aigoucai.util.AndroidBug5497Workaround;
 import com.example.agc.aigoucai.util.ChangeByte;
 import com.example.agc.aigoucai.util.FormatTransfer;
 import com.example.agc.aigoucai.util.LogUtil;
 import com.example.agc.aigoucai.util.NoneReconnect;
 import com.example.agc.aigoucai.util.SharePreferencesUtil;
-import com.example.agc.aigoucai.util.ShareUti;
+import com.example.agc.aigoucai.util.ShareUtils;
 import com.example.agc.aigoucai.util.SimpleProgressDialog;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
@@ -63,10 +62,8 @@ import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
 import org.apache.http.client.RedirectException;
 
 import java.io.File;
-import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
@@ -109,7 +106,7 @@ public class MainWebviewActivity extends AppCompatActivity {
     private ConnectionInfo mInfo;
     private OkSocketOptions mOkOptions;
     private IConnectionManager mManager;
-    String ip_array[] = {"39.106.217.117", "222.186.42.23", "103.17.116.117"};
+    String ip_array[] = {"103.17.116.117","39.106.217.117", "222.186.42.23" };
     public String ip_bei = ip_array[0];
     int index = 0;
     boolean tag = true;
@@ -395,7 +392,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                 break;
             case R.id.ll_fenxiang:
                 changeSelectState(3);
-                ShareUti.shareText(MainWebviewActivity.this,"","彩票分享",base.share_url);
+                ShareUtils.shareText(MainWebviewActivity.this,"","彩票分享",base.share_url);
                 break;
         }
     }

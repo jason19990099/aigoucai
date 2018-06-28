@@ -59,7 +59,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     private ListView listvie_id;
     Adapter_url adapter_url;
     private CustomDialog2.Builder ibuilder;
-    String ip_array[] = {"103.17.116.117", "39.106.217.117", "222.186.42.23"};
+    String ip_array[] = {"103.17.116.117","39.106.217.117", "222.186.42.23" };
     public String ip_bei = ip_array[0];
     int index = 0;
     private boolean tag = true;
