@@ -1,12 +1,9 @@
 package com.example.agc.aigoucai.bean;
 
-import com.example.agc.aigoucai.bean.base;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
-
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
-import java.util.Calendar;
 
 /**
  * Created by Administrator on 2018/3/26 0026.

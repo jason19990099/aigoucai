@@ -81,12 +81,6 @@ import static com.xuhao.android.libsocket.sdk.OkSocket.open;
 
 
 public class MainWebviewActivity extends AppCompatActivity {
-    @BindView(R.id.web_layout)
-    LinearLayout webLayout;
-    @BindView(R.id.iv_home)
-    ImageView ivHome;
-    @BindView(R.id.tv_home)
-    TextView tvHome;
     @BindView(R.id.ll_home)
     LinearLayout llHome;
     @BindView(R.id.ll_refresh)

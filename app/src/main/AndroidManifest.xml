@@ -46,7 +46,7 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <receiver
-            android:name=".MyReceiver"
+            android:name=".activity.MyReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
