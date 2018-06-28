@@ -3,6 +3,7 @@ package com.example.agc.aigoucai.util;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.example.agc.aigoucai.util.LogUtil;
@@ -62,4 +63,24 @@ public class Apputil {
 //         isRoaming();   //判断是否漫游
 
      }
+
+
+    public static String getOperator(Context context) {
+        String ProvidersName = "";
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        String IMSI = telephonyManager.getSubscriberId();
+        Log.e("qweqwes", "运营商代码" + IMSI);
+        if (IMSI != null) {
+            if (IMSI.startsWith("46000") || IMSI.startsWith("46002") || IMSI.startsWith("46007")) {
+                ProvidersName = "中国移动";
+            } else if (IMSI.startsWith("46001") || IMSI.startsWith("46006")) {
+                ProvidersName = "中国联通";
+            } else if (IMSI.startsWith("46003")) {
+                ProvidersName = "中国电信";
+            }
+            return ProvidersName;
+        } else {
+            return "没有获取到sim卡信息";
+        }
+    }
 }
