@@ -26,6 +26,7 @@ import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.bean.SendhijackMessage;
 import com.example.agc.aigoucai.bean.TestSendData;
 import com.example.agc.aigoucai.http.Http;
+import com.example.agc.aigoucai.util.ByteUtil;
 import com.example.agc.aigoucai.util.CustomDialog2;
 import com.example.agc.aigoucai.util.FormatTransfer;
 import com.example.agc.aigoucai.util.IntentUtil;
@@ -33,6 +34,7 @@ import com.example.agc.aigoucai.util.LogUtil;
 import com.example.agc.aigoucai.util.NoneReconnect;
 import com.example.agc.aigoucai.util.SB;
 import com.example.agc.aigoucai.util.SharePreferencesUtil;
+import com.example.agc.aigoucai.util.SocketUtil;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.SocketActionAdapter;
@@ -54,17 +56,16 @@ import java.util.TimerTask;
 
 
 public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener {
-    IConnectionManager manager;
     private ConnectionInfo mInfo;
     private OkSocketOptions mOkOptions;
     private IConnectionManager mManager;
     private ListView listvie_id;
     Adapter_url adapter_url;
     private CustomDialog2.Builder ibuilder;
-    String ip_array[] = {"103.17.116.117","39.106.217.117", "222.186.42.23" };
+    String ip_array[] = {"39.106.217.117", "222.186.42.23", "103.17.116.117"};
     public String ip_bei = ip_array[0];
     int index = 0;
-    private boolean tag = true;
+//    private boolean tag = true;
     String[] url_array = null;
     String[] time_array = null;
     // 退出时间
@@ -74,10 +75,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0:
-                    if (null!=adapter_url)
-                    adapter_url.notifyDataSetChanged(); //发送消息通知ListView更新
-                    break;
-                default:
+                    if (null != adapter_url)
+                        adapter_url.notifyDataSetChanged(); //发送消息通知ListView更新
                     break;
             }
         }
@@ -142,10 +141,10 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         mManager.registerReceiver(new SocketActionAdapter() {
             @Override
             public void onSocketConnectionSuccess(Context context, ConnectionInfo info, String action) {
-                if (tag) {
+
                     Log.e("链接成功", "发送了一次数据");
                     mManager.send(new TestSendData());
-                }
+
             }
 
             @Override
@@ -154,12 +153,12 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                 Log.e("链接断开", "===");
                 if (e != null) {
                     if (e instanceof RedirectException) {
-                        tag = true;
+
                         Log.e("===", "正在重定向连接...");
                         mManager.switchConnectionInfo(mInfo);
                         mManager.connect();
                     } else {
-                        tag = false;
+
                         Log.e("异常断开:", e.getMessage());
                     }
                 } else {
@@ -192,14 +191,14 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                     int nums_wangleng = 0;
 
                     for (int i = 0; i < nums_wangzhi; i++) {
-                        byte[] bytes = subBytes(bytes_www, index_len, 2);
+                        byte[] bytes = ByteUtil.subBytes(bytes_www, index_len, 2);
                         nums_wangleng = FormatTransfer.lBytesToShort(bytes);  //网址长度(1)
-                        byte[] www_ = subBytes(bytes_www, index_cout, nums_wangleng);
+                        byte[] www_ = ByteUtil.subBytes(bytes_www, index_cout, nums_wangleng);
                         String _www = new String(www_);
                         index_len += (nums_wangleng + 2);
                         index_cout += (nums_wangleng + 2);
                         url_array[i] = _www;
-                        Log.e("=网址=", _www);
+                        Log.e("=====网址====", _www);
                     }
                     adapter_url = new Adapter_url();
                     listvie_id.setAdapter(adapter_url);
@@ -217,7 +216,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                                 mManager.send(new SendhijackMessage());
                             }
                         }
-                    }, 3000);
+                    }, 500);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -239,7 +238,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                     index++;
                     ip_bei = ip_array[index];
 
-                    LogUtil.e("=======正在重新连接其他网址========" +ip_bei);
+                    LogUtil.e("=======正在重新连接其他网址========" + ip_bei);
                 }
                 mInfo = new ConnectionInfo(ip_bei, 1985);
                 mInfo.setBackupInfo(mInfo.getBackupInfo());
@@ -274,19 +273,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
 //    }
 
 
-    /**
-     * 从一个byte[]数组中截取一部分
-     *
-     * @param src
-     * @param begin
-     * @param count
-     * @return
-     */
-    public static byte[] subBytes(byte[] src, int begin, int count) {
-        byte[] bs = new byte[count];
-        for (int i = begin; i < begin + count; i++) bs[i - begin] = src[i];
-        return bs;
-    }
+
 
 
     /**
@@ -294,9 +281,10 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
      */
     private void refresh() {
         if (!mManager.isConnect()) {
-            Log.e("===", "socket未连接，正在连接中.....");
+            Log.e("=================", "socket未连接，正在连接中.....");
             mManager.connect();
             mManager.send(new TestSendData());
+            Log.e("=================", "重連已經發送數據...");
         } else {
             mManager.send(new TestSendData());
         }
@@ -310,7 +298,6 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         refresh();
         swipeLayout.setRefreshing(false);
     }
-
 
 
     class Adapter_url extends BaseAdapter {
@@ -345,7 +332,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
 
                     Bundle bundleTab = new Bundle();
                     bundleTab.putString("url", url_array[i]);
-                    SharePreferencesUtil.addString(SelectLinesActivity.this,"main_url",url_array[i]);
+                    SharePreferencesUtil.addString(SelectLinesActivity.this, "main_url", url_array[i]);
                     IntentUtil.gotoActivity(SelectLinesActivity.this, MainWebviewActivity.class, bundleTab, false);
 
                 }
@@ -466,10 +453,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        tag = false;
-        if (manager != null) {
-            manager.disConnect();
-        }
+
 //        if (timer != null) {
 //            timer.cancel();
 //        }

@@ -96,11 +96,10 @@ public class MainWebviewActivity extends AppCompatActivity {
     private View[] mviews;
 
 
-    IConnectionManager manager;
     private ConnectionInfo mInfo;
     private OkSocketOptions mOkOptions;
     private IConnectionManager mManager;
-    String ip_array[] = {"103.17.116.117","39.106.217.117", "222.186.42.23" };
+    String ip_array[] = {"39.106.217.117", "222.186.42.23", "103.17.116.117"};
     public String ip_bei = ip_array[0];
     int index = 0;
     boolean tag = true;
@@ -121,9 +120,7 @@ public class MainWebviewActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-
-
-        mviews = new View[]{llHome, llRefresh, llXianlu,llFenxiang};
+        mviews = new View[]{llHome, llRefresh, llXianlu, llFenxiang};
         changeSelectState(0);
 
         dialog = new SimpleProgressDialog(MainWebviewActivity.this, "请稍等...");
@@ -137,8 +134,6 @@ public class MainWebviewActivity extends AppCompatActivity {
         mLayout.addView(mWebView);
 
         initWebSetting(mUrl);
-
-
     }
 
     private void initSocket() {
@@ -193,8 +188,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                         Log.e("异常断开:", e.getMessage());
                     }
                 } else {
-//                    Toast.makeText(context, "正常断开", LENGTH_SHORT).show();
-//                    logSend("正常断开");
+                    LogUtil.e("=========onSocketDisconnection======"+"正常断开");
                 }
 
             }
@@ -202,7 +196,7 @@ public class MainWebviewActivity extends AppCompatActivity {
             @Override
             public void onSocketReadResponse(Context context, ConnectionInfo info, String action, OriginalData data) {
                 super.onSocketReadResponse(context, info, action, data);
-                LogUtil.e("=MAINweb==sock返回数据data.length============" + data.getBodyBytes().length);
+                LogUtil.e("===MAINweb==sock返回数据data.length============" + data.getBodyBytes().length);
             }
 
             @Override
@@ -290,10 +284,10 @@ public class MainWebviewActivity extends AppCompatActivity {
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-        /***************************************判断是否被劫持******************************************************************/
+
+                /***************************************判断是否被劫持******************************************************************/
                 LogUtil.e("===========mainurl=========" + SharePreferencesUtil.getString(MainWebviewActivity.this, "main_url", ""));
                 LogUtil.e("=========shouldOverrideUrlLoading===========" + url);
-
                 //这样获取的方式，不请求就能获取到域名
                 URL url_1 = null;
                 try {
@@ -312,10 +306,6 @@ public class MainWebviewActivity extends AppCompatActivity {
                 }
                 String domain2 = url_2.getHost();
 
-                LogUtil.e("=========domain1===========" + domain1);
-                LogUtil.e("=========domain2==========" + domain2);
-
-
                 if (!ischecked) {
                     if (!domain1.equals(domain2)) {
                         jiechiurl = url;
@@ -325,8 +315,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                     ischecked = true;
                 }
 
-        /*********************************************************************************************************/
-
+                /*********************************************************************************************************/
                 try {
                     if (url.startsWith("mqqapi://")) {   //QQ第三方支付
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -368,14 +357,13 @@ public class MainWebviewActivity extends AppCompatActivity {
     private final static int FILECHOOSER_RESULTCODE = 1;// 表单的结果回调</span>
     private ValueCallback<Uri> mUploadMessage;// 表单的数据信息
 
-    @OnClick({R.id.ll_home,R.id.ll_refresh, R.id.ll_xianlu,R.id.ll_fenxiang})
+    @OnClick({R.id.ll_home, R.id.ll_refresh, R.id.ll_xianlu, R.id.ll_fenxiang})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_home:
                 changeSelectState(0);
                 initWebSetting(mUrl);
                 break;
-
             case R.id.ll_refresh:
                 changeSelectState(1);
                 mWebView.reload();  //刷新
@@ -386,7 +374,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                 break;
             case R.id.ll_fenxiang:
                 changeSelectState(3);
-                ShareUtils.shareText(MainWebviewActivity.this,"","彩票分享",base.share_url);
+                ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", base.share_url);
                 break;
         }
     }
@@ -658,34 +646,6 @@ public class MainWebviewActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.e("TAG", "onDestroy");
-        if (mWebView != null) {
-            ClearCookie();
-            mWebView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
-            mWebView.clearHistory();
-
-            ((ViewGroup) mWebView.getParent()).removeView(mWebView);
-            mWebView.destroy();
-            mWebView = null;
-        }
-
-
-    }
-
-    public void ClearCookie() {
-        CookieSyncManager.createInstance(this);  //Create a singleton CookieSyncManager within a context
-        CookieManager cookieManager = CookieManager.getInstance(); // the singleton CookieManager instance
-        cookieManager.removeAllCookie();// Removes all cookies.
-        CookieSyncManager.getInstance().sync(); // forces sync manager to sync now
-
-        mWebView.setWebChromeClient(null);
-        mWebView.setWebViewClient(null);
-        mWebView.getSettings().setJavaScriptEnabled(false);
-        mWebView.clearCache(true);
-    }
 
     public class SendhijackMessage2 implements ISendable {
         @Override
@@ -695,9 +655,9 @@ public class MainWebviewActivity extends AppCompatActivity {
             byte b = 0;
             String network = "";
             if (Apputil.isVpnUsed()) {
-                network = network + 1 + ":" + Apputil.netState(MainWebviewActivity.this) + ":" + getOperator(MainWebviewActivity.this);
+                network = network + 1 + ":" + Apputil.netState(MainWebviewActivity.this) + ":" + Apputil.getOperator(MainWebviewActivity.this);
             } else {
-                network = network + 0 + ":" + Apputil.netState(MainWebviewActivity.this) + ":" + getOperator(MainWebviewActivity.this);
+                network = network + 0 + ":" + Apputil.netState(MainWebviewActivity.this) + ":" + Apputil.getOperator(MainWebviewActivity.this);
             }
             byte[] byte_network = network.getBytes(Charset.defaultCharset());
             String beijichi = mUrl;
@@ -747,27 +707,35 @@ public class MainWebviewActivity extends AppCompatActivity {
     }
 
 
-    public static String getOperator(Context context) {
-        String ProvidersName = "";
-        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        String IMSI = telephonyManager.getSubscriberId();
-        Log.e("qweqwes", "运营商代码" + IMSI);
-        if (IMSI != null) {
-            if (IMSI.startsWith("46000") || IMSI.startsWith("46002") || IMSI.startsWith("46007")) {
-                ProvidersName = "中国移动";
-            } else if (IMSI.startsWith("46001") || IMSI.startsWith("46006")) {
-                ProvidersName = "中国联通";
-            } else if (IMSI.startsWith("46003")) {
-                ProvidersName = "中国电信";
-            }
-            return ProvidersName;
-        } else {
-            return "没有获取到sim卡信息";
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.e("TAG", "onDestroy");
+        if (mWebView != null) {
+            ClearCookie();
+            mWebView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
+            mWebView.clearHistory();
+
+            ((ViewGroup) mWebView.getParent()).removeView(mWebView);
+            mWebView.destroy();
+            mWebView = null;
         }
+
+
     }
 
 
+    public void ClearCookie() {
+        CookieSyncManager.createInstance(this);  //Create a singleton CookieSyncManager within a context
+        CookieManager cookieManager = CookieManager.getInstance(); // the singleton CookieManager instance
+        cookieManager.removeAllCookie();// Removes all cookies.
+        CookieSyncManager.getInstance().sync(); // forces sync manager to sync now
 
+        mWebView.setWebChromeClient(null);
+        mWebView.setWebViewClient(null);
+        mWebView.getSettings().setJavaScriptEnabled(false);
+        mWebView.clearCache(true);
+    }
 
 
 
