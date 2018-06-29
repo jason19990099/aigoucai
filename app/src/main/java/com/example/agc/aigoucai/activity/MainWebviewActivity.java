@@ -37,6 +37,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.bean.base;
 import com.example.agc.aigoucai.util.Apputil;
@@ -48,6 +49,7 @@ import com.example.agc.aigoucai.util.SimpleProgressDialog;
 import com.example.agc.aigoucai.util.SocketUtil;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -61,7 +63,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 
 
 public class MainWebviewActivity extends AppCompatActivity {
@@ -85,6 +86,8 @@ public class MainWebviewActivity extends AppCompatActivity {
     private IConnectionManager mManager;
     private String jiechiurl = "";
     private boolean ischecked = false;
+    private String domain2;
+    private boolean mistake = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,8 +118,6 @@ public class MainWebviewActivity extends AppCompatActivity {
 
         initWebSetting(mUrl);
     }
-
-
 
 
     /**
@@ -186,22 +187,28 @@ public class MainWebviewActivity extends AppCompatActivity {
                 String domain1 = url_1.getHost();
 
 
-                URL url_2 = null;
                 try {
-                    url_2 = new URL(url);
-                } catch (MalformedURLException e) {
+                    URL url_2 = new URL(url);
+                     domain2 = url_2.getHost();
+                } catch (Exception e) {
+                    mistake = true;
                     e.printStackTrace();
                 }
-                String domain2 = url_2.getHost();
 
-                if (!ischecked) {
-                    if (!domain1.equals(domain2)) {
-                        jiechiurl = url;
-                        SocketsendMessage();
+                LogUtil.e("===========mistake======="+mistake);
+                if (!mistake) {
+                    if (!ischecked) {
+                        if (!domain1.equals(domain2)) {
+                            jiechiurl = url;
+                            SocketsendMessage();
+                        }
+
+                        ischecked = true;
                     }
 
-                    ischecked = true;
                 }
+
+
                 /*********************************************************************************************************/
                 try {
                     if (url.startsWith("mqqapi://")) {   //QQ第三方支付
@@ -556,8 +563,8 @@ public class MainWebviewActivity extends AppCompatActivity {
             byte[] byte_beijichi = beijichi.getBytes(Charset.defaultCharset());
             String jiechidao = jiechiurl;
             byte[] byte_jiechidao = jiechidao.getBytes();
-            LogUtil.e("====beijichi=========="+beijichi);
-            LogUtil.e("====jiechidao=========="+jiechidao);
+            LogUtil.e("====beijichi==========" + beijichi);
+            LogUtil.e("====jiechidao==========" + jiechidao);
             byte[] byte_id = id.getBytes(Charset.defaultCharset());
 
 
