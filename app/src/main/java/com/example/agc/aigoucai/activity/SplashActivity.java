@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.bean.DataInfo;
 import com.example.agc.aigoucai.util.LogUtil;
+import com.example.agc.aigoucai.util.SocketUtil;
 import com.example.agc.aigoucai.util.SystemUtil;
 import com.example.agc.aigoucai.util.TrustAllCerts;
 import com.google.gson.Gson;
@@ -44,13 +45,16 @@ public class SplashActivity extends AppCompatActivity {
 
         SystemUtil.setfullScreen(SplashActivity.this);
 
+
+        SocketUtil.getSocketConiction();
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 startActivity(new Intent(SplashActivity.this, SelectLinesActivity.class));
                 finish();
             }
-        }, 1000);
+        }, 1500);
 
 
     }
