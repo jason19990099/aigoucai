@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@mipmap/flaot" />
+            android:src="@mipmap/float_678" />
 
 
         <LinearLayout
