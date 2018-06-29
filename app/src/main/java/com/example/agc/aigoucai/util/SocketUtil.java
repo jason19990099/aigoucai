@@ -24,18 +24,18 @@ import java.util.List;
 import static com.xuhao.android.libsocket.sdk.OkSocket.open;
 
 /**
- *  socket工具類
+ * socket工具類
  */
 public class SocketUtil {
     private static ConnectionInfo mInfo;
     private static OkSocketOptions mOkOptions;
-    private  static IConnectionManager mManager;
-    private static String ip_array[] = {"39.106.217.117", "222.186.42.23", "103.17.116.117"};
+    private static IConnectionManager mManager;
+    private static String ip_array[] = {"47.104.156.66", "119.23.32.234"};
     private static String ip_bei = ip_array[0];
     private static int index = 0;
     private static String[] url_array = null;
 
-    public static void  getSocketConiction(){
+    public static void getSocketConiction() {
         //socket连接
         mInfo = new ConnectionInfo(ip_bei, 1985);
         mOkOptions = new OkSocketOptions.Builder(OkSocketOptions.getDefault())
@@ -78,7 +78,7 @@ public class SocketUtil {
                         mManager.switchConnectionInfo(mInfo);
                         mManager.connect();
                     } else {
-                        LogUtil.e("==onSocketDisconnection=异常断开======"+ e.getMessage());
+                        LogUtil.e("==onSocketDisconnection=异常断开======" + e.getMessage());
                         mManager.switchConnectionInfo(mInfo);
                         mManager.connect();
                     }
@@ -109,7 +109,7 @@ public class SocketUtil {
                     int index_len = 0;
                     int index_cout = 2;
                     int nums_wangleng = 0;
-                    List list=new ArrayList();
+                    List list = new ArrayList();
                     for (int i = 0; i < nums_wangzhi; i++) {
                         byte[] bytes = ByteUtil.subBytes(bytes_www, index_len, 2);
                         nums_wangleng = FormatTransfer.lBytesToShort(bytes);  //网址长度(1)
@@ -122,7 +122,7 @@ public class SocketUtil {
                         Log.e("=====网址====", _www);
 
                     }
-                    DataSynevent dataSynevent=new DataSynevent();
+                    DataSynevent dataSynevent = new DataSynevent();
                     dataSynevent.setList(list);
                     //发送粘性事件
                     EventBus.getDefault().postSticky(dataSynevent);
@@ -136,7 +136,7 @@ public class SocketUtil {
             public void onSocketConnectionFailed(Context context, ConnectionInfo info, String action, Exception e) {
                 Log.e("=======fail=========", "连接失败=" + info.clone().getIp());
                 if (ip_bei.equals(info.clone().getIp())) {
-                    if (index > 2) {
+                    if (index > 1) {
                         return;
                     }
                     index++;
@@ -150,7 +150,6 @@ public class SocketUtil {
         });
 
 
-
         /**
          *   开始链接
          */
@@ -159,14 +158,14 @@ public class SocketUtil {
         }
 
 
-
     }
 
     /**
-     *  获取到socket链接的manager
+     * 获取到socket链接的manager
+     *
      * @return
      */
-    public static  IConnectionManager getmManager(){
+    public static IConnectionManager getmManager() {
         return mManager;
     }
 
