@@ -20,6 +20,7 @@
         android:theme="@style/AppTheme.NoActionBar">
 
         <activity
+            android:theme="@style/Theme.AppStartLoadTranslucent"
             android:name="com.example.agc.aigoucai.activity.SplashActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan">
