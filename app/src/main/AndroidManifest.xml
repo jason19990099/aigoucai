@@ -31,11 +31,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.agc.aigoucai.activity.Aigoucai_Activity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
             android:name="com.example.agc.aigoucai.activity.MainWebviewActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait"

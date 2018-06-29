@@ -1,6 +1,6 @@
 package com.example.agc.aigoucai.bean;
 
-import com.example.agc.aigoucai.util.ChangeByte;
+import com.example.agc.aigoucai.util.ByteUtil;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 
 import java.nio.ByteBuffer;
@@ -21,12 +21,12 @@ public class TestSendData implements ISendable {
         byte[] body = str.getBytes(Charset.defaultCharset());  //
 
         ByteBuffer bb = ByteBuffer.allocate(body.length + 4 + 1 + 2 + 4);
-        byte[] bytes = ChangeByte.toLH(body.length + 4 + 1 + 2);
-        byte[] byte_1 = ChangeByte.toLH(1);
+        byte[] bytes = ByteUtil.toLH(body.length + 4 + 1 + 2);
+        byte[] byte_1 = ByteUtil.toLH(1);
         bb.put(bytes);
         bb.put(byte_1);
         bb.put(b);
-        byte[] bytes1 = ChangeByte.toLH2((short) body.length);
+        byte[] bytes1 = ByteUtil.toLH2((short) body.length);
         bb.put(bytes1);
         bb.order(ByteOrder.LITTLE_ENDIAN);
         bb.put(body);

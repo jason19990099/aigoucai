@@ -21,16 +21,16 @@ import com.example.agc.aigoucai.R;
  * Created by Administrator on 2017/9/18 0018.
  */
 
-public class CustomDialog2 extends Dialog {
-    public CustomDialog2(@NonNull Context context) {
+public class CustomDialog extends Dialog {
+    public CustomDialog(@NonNull Context context) {
         super(context);
     }
 
-    public CustomDialog2(@NonNull Context context, @StyleRes int themeResId) {
+    public CustomDialog(@NonNull Context context, @StyleRes int themeResId) {
         super(context, themeResId);
     }
 
-    protected CustomDialog2(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
+    protected CustomDialog(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
     }
 
@@ -175,11 +175,11 @@ public class CustomDialog2 extends Dialog {
             return this;
         }
 
-        public CustomDialog2 create() {
+        public CustomDialog create() {
             LayoutInflater inflater = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             // instantiate the dialog with the custom Theme
-            final CustomDialog2 dialog = new CustomDialog2(context,
+            final CustomDialog dialog = new CustomDialog(context,
                     R.style.mystyle);
             View layout = inflater.inflate(R.layout.customdialog, null);
             dialog.addContentView(layout, new ViewGroup.LayoutParams(
