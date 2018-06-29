@@ -1,5 +1,6 @@
 package com.example.agc.aigoucai.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -82,5 +83,31 @@ public class Apputil {
         } else {
             return "没有获取到sim卡信息";
         }
+    }
+
+
+    /**
+     * 判断是否有网络连接
+     * @return
+     * @version 1.0
+     * @updateInfo
+     */
+    public static boolean isNetConnection(Context context) {
+        // 获取网络服务
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager == null) {
+            return false;
+        } else {
+            // 获取所有可用连接
+            @SuppressLint("MissingPermission") NetworkInfo[] infos = connectivityManager.getAllNetworkInfo();
+            if (infos != null) {
+                for (NetworkInfo info : infos) {
+                    // 如果有连接
+                    if (info.getState() == NetworkInfo.State.CONNECTED)
+                        return true;
+                }
+            }
+        }
+        return false;
     }
 }

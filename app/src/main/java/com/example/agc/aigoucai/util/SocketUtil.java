@@ -140,9 +140,7 @@ public class SocketUtil {
                         return;
                     }
                     index++;
-                    LogUtil.e("======index======"+index);
                     ip_bei = ip_array[index];
-
                     LogUtil.e("=======正在重新连接其他网址========" + ip_bei);
                 }
                 mInfo = new ConnectionInfo(ip_bei, 1985);

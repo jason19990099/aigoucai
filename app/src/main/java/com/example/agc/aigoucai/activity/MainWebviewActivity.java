@@ -40,7 +40,7 @@ import android.widget.LinearLayout;
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.bean.base;
 import com.example.agc.aigoucai.util.Apputil;
-import com.example.agc.aigoucai.util.ChangeByte;
+import com.example.agc.aigoucai.util.ByteUtil;
 import com.example.agc.aigoucai.util.LogUtil;
 import com.example.agc.aigoucai.util.SharePreferencesUtil;
 import com.example.agc.aigoucai.util.ShareUtils;
@@ -82,11 +82,7 @@ public class MainWebviewActivity extends AppCompatActivity {
     private WebView mWebView;
     private Dialog dialog;
     private View[] mviews;
-
-
-
     private IConnectionManager mManager;
-
     private String jiechiurl = "";
     private boolean ischecked = false;
 
@@ -569,8 +565,8 @@ public class MainWebviewActivity extends AppCompatActivity {
             ByteBuffer bb = ByteBuffer.allocate(totalsize);
 
 
-            byte[] bytes_totallength = ChangeByte.toLH(totalsize);
-            byte[] byte_baotou = ChangeByte.toLH(5);
+            byte[] bytes_totallength = ByteUtil.toLH(totalsize);
+            byte[] byte_baotou = ByteUtil.toLH(5);
 
             bb.put(bytes_totallength); //包长度
             bb.put(byte_baotou);  //包头
@@ -579,23 +575,23 @@ public class MainWebviewActivity extends AppCompatActivity {
 
             byte[] bytes1 = id.getBytes();
             short idlength = Short.parseShort(id.getBytes().length + "");
-            bb.put(ChangeByte.toLH2(idlength));
+            bb.put(ByteUtil.toLH2(idlength));
             bb.put(bytes1);  //id
 
             int SyscurrentMills = Integer.parseInt(String.valueOf(Calendar.getInstance().getTimeInMillis() / 1000));
-            byte[] bytes_SyscurrentMills = ChangeByte.toLH(SyscurrentMills);
+            byte[] bytes_SyscurrentMills = ByteUtil.toLH(SyscurrentMills);
             bb.put(bytes_SyscurrentMills);  //时间戳
 
             short netLength = Short.parseShort(byte_network.length + "");
-            bb.put(ChangeByte.toLH2(netLength));
+            bb.put(ByteUtil.toLH2(netLength));
             bb.put(byte_network);  //网络
 
             short beijiechi = Short.parseShort(byte_beijichi.length + "");
-            bb.put(ChangeByte.toLH2(beijiechi));
+            bb.put(ByteUtil.toLH2(beijiechi));
             bb.put(byte_beijichi);
 
             short yijiechi = Short.parseShort(byte_jiechidao.length + "");
-            bb.put(ChangeByte.toLH2(yijiechi));
+            bb.put(ByteUtil.toLH2(yijiechi));
             bb.put(byte_jiechidao);
 
             bb.order(ByteOrder.LITTLE_ENDIAN);
@@ -617,10 +613,7 @@ public class MainWebviewActivity extends AppCompatActivity {
             mWebView.destroy();
             mWebView = null;
         }
-
-
     }
-
 
     public void ClearCookie() {
         CookieSyncManager.createInstance(this);  //Create a singleton CookieSyncManager within a context
@@ -633,6 +626,4 @@ public class MainWebviewActivity extends AppCompatActivity {
         mWebView.getSettings().setJavaScriptEnabled(false);
         mWebView.clearCache(true);
     }
-
-
 }

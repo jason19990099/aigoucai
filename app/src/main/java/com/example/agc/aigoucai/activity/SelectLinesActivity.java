@@ -24,8 +24,8 @@ import android.widget.TextView;
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.bean.DataSynevent;
 import com.example.agc.aigoucai.bean.TestSendData;
-import com.example.agc.aigoucai.http.Http;
-import com.example.agc.aigoucai.util.CustomDialog2;
+import com.example.agc.aigoucai.util.Apputil;
+import com.example.agc.aigoucai.util.CustomDialog;
 import com.example.agc.aigoucai.util.IntentUtil;
 import com.example.agc.aigoucai.util.LogUtil;
 import com.example.agc.aigoucai.util.SB;
@@ -49,7 +49,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     public IConnectionManager mManager;
     private ListView listvie_id;
     private Adapter_url adapter_url = new Adapter_url();
-    private CustomDialog2.Builder ibuilder;
+    private CustomDialog.Builder ibuilder;
     private String[] url_array = null;
     private String[] time_array = null;
     // 退出时间
@@ -84,8 +84,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        if (!Http.isNetConnection(SelectLinesActivity.this)) {
-            ibuilder = new CustomDialog2.Builder(SelectLinesActivity.this);
+        if (!Apputil.isNetConnection(SelectLinesActivity.this)) {
+            ibuilder = new CustomDialog.Builder(SelectLinesActivity.this);
             ibuilder.setTitle("");
             ibuilder.setMessage("请检查你的网络是否连接");
             ibuilder.setPositiveButton("查看", new DialogInterface.OnClickListener() {
@@ -103,10 +103,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         if (null!=mManager){
             if (!mManager.isConnect()) {
                 mManager.connect();
-                mManager.send(new TestSendData());
-            } else {
-                mManager.send(new TestSendData());
             }
+            mManager.send(new TestSendData());
         }
 
 
@@ -120,10 +118,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         if (!mManager.isConnect()) {
             Log.e("=================", "socket未连接，正在连接中.....");
             mManager.connect();
-            mManager.send(new TestSendData());
-        } else {
-            mManager.send(new TestSendData());
         }
+        mManager.send(new TestSendData());
 
         Log.e("=================", "發送已经发送.......");
         if (null != adapter_url)
