@@ -2,7 +2,7 @@ package com.example.agc.aigoucai.bean;
 
 public class base {
 
-    public static final String appid = "android101";
+    public static final String appid = "android905";
     //分享链接 500  https://www.500app.me/app.html
     //爱购彩 https://www.agcapp.me/app.html
 //
@@ -21,7 +21,7 @@ public class base {
 //    https://www.appkings.me/678.html
 //    新葡京
 //    https://www.appkings.me/xpj.html
-    public static final String share_url = "https://www.agcapp.me/app.html";
+    public static final String share_url = "https://www.appkings.me/zzc.html";
     //注意要修改配置文件的推送設置
 
 }
