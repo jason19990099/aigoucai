@@ -43,4 +43,11 @@
         <item name="android:windowHideAnimation">@anim/dialog_exit</item>
         <!-- 指定消失的动画xml  -->
     </style>
+
+    <style name="Theme.AppStartLoadTranslucent" parent="AppTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>
