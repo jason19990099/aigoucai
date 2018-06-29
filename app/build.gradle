@@ -56,7 +56,7 @@ android {
 
     // 打包的渠道
     productFlavors {
-        aigoucai {}
+        caipiao500 {}
     }
 }
 //获取当前打包的时间
