@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.ListView;
 
+import com.example.agc.aigoucai.bean.DataSynevent;
 import com.example.agc.aigoucai.bean.TestSendData;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
@@ -14,8 +15,11 @@ import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
 import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
 
 import org.apache.http.client.RedirectException;
+import org.greenrobot.eventbus.EventBus;
 
 import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.xuhao.android.libsocket.sdk.OkSocket.open;
 
@@ -23,22 +27,15 @@ import static com.xuhao.android.libsocket.sdk.OkSocket.open;
  *  socket工具類
  */
 public class SocketUtil {
-
     private static ConnectionInfo mInfo;
     private static OkSocketOptions mOkOptions;
     private  static IConnectionManager mManager;
-    private ListView listvie_id;
-    private CustomDialog2.Builder ibuilder;
-    static String ip_array[] = {"39.106.217.117", "222.186.42.23", "103.17.116.117"};
-    public static String ip_bei = ip_array[0];
-    int index = 0;
-    private static boolean tag = true;
-    String[] url_array = null;
-    String[] time_array = null;
+    private static String ip_array[] = {"39.106.217.117", "222.186.42.23", "103.17.116.117"};
+    private static String ip_bei = ip_array[0];
+    private static int index = 0;
+    private static String[] url_array = null;
 
-
-
-    public static void  getSocket(){
+    public static void  getSocketConiction(){
         //socket连接
         mInfo = new ConnectionInfo(ip_bei, 1985);
         mOkOptions = new OkSocketOptions.Builder(OkSocketOptions.getDefault())
@@ -69,29 +66,24 @@ public class SocketUtil {
         mManager.registerReceiver(new SocketActionAdapter() {
             @Override
             public void onSocketConnectionSuccess(Context context, ConnectionInfo info, String action) {
-                if (tag) {
-                    Log.e("链接成功", "发送了一次数据");
-                    mManager.send(new TestSendData());
-                }
+                LogUtil.e("==onSocketConnectionSuccess=链接成功======");
             }
 
             @Override
             public void onSocketDisconnection(Context context, ConnectionInfo info, String action, Exception e) {
                 super.onSocketDisconnection(context, info, action, e);
-                Log.e("链接断开", "===");
                 if (e != null) {
                     if (e instanceof RedirectException) {
-                        tag = true;
-                        Log.e("===", "正在重定向连接...");
+                        LogUtil.e("==onSocketDisconnection=异常断开===正在重定向连接===");
                         mManager.switchConnectionInfo(mInfo);
                         mManager.connect();
                     } else {
-                        tag = false;
-                        Log.e("异常断开:", e.getMessage());
+                        LogUtil.e("==onSocketDisconnection=异常断开======"+ e.getMessage());
+                        mManager.switchConnectionInfo(mInfo);
+                        mManager.connect();
                     }
                 } else {
-//                    Toast.makeText(context, "正常断开", LENGTH_SHORT).show();
-//                    logSend("正常断开");
+                    LogUtil.e("==onSocketDisconnection=正常断开======");
                 }
 
             }
@@ -99,7 +91,44 @@ public class SocketUtil {
             @Override
             public void onSocketReadResponse(Context context, ConnectionInfo info, String action, OriginalData data) {
                 super.onSocketReadResponse(context, info, action, data);
-                LogUtil.e("===sock返回数据data.length============" + data.getBodyBytes().length);
+                LogUtil.e("===sockutil返回数据data.length============" + data.getBodyBytes().length);
+                if (data.getBodyBytes().length < 15) {
+                    return;
+                }
+                try {
+                    byte[] bodyBytes = data.getBodyBytes();
+                    String bytesToHex_16 = FormatTransfer.bytesToHex(bodyBytes, 0, data.getBodyBytes().length);
+                    String substring = bytesToHex_16.substring(4 * 2 + 2, bytesToHex_16.length());
+                    String nums_str = substring.substring(0, 4 * 2); //获取网址数量
+                    byte[] bytes_nums = FormatTransfer.hexStringToByte(nums_str);
+                    int nums_wangzhi = FormatTransfer.lBytesToInt(bytes_nums);  //网址数量
+                    url_array = new String[nums_wangzhi];
+                    String _www_string = bytesToHex_16.substring(2 * (4 + 1 + 4), bytesToHex_16.length());
+                    byte[] bytes_www = FormatTransfer.hexStringToByte(_www_string); //所有网址字节
+
+                    int index_len = 0;
+                    int index_cout = 2;
+                    int nums_wangleng = 0;
+                    List list=new ArrayList();
+                    for (int i = 0; i < nums_wangzhi; i++) {
+                        byte[] bytes = ByteUtil.subBytes(bytes_www, index_len, 2);
+                        nums_wangleng = FormatTransfer.lBytesToShort(bytes);  //网址长度(1)
+                        byte[] www_ = ByteUtil.subBytes(bytes_www, index_cout, nums_wangleng);
+                        String _www = new String(www_);
+                        index_len += (nums_wangleng + 2);
+                        index_cout += (nums_wangleng + 2);
+                        url_array[i] = _www;
+                        list.add(url_array[i]);
+                        Log.e("=====网址====", _www);
+
+                    }
+                    DataSynevent dataSynevent=new DataSynevent();
+                    dataSynevent.setList(list);
+                    //发送粘性事件
+                    EventBus.getDefault().postSticky(dataSynevent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             }
 
@@ -107,20 +136,26 @@ public class SocketUtil {
             public void onSocketConnectionFailed(Context context, ConnectionInfo info, String action, Exception e) {
                 Log.e("=======fail=========", "连接失败=" + info.clone().getIp());
                 if (ip_bei.equals(info.clone().getIp())) {
-//                    if (index > 2) {
-//                        return;
-//                    }
-//                    index++;
-//                    ip_bei = ip_array[index];
+                    if (index > 2) {
+                        return;
+                    }
+                    index++;
+                    LogUtil.e("======index======"+index);
+                    ip_bei = ip_array[index];
 
                     LogUtil.e("=======正在重新连接其他网址========" + ip_bei);
                 }
                 mInfo = new ConnectionInfo(ip_bei, 1985);
                 mInfo.setBackupInfo(mInfo.getBackupInfo());
-//                mManager.getReconnectionManager().addIgnoreException(RedirectException.class);
                 mManager.disConnect(new RedirectException());
             }
         });
+
+
+
+        /**
+         *   开始链接
+         */
         if (!mManager.isConnect()) {
             mManager.connect();
         }
@@ -129,12 +164,12 @@ public class SocketUtil {
 
     }
 
-
-
-
-
-
-
-
+    /**
+     *  获取到socket链接的manager
+     * @return
+     */
+    public static  IConnectionManager getmManager(){
+        return mManager;
+    }
 
 }

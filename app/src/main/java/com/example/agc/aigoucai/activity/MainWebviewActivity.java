@@ -37,29 +37,17 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.bean.base;
 import com.example.agc.aigoucai.util.Apputil;
 import com.example.agc.aigoucai.util.ChangeByte;
-import com.example.agc.aigoucai.util.FormatTransfer;
 import com.example.agc.aigoucai.util.LogUtil;
-import com.example.agc.aigoucai.util.NoneReconnect;
 import com.example.agc.aigoucai.util.SharePreferencesUtil;
 import com.example.agc.aigoucai.util.ShareUtils;
 import com.example.agc.aigoucai.util.SimpleProgressDialog;
-import com.xuhao.android.libsocket.sdk.ConnectionInfo;
-import com.xuhao.android.libsocket.sdk.OkSocketOptions;
-import com.xuhao.android.libsocket.sdk.SocketActionAdapter;
+import com.example.agc.aigoucai.util.SocketUtil;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
-import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
-import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
-
-import org.apache.http.client.RedirectException;
-
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -69,14 +57,11 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.xuhao.android.libsocket.sdk.OkSocket.open;
 
 
 public class MainWebviewActivity extends AppCompatActivity {
@@ -99,13 +84,9 @@ public class MainWebviewActivity extends AppCompatActivity {
     private View[] mviews;
 
 
-    private ConnectionInfo mInfo;
-    private OkSocketOptions mOkOptions;
+
     private IConnectionManager mManager;
-    String ip_array[] = {"39.106.217.117", "222.186.42.23", "103.17.116.117"};
-    public String ip_bei = ip_array[0];
-    int index = 0;
-    boolean tag = true;
+
     private String jiechiurl = "";
     private boolean ischecked = false;
 
@@ -137,116 +118,10 @@ public class MainWebviewActivity extends AppCompatActivity {
         mLayout.addView(mWebView);
 
         initWebSetting(mUrl);
-
-    }
-
-    private void initSocket() {
-        //socket连接
-        mInfo = new ConnectionInfo(ip_bei, 1985);
-        mOkOptions = new OkSocketOptions.Builder(OkSocketOptions.getDefault())
-                .setReconnectionManager(new NoneReconnect())
-                .build();
-        mManager = open(mInfo, mOkOptions);
-
-        mManager.setIsConnectionHolder(false);
-        OkSocketOptions.Builder okOptionsBuilder = new OkSocketOptions.Builder(mOkOptions);
-
-        mManager.option(okOptionsBuilder.build());
-        okOptionsBuilder.setHeaderProtocol(new IHeaderProtocol() {
-            @Override
-            public int getHeaderLength() {
-                //返回自定义的包头长度,框架会解析该长度的包头
-                return 4;
-            }
-
-            @Override
-            public int getBodyLength(byte[] header, ByteOrder byteOrder) {
-                //从header(包头数据)中解析出包体的长度,byteOrder是你在参配中配置的字节序,可以使用ByteBuffer比较方便解析
-                int toInt = FormatTransfer.lBytesToInt(header); //将低字节数组转换为int
-                return toInt;
-            }
-        });
-        //将新的修改后的参配设置给连接管理器
-        mManager.option(okOptionsBuilder.build());
-        mManager.registerReceiver(new SocketActionAdapter() {
-            @Override
-            public void onSocketConnectionSuccess(Context context, ConnectionInfo info, String action) {
-                if (tag) {
-                    Log.e("链接成功", "发送了一次数据");
-//                    mManager.send(new SendhijackMessage2());
-                }
-            }
-
-            @Override
-            public void onSocketDisconnection(Context context, ConnectionInfo info, String action, Exception e) {
-                super.onSocketDisconnection(context, info, action, e);
-                Log.e("链接断开", "===");
-                if (e != null) {
-                    if (e instanceof RedirectException) {
-                        tag = true;
-                        Log.e("===", "正在重定向连接...");
-                        mManager.switchConnectionInfo(mInfo);
-                        mManager.connect();
-                    } else {
-                        tag = false;
-                        Log.e("异常断开:", e.getMessage());
-                    }
-                } else {
-                    LogUtil.e("=========onSocketDisconnection======" + "正常断开");
-                }
-
-            }
-
-            @Override
-            public void onSocketReadResponse(Context context, ConnectionInfo info, String action, OriginalData data) {
-                super.onSocketReadResponse(context, info, action, data);
-                LogUtil.e("===MAINweb==sock返回数据data.length============" + data.getBodyBytes().length);
-            }
-
-            @Override
-            public void onSocketConnectionFailed(Context context, ConnectionInfo info, String action, Exception e) {
-                Log.e("=======fail=========", "连接失败=" + info.clone().getIp());
-                if (ip_bei.equals(info.clone().getIp())) {
-                    if (index > 2) {
-                        return;
-                    }
-                    index++;
-                    ip_bei = ip_array[index];
-                }
-                mInfo = new ConnectionInfo(ip_bei, 1985);
-                mInfo.setBackupInfo(mInfo.getBackupInfo());
-//                mManager.getReconnectionManager().addIgnoreException(RedirectException.class);
-                mManager.disConnect(new RedirectException());
-            }
-        });
-
-        if (!mManager.isConnect()) {
-            mManager.connect();
-        }
-
-        /**
-         *   发送测试数据
-         */
-        sendMessage();
     }
 
 
-    Timer timer = new Timer();
 
-    public void sendMessage() {
-        timer.schedule(new TimerTask() {
-            public void run() {
-                if (!mManager.isConnect()) {
-                    mManager.connect();
-                    mManager.send(new SendhijackMessage2());
-                } else {
-                    mManager.send(new SendhijackMessage2());
-                }
-            }
-        }, 1000);
-        Toast.makeText(getApplicationContext(), "网站被劫持,请选择其他线路", Toast.LENGTH_LONG).show();
-        finish();
-    }
 
     /**
      * 切換底部按鈕顏色
@@ -255,8 +130,21 @@ public class MainWebviewActivity extends AppCompatActivity {
         for (int i = 0; i < mviews.length; i++) {
             mviews[i].setSelected(index == i);
         }
+    }
+
+
+    /**
+     * socket发送信息到服务器
+     */
+    private void SocketsendMessage() {
+        mManager = SocketUtil.getmManager();
+        if (!mManager.isConnect()) {
+            mManager.connect();
+        }
+        mManager.send(new SendhijackMessage2());
 
     }
+
 
     /**
      * 初始化webview
@@ -313,12 +201,11 @@ public class MainWebviewActivity extends AppCompatActivity {
                 if (!ischecked) {
                     if (!domain1.equals(domain2)) {
                         jiechiurl = url;
-                        initSocket();
+                        SocketsendMessage();
                     }
 
                     ischecked = true;
                 }
-
                 /*********************************************************************************************************/
                 try {
                     if (url.startsWith("mqqapi://")) {   //QQ第三方支付
@@ -388,10 +275,10 @@ public class MainWebviewActivity extends AppCompatActivity {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             super.onProgressChanged(view, newProgress);
-            if (newProgress==100){
+            if (newProgress == 100) {
                 mWebView.setVisibility(View.VISIBLE);
                 ivLoading.setVisibility(View.GONE);
-            }else{
+            } else {
                 mWebView.setVisibility(View.GONE);
                 ivLoading.setVisibility(View.VISIBLE);
             }
@@ -539,8 +426,6 @@ public class MainWebviewActivity extends AppCompatActivity {
                 if ("primary".equalsIgnoreCase(type)) {
                     return Environment.getExternalStorageDirectory() + "/" + split[1];
                 }
-
-                // TODO handle non-primary volumes
             }
             // DownloadsProvider
             else if (isDownloadsDocument(uri)) {
@@ -675,7 +560,8 @@ public class MainWebviewActivity extends AppCompatActivity {
             byte[] byte_beijichi = beijichi.getBytes(Charset.defaultCharset());
             String jiechidao = jiechiurl;
             byte[] byte_jiechidao = jiechidao.getBytes();
-
+            LogUtil.e("====beijichi=========="+beijichi);
+            LogUtil.e("====jiechidao=========="+jiechidao);
             byte[] byte_id = id.getBytes(Charset.defaultCharset());
 
 

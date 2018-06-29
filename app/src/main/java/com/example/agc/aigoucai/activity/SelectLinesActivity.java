@@ -1,7 +1,6 @@
 package com.example.agc.aigoucai.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -23,52 +22,39 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.agc.aigoucai.R;
-import com.example.agc.aigoucai.bean.SendhijackMessage;
+import com.example.agc.aigoucai.bean.DataSynevent;
 import com.example.agc.aigoucai.bean.TestSendData;
 import com.example.agc.aigoucai.http.Http;
-import com.example.agc.aigoucai.util.ByteUtil;
 import com.example.agc.aigoucai.util.CustomDialog2;
-import com.example.agc.aigoucai.util.FormatTransfer;
 import com.example.agc.aigoucai.util.IntentUtil;
 import com.example.agc.aigoucai.util.LogUtil;
-import com.example.agc.aigoucai.util.NoneReconnect;
 import com.example.agc.aigoucai.util.SB;
 import com.example.agc.aigoucai.util.SharePreferencesUtil;
-import com.xuhao.android.libsocket.sdk.ConnectionInfo;
-import com.xuhao.android.libsocket.sdk.OkSocketOptions;
-import com.xuhao.android.libsocket.sdk.SocketActionAdapter;
-import com.xuhao.android.libsocket.sdk.bean.OriginalData;
+import com.example.agc.aigoucai.util.SocketUtil;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
-import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
 
-import org.apache.http.client.RedirectException;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
-import static com.xuhao.android.libsocket.sdk.OkSocket.open;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.ByteOrder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener {
-    private ConnectionInfo mInfo;
-    private OkSocketOptions mOkOptions;
-    public  IConnectionManager mManager;
+    public IConnectionManager mManager;
     private ListView listvie_id;
-    private Adapter_url adapter_url;
+    private Adapter_url adapter_url = new Adapter_url();
     private CustomDialog2.Builder ibuilder;
-    private String ip_array[] = {"39.106.217.117", "222.186.42.23", "103.17.116.117"};
-    private String ip_bei = ip_array[0];
-    private int index = 0;
     private String[] url_array = null;
     private String[] time_array = null;
     // 退出时间
     private static long currentBackPressedTime = 0;
-    private  Timer timer  = new Timer();
+    private Timer timer = new Timer();
     private SwipeRefreshLayout swipeLayout;
 
     private Handler hander = new Handler() {
@@ -88,6 +74,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wel_activity_main);
+        EventBus.getDefault().register(this);
         listvie_id = (ListView) findViewById(R.id.listvie_id);
         swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
 //        swipeLayout.setRefreshing(true);
@@ -112,144 +99,18 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         }
 
 
-        //socket连接
-        mInfo = new ConnectionInfo(ip_bei, 1985);
-        mOkOptions = new OkSocketOptions.Builder(OkSocketOptions.getDefault())
-                .setReconnectionManager(new NoneReconnect())
-                .build();
-        mManager = open(mInfo, mOkOptions);
-
-        mManager.setIsConnectionHolder(false);
-        OkSocketOptions.Builder okOptionsBuilder = new OkSocketOptions.Builder(mOkOptions);
-
-        mManager.option(okOptionsBuilder.build());
-        okOptionsBuilder.setHeaderProtocol(new IHeaderProtocol() {
-            @Override
-            public int getHeaderLength() {
-                //返回自定义的包头长度,框架会解析该长度的包头
-                return 4;
+        mManager = SocketUtil.getmManager();
+        if (null!=mManager){
+            if (!mManager.isConnect()) {
+                mManager.connect();
+                mManager.send(new TestSendData());
+            } else {
+                mManager.send(new TestSendData());
             }
-
-            @Override
-            public int getBodyLength(byte[] header, ByteOrder byteOrder) {
-                //从header(包头数据)中解析出包体的长度,byteOrder是你在参配中配置的字节序,可以使用ByteBuffer比较方便解析
-                int toInt = FormatTransfer.lBytesToInt(header); //将低字节数组转换为int
-                return toInt;
-            }
-        });
-        //将新的修改后的参配设置给连接管理器
-        mManager.option(okOptionsBuilder.build());
-        mManager.registerReceiver(new SocketActionAdapter() {
-            @Override
-            public void onSocketConnectionSuccess(Context context, ConnectionInfo info, String action) {
-                    Log.e("=======链接成功=====", "发送了一次数据");
-                    mManager.send(new TestSendData());
-
-            }
-
-            @Override
-            public void onSocketDisconnection(Context context, ConnectionInfo info, String action, Exception e) {
-                super.onSocketDisconnection(context, info, action, e);
-
-                if (e != null) {
-                    if (e instanceof RedirectException) {
-                        LogUtil.e("==onSocketDisconnection=异常断开===正在重定向连接===");
-                        mManager.switchConnectionInfo(mInfo);
-                        mManager.connect();
-                    } else {
-                        LogUtil.e("==onSocketDisconnection=异常断开======"+ e.getMessage());
-                    }
-                } else {
-                       LogUtil.e("==onSocketDisconnection=正常断开======");
-                }
-
-            }
-
-            @Override
-            public void onSocketReadResponse(Context context, ConnectionInfo info, String action, OriginalData data) {
-                super.onSocketReadResponse(context, info, action, data);
-                LogUtil.e("===sock返回数据data.length============" + data.getBodyBytes().length);
-                if (data.getBodyBytes().length < 15) {
-                    return;
-                }
-                try {
-                    byte[] bodyBytes = data.getBodyBytes();
-                    String bytesToHex_16 = FormatTransfer.bytesToHex(bodyBytes, 0, data.getBodyBytes().length);
-                    String substring = bytesToHex_16.substring(4 * 2 + 2, bytesToHex_16.length());
-                    String nums_str = substring.substring(0, 4 * 2); //获取网址数量
-                    byte[] bytes_nums = FormatTransfer.hexStringToByte(nums_str);
-                    int nums_wangzhi = FormatTransfer.lBytesToInt(bytes_nums);  //网址数量
-                    url_array = new String[nums_wangzhi];
-                    String _www_string = bytesToHex_16.substring(2 * (4 + 1 + 4), bytesToHex_16.length());
-                    byte[] bytes_www = FormatTransfer.hexStringToByte(_www_string); //所有网址字节
-
-                    int index_len = 0;
-                    int index_cout = 2;
-                    int nums_wangleng = 0;
-
-                    for (int i = 0; i < nums_wangzhi; i++) {
-                        byte[] bytes = ByteUtil.subBytes(bytes_www, index_len, 2);
-                        nums_wangleng = FormatTransfer.lBytesToShort(bytes);  //网址长度(1)
-                        byte[] www_ = ByteUtil.subBytes(bytes_www, index_cout, nums_wangleng);
-                        String _www = new String(www_);
-                        index_len += (nums_wangleng + 2);
-                        index_cout += (nums_wangleng + 2);
-                        url_array[i] = _www;
-                        Log.e("=====网址====", _www);
-                    }
-                    adapter_url = new Adapter_url();
-                    listvie_id.setAdapter(adapter_url);
-                    time_array = new String[url_array.length];
-                    for (int i = 0; i < url_array.length; i++) {
-                        sendHttpRequest(url_array[i], i);
-                    }
-
-                    timer.schedule(new TimerTask() {
-                        public void run() {
-                            if (!mManager.isConnect()) {
-                                mManager.connect();
-                                mManager.send(new SendhijackMessage());
-                            } else {
-                                mManager.send(new SendhijackMessage());
-                            }
-                        }
-                    }, 500);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    LogUtil.e("==============" + e);
-                }
-
-            }
-
-            @Override
-            public void onSocketConnectionFailed(Context context, ConnectionInfo info, String action, Exception e) {
-                Log.e("=======fail=========", "连接失败=" + info.clone().getIp());
-                if (ip_bei.equals(info.clone().getIp())) {
-                    if (index > 2) {
-                        return;
-                    }
-                    index++;
-                    ip_bei = ip_array[index];
-
-                    LogUtil.e("=======正在重新连接其他网址========" + ip_bei);
-                }
-                mInfo = new ConnectionInfo(ip_bei, 1985);
-                mInfo.setBackupInfo(mInfo.getBackupInfo());
-//                mManager.getReconnectionManager().addIgnoreException(RedirectException.class);
-                mManager.disConnect(new RedirectException());
-            }
-        });
-
-
-        //开始连接
-        if (!mManager.isConnect()) {
-            mManager.connect();
         }
 
+
     }
-
-
 
 
     /**
@@ -263,8 +124,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         } else {
             mManager.send(new TestSendData());
         }
-        Log.e("=================", "重連已經發送數據...");
 
+        Log.e("=================", "發送已经发送.......");
         if (null != adapter_url)
             adapter_url.notifyDataSetChanged();
     }
@@ -424,10 +285,25 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     }
 
 
+    /**
+     * EventBus的接收方法
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void eventBusReceive(DataSynevent dataSynevent) {
+        LogUtil.e("====SELECactivity==接收到eventbus传递过来的数据========");
+        url_array = dataSynevent.getList().toArray(new String[0]);
+        listvie_id.setAdapter(adapter_url);
+        time_array = new String[url_array.length];
+        for (int i = 0; i < url_array.length; i++) {
+            sendHttpRequest(url_array[i], i);
+        }
+
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        EventBus.getDefault().unregister(this);
         if (timer != null) {
             timer.cancel();
         }
