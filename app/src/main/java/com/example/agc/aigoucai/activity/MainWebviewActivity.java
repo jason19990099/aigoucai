@@ -21,7 +21,6 @@ import android.os.Parcelable;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -41,9 +40,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.agc.aigoucai.util.Apputil;
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.bean.base;
+import com.example.agc.aigoucai.util.Apputil;
 import com.example.agc.aigoucai.util.ChangeByte;
 import com.example.agc.aigoucai.util.FormatTransfer;
 import com.example.agc.aigoucai.util.LogUtil;
@@ -89,6 +88,10 @@ public class MainWebviewActivity extends AppCompatActivity {
     LinearLayout llXianlu;
     @BindView(R.id.ll_fenxiang)
     LinearLayout llFenxiang;
+    @BindView(R.id.iv_loading)
+    ImageView ivLoading;
+    @BindView(R.id.web_layout)
+    LinearLayout webLayout;
     private String mUrl;
     private LinearLayout mLayout;
     private WebView mWebView;
@@ -134,6 +137,7 @@ public class MainWebviewActivity extends AppCompatActivity {
         mLayout.addView(mWebView);
 
         initWebSetting(mUrl);
+
     }
 
     private void initSocket() {
@@ -188,7 +192,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                         Log.e("异常断开:", e.getMessage());
                     }
                 } else {
-                    LogUtil.e("=========onSocketDisconnection======"+"正常断开");
+                    LogUtil.e("=========onSocketDisconnection======" + "正常断开");
                 }
 
             }
@@ -384,7 +388,14 @@ public class MainWebviewActivity extends AppCompatActivity {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             super.onProgressChanged(view, newProgress);
-            mWebView.setVisibility(View.VISIBLE);
+            if (newProgress==100){
+                mWebView.setVisibility(View.VISIBLE);
+                ivLoading.setVisibility(View.GONE);
+            }else{
+                mWebView.setVisibility(View.GONE);
+                ivLoading.setVisibility(View.VISIBLE);
+            }
+
         }
 
         @Override
@@ -736,7 +747,6 @@ public class MainWebviewActivity extends AppCompatActivity {
         mWebView.getSettings().setJavaScriptEnabled(false);
         mWebView.clearCache(true);
     }
-
 
 
 }
