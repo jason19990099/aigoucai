@@ -34,7 +34,6 @@ import com.example.agc.aigoucai.util.LogUtil;
 import com.example.agc.aigoucai.util.NoneReconnect;
 import com.example.agc.aigoucai.util.SB;
 import com.example.agc.aigoucai.util.SharePreferencesUtil;
-import com.example.agc.aigoucai.util.SocketUtil;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.SocketActionAdapter;
@@ -58,18 +57,20 @@ import java.util.TimerTask;
 public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener {
     private ConnectionInfo mInfo;
     private OkSocketOptions mOkOptions;
-    private IConnectionManager mManager;
+    public  IConnectionManager mManager;
     private ListView listvie_id;
-    Adapter_url adapter_url;
+    private Adapter_url adapter_url;
     private CustomDialog2.Builder ibuilder;
-    String ip_array[] = {"39.106.217.117", "222.186.42.23", "103.17.116.117"};
-    public String ip_bei = ip_array[0];
-    int index = 0;
-//    private boolean tag = true;
-    String[] url_array = null;
-    String[] time_array = null;
+    private String ip_array[] = {"39.106.217.117", "222.186.42.23", "103.17.116.117"};
+    private String ip_bei = ip_array[0];
+    private int index = 0;
+    private String[] url_array = null;
+    private String[] time_array = null;
     // 退出时间
-    public static long currentBackPressedTime = 0;
+    private static long currentBackPressedTime = 0;
+    private  Timer timer  = new Timer();
+    private SwipeRefreshLayout swipeLayout;
+
     private Handler hander = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -81,7 +82,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
             }
         }
     };
-    private SwipeRefreshLayout swipeLayout;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -141,8 +142,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         mManager.registerReceiver(new SocketActionAdapter() {
             @Override
             public void onSocketConnectionSuccess(Context context, ConnectionInfo info, String action) {
-
-                    Log.e("链接成功", "发送了一次数据");
+                    Log.e("=======链接成功=====", "发送了一次数据");
                     mManager.send(new TestSendData());
 
             }
@@ -203,7 +203,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                     for (int i = 0; i < url_array.length; i++) {
                         sendHttpRequest(url_array[i], i);
                     }
-                    Timer timer = new Timer();
+
                     timer.schedule(new TimerTask() {
                         public void run() {
                             if (!mManager.isConnect()) {
@@ -218,10 +218,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                 } catch (Exception e) {
                     e.printStackTrace();
                     LogUtil.e("==============" + e);
-                } finally {
-
                 }
-
 
             }
 
@@ -243,32 +240,14 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                 mManager.disConnect(new RedirectException());
             }
         });
+
+
+        //开始连接
         if (!mManager.isConnect()) {
             mManager.connect();
         }
 
-        /**
-         *   发送测试数据
-         */
-//        sendMessage();
     }
-
-
-//    Timer timer = new Timer();
-//
-//    public void sendMessage() {
-//        timer.schedule(new TimerTask() {
-//            public void run() {
-//                if (!mManager.isConnect()) {
-//                    mManager.connect();
-//                    mManager.send(new TestSendData());
-//                } else {
-//                    mManager.send(new TestSendData());
-//                }
-//            }
-//        }, 2000);
-//    }
-
 
 
 
@@ -357,8 +336,6 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                     text_id_sp.setText(time_array[i]);
                 }
             }
-
-
             return view1;
         }
     }
@@ -372,7 +349,6 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
 
         new Thread(new Runnable() {
             long between = 0;
-            String date1 = "";
             String date2 = "";
             long day;
             long hour;
@@ -448,14 +424,12 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     }
 
 
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
-//        if (timer != null) {
-//            timer.cancel();
-//        }
+        if (timer != null) {
+            timer.cancel();
+        }
     }
 }

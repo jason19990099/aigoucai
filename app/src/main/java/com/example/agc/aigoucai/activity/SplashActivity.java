@@ -33,7 +33,7 @@ import okhttp3.Response;
 
 
 /**
- * 启动页  查看开关是否开启
+ * 启动页
  */
 public class SplashActivity extends AppCompatActivity {
 
