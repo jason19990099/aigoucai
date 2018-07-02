@@ -95,9 +95,7 @@ public class MainWebviewActivity extends AppCompatActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
 
         //解決挼鍵盤把輸入框遮擋的問題
-        getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
-                        | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         setContentView(R.layout.activity_web);
 
@@ -190,13 +188,13 @@ public class MainWebviewActivity extends AppCompatActivity {
 
                 try {
                     URL url_2 = new URL(url);
-                     domain2 = url_2.getHost();
+                    domain2 = url_2.getHost();
                 } catch (Exception e) {
                     mistake = true;
                     e.printStackTrace();
                 }
 
-                LogUtil.e("===========mistake======="+mistake);
+                LogUtil.e("===========mistake=======" + mistake);
                 if (!mistake) {
                     if (!ischecked) {
                         if (!domain1.equals(domain2)) {
@@ -208,28 +206,28 @@ public class MainWebviewActivity extends AppCompatActivity {
                     }
 
                 }
-
-
-
-
-                /*****************************QQ第三方支付****************************************************************************/
+                /********************************调起支付宝支付或者QQ第三方支付*************************************************************************/
                 try {
-                    if (url.startsWith("mqqapi://")) { 
+                    if (url.startsWith("mqqapi://")
+                            || url.contains("alipays://platformapi")
+                            || url.startsWith("https://messenger")
+                            || url.startsWith("https://www.agcapp.me/app.apk")) {
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                         startActivity(intent);
-                        return true;
+                        //是聊天页就关闭  不然白屏
+                        if (url.startsWith("https://messenger")) {
+                            finish();
+                        }
+                    } else {
+                        view.loadUrl(url);
                     }
-                } catch (Exception e) {
-                    return true;
-                }
-                /********************************调起支付宝支付*************************************************************************/
 
-                if (url.contains("alipays://platformapi")){
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    startActivity( intent );
-                }else{
-                    view.loadUrl(url);
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+
 //                view.loadUrl(url);
 //                return true;
                 return super.shouldOverrideUrlLoading(view, url);//设置不重新加载 依旧加载原来链接 （在个别手机上重新 view.loadUrl(url) 返回按钮失效）
@@ -288,6 +286,7 @@ public class MainWebviewActivity extends AppCompatActivity {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             super.onProgressChanged(view, newProgress);
+            LogUtil.e("=========newProgress===============" + newProgress);
             if (newProgress == 100) {
                 mWebView.setVisibility(View.VISIBLE);
                 ivLoading.setVisibility(View.GONE);

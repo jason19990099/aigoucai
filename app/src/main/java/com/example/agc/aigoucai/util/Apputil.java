@@ -2,11 +2,14 @@ package com.example.agc.aigoucai.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.util.LogUtil;
 
 import java.net.NetworkInterface;
@@ -20,18 +23,19 @@ public class Apputil {
 
     /**
      * 判断是否在使用VPN
+     *
      * @return
      */
     public static boolean isVpnUsed() {
         try {
             Enumeration<NetworkInterface> niList = NetworkInterface.getNetworkInterfaces();
-            if(niList != null) {
+            if (niList != null) {
                 for (NetworkInterface intf : Collections.list(niList)) {
-                    if(!intf.isUp() || intf.getInterfaceAddresses().size() == 0) {
+                    if (!intf.isUp() || intf.getInterfaceAddresses().size() == 0) {
                         continue;
                     }
                     LogUtil.e("isVpnUsed() NetworkInterface Name: " + intf.getName());
-                    if ("tun0".equals(intf.getName()) || "ppp0".equals(intf.getName())){
+                    if ("tun0".equals(intf.getName()) || "ppp0".equals(intf.getName())) {
                         return true; // The VPN is up
                     }
                 }
@@ -43,14 +47,13 @@ public class Apputil {
     }
 
 
+    public static String netState(Context context) {
 
-     public static String   netState(Context context){
-
-         //获取网络连接管理者
-         ConnectivityManager connectionManager = (ConnectivityManager)
-                 context.getSystemService(Context.CONNECTIVITY_SERVICE);
-         //获取网络的状态信息，有下面三种方式
-         NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
+        //获取网络连接管理者
+        ConnectivityManager connectionManager = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        //获取网络的状态信息，有下面三种方式
+        NetworkInfo networkInfo = connectionManager.getActiveNetworkInfo();
 //         getDetailedState();//获取详细状态。
 //         getExtraInfo();//获取附加信息。
 //         getReason();//获取连接失败的原因。
@@ -63,7 +66,7 @@ public class Apputil {
 //         isFailover();//判断是否连接失败。
 //         isRoaming();   //判断是否漫游
 
-     }
+    }
 
 
     public static String getOperator(Context context) {
@@ -88,6 +91,7 @@ public class Apputil {
 
     /**
      * 判断是否有网络连接
+     *
      * @return
      * @version 1.0
      * @updateInfo
@@ -109,5 +113,23 @@ public class Apputil {
             }
         }
         return false;
+    }
+
+
+    /**
+     * 2  * 获取版本号
+     * 3  * @return 当前应用的版本号
+     * 4
+     */
+    public static  String getVersion(Context context) {
+        try {
+            PackageManager manager = context.getPackageManager();
+            PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
+            String version = info.versionName;
+            return version;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "1.0";
+        }
     }
 }
