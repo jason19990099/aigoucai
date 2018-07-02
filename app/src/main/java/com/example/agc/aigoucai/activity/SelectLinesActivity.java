@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,17 +38,27 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener {
     public IConnectionManager mManager;
-    private ListView listvie_id;
+    @BindView(R.id.listvie_id)
+    ListView listvieId;
+    @BindView(R.id.swipe_container)
+    SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.fl_layout)
+    FrameLayout flLayout;
+    @BindView(R.id.tv_vertion)
+    TextView tvVertion;
+
     private Adapter_url adapter_url = new Adapter_url();
     private CustomDialog.Builder ibuilder;
     private String[] url_array = null;
@@ -55,8 +66,6 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     // 退出时间
     private static long currentBackPressedTime = 0;
     private Timer timer = new Timer();
-    private SwipeRefreshLayout swipeLayout;
-
     private Handler hander = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -73,13 +82,13 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.wel_activity_main);
+        setContentView(R.layout.activity_selectlines);
+        ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        listvie_id = (ListView) findViewById(R.id.listvie_id);
-        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_container);
+        tvVertion.setText("版本号:"+Apputil.getVersion(SelectLinesActivity.this));
 //        swipeLayout.setRefreshing(true);
-        swipeLayout.setOnRefreshListener(this);
-        swipeLayout.setColorSchemeResources(android.R.color.holo_orange_dark,
+        swipeContainer.setOnRefreshListener(this);
+        swipeContainer.setColorSchemeResources(android.R.color.holo_orange_dark,
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
@@ -100,7 +109,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
 
 
         mManager = SocketUtil.getmManager();
-        if (null!=mManager){
+        if (null != mManager) {
             if (!mManager.isConnect()) {
                 mManager.connect();
             }
@@ -129,7 +138,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     @Override
     public void onRefresh() {
         refresh();
-        swipeLayout.setRefreshing(false);
+        swipeContainer.setRefreshing(false);
     }
 
 
@@ -226,8 +235,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                     int responseCode = connection.getResponseCode();
                     if (responseCode == 200) {
                         date2 = dfs.format(new Date());// new Date()为获取当前系统时间，也可使用当前时间戳
-                        java.util.Date begin = dfs.parse(date1);
-                        java.util.Date end = dfs.parse(date2);
+                        Date begin = dfs.parse(date1);
+                        Date end = dfs.parse(date2);
                         between = Math.abs((end.getTime() - begin.getTime()));// 得到两者的毫秒数
                         day = between / (24 * 60 * 60 * 1000);
                         hour = (between / (60 * 60 * 1000) - day * 24);
@@ -288,7 +297,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     public void eventBusReceive(DataSynevent dataSynevent) {
         LogUtil.e("====SELECactivity==接收到eventbus传递过来的数据========");
         url_array = dataSynevent.getList().toArray(new String[0]);
-        listvie_id.setAdapter(adapter_url);
+        listvieId.setAdapter(adapter_url);
         time_array = new String[url_array.length];
         for (int i = 0; i < url_array.length; i++) {
             sendHttpRequest(url_array[i], i);
