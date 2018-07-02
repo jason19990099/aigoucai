@@ -163,6 +163,7 @@ public class MainWebviewActivity extends AppCompatActivity {
         settings.setAppCacheEnabled(true);
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         settings.setAllowFileAccess(true);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
@@ -209,9 +210,11 @@ public class MainWebviewActivity extends AppCompatActivity {
                 }
 
 
-                /*********************************************************************************************************/
+
+
+                /*****************************QQ第三方支付****************************************************************************/
                 try {
-                    if (url.startsWith("mqqapi://")) {   //QQ第三方支付
+                    if (url.startsWith("mqqapi://")) { 
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                         startActivity(intent);
                         return true;
@@ -219,7 +222,14 @@ public class MainWebviewActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     return true;
                 }
+                /********************************调起支付宝支付*************************************************************************/
 
+                if (url.contains("alipays://platformapi")){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity( intent );
+                }else{
+                    view.loadUrl(url);
+                }
 //                view.loadUrl(url);
 //                return true;
                 return super.shouldOverrideUrlLoading(view, url);//设置不重新加载 依旧加载原来链接 （在个别手机上重新 view.loadUrl(url) 返回按钮失效）
