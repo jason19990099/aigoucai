@@ -58,14 +58,12 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     FrameLayout flLayout;
     @BindView(R.id.tv_vertion)
     TextView tvVertion;
-
     private Adapter_url adapter_url = new Adapter_url();
     private CustomDialog.Builder ibuilder;
     private String[] url_array = null;
     private String[] time_array = null;
     // 退出时间
     private static long currentBackPressedTime = 0;
-    private Timer timer = new Timer();
     private Handler hander = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -108,7 +106,9 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         }
 
 
-        mManager = SocketUtil.getmManager();
+        if (null==mManager){
+            mManager = SocketUtil.getmManager();
+        }
         if (null != mManager) {
             if (!mManager.isConnect()) {
                 mManager.connect();
@@ -124,15 +124,20 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
      * 刷新網址鏈接
      */
     private void refresh() {
-        if (!mManager.isConnect()) {
-            Log.e("=================", "socket未连接，正在连接中.....");
-            mManager.connect();
+        if (null==mManager){
+            mManager = SocketUtil.getmManager();
         }
-        mManager.send(new TestSendData());
+        if (null!=mManager){
+            if (!mManager.isConnect()) {
+                Log.e("=================", "socket未连接，正在连接中.....");
+                mManager.connect();
+            }
+            mManager.send(new TestSendData());
 
-        Log.e("=================", "發送已经发送.......");
-        if (null != adapter_url)
-            adapter_url.notifyDataSetChanged();
+            Log.e("=================", "發送已经发送.......");
+        }
+
+
     }
 
     @Override
@@ -303,14 +308,14 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
             sendHttpRequest(url_array[i], i);
         }
 
+        if (null != adapter_url)
+            adapter_url.notifyDataSetChanged();
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        if (timer != null) {
-            timer.cancel();
-        }
     }
 }
