@@ -132,7 +132,7 @@ public class SocketUtil {
             public void onSocketConnectionFailed(Context context, ConnectionInfo info, String action, Exception e) {
                 Log.e("=======fail=========", "连接失败=" + info.clone().getIp());
                 if (ip_bei.equals(info.clone().getIp())) {
-                    if (index > 2) {
+                    if (index > (ip_array.length-1)) {
                         return;
                     }
                     index++;
