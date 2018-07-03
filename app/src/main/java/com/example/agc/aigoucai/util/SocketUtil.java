@@ -3,10 +3,8 @@ package com.example.agc.aigoucai.util;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.ListView;
 
 import com.example.agc.aigoucai.bean.DataSynevent;
-import com.example.agc.aigoucai.bean.TestSendData;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.SocketActionAdapter;
@@ -38,9 +36,7 @@ public class SocketUtil {
     public static void getSocketConiction() {
         //socket连接
         mInfo = new ConnectionInfo(ip_bei, 1985);
-        mOkOptions = new OkSocketOptions.Builder(OkSocketOptions.getDefault())
-                .setReconnectionManager(new NoneReconnect())
-                .build();
+        mOkOptions = new OkSocketOptions.Builder(OkSocketOptions.getDefault()).setReconnectionManager(new NoneReconnect()).build();
         mManager = open(mInfo, mOkOptions);
 
         mManager.setIsConnectionHolder(false);
@@ -78,7 +74,7 @@ public class SocketUtil {
                         mManager.switchConnectionInfo(mInfo);
                         mManager.connect();
                     } else {
-                        LogUtil.e("==onSocketDisconnection=异常断开======" + e.getMessage());
+                        LogUtil.e("==onSocketDisconnection=socket已經断开======" + e.getMessage());
                         mManager.switchConnectionInfo(mInfo);
                         mManager.connect();
                     }
@@ -140,6 +136,7 @@ public class SocketUtil {
                         return;
                     }
                     index++;
+                    LogUtil.e("===========index========" + index);
                     ip_bei = ip_array[index];
                     LogUtil.e("=======正在重新连接其他网址========" + ip_bei);
                 }
