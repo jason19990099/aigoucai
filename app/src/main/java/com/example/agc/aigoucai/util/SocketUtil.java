@@ -28,7 +28,7 @@ public class SocketUtil {
     private static ConnectionInfo mInfo;
     private static OkSocketOptions mOkOptions;
     private static IConnectionManager mManager;
-    private static String ip_array[] = {"39.106.217.117", "222.186.42.23", "103.17.116.117"};
+    private static String ip_array[] = {"112.74.175.185", "39.106.148.87"};
     private static String ip_bei = ip_array[0];
     private static int index = 0;
     private static String[] url_array = null;
