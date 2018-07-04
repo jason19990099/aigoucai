@@ -29,7 +29,6 @@ public class SocketUtil {
     private static ConnectionInfo mInfo;
     private static OkSocketOptions mOkOptions;
     private static IConnectionManager mManager;
-    //    private static String ip_array[] = {"39.106.217.117", "222.186.42.23", "103.17.116.117"};
     private static List<String> ip_array = new ArrayList<>();
     public static String ip_bei = "";
     private static int index = 0;
@@ -39,11 +38,11 @@ public class SocketUtil {
 
     public SocketUtil(List list) {
         ip_array = list;
-        ip_bei = ip_array.get(0);
+        ip_bei = ip_array.get(index);
     }
 
 
-    public static void getSocketConiction(String ip, int netport) {
+    public static void getSocketConiction(String ip, final int netport) {
         //socket连接
         mInfo = new ConnectionInfo(ip, netport);
         mOkOptions = new OkSocketOptions.Builder(OkSocketOptions.getDefault()).setReconnectionManager(new NoneReconnect()).build();
@@ -142,7 +141,7 @@ public class SocketUtil {
             public void onSocketConnectionFailed(Context context, ConnectionInfo info, String action, Exception e) {
                 Log.e("=======fail=========", "连接失败=" + info.clone().getIp());
                 if (ip_bei.equals(info.clone().getIp())) {
-                    if (index > (ip_array.length - 1)) {
+                    if (index > (ip_array.size() - 1)) {
                         return;
                     }
                     index++;
@@ -150,7 +149,7 @@ public class SocketUtil {
                     ip_bei = ip_array.get(index);
                     LogUtil.e("=======正在重新连接其他网址========" + ip_bei);
                 }
-                mInfo = new ConnectionInfo(ip_bei, 1985);
+                mInfo = new ConnectionInfo(ip_bei, netport);
                 mInfo.setBackupInfo(mInfo.getBackupInfo());
                 mManager.disConnect(new RedirectException());
                 new android.os.Handler().postDelayed(new Runnable() {
