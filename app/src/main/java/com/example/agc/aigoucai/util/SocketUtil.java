@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.agc.aigoucai.bean.DataSynevent;
+import com.example.agc.aigoucai.bean.TestSendData;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.SocketActionAdapter;
@@ -132,7 +133,7 @@ public class SocketUtil {
             public void onSocketConnectionFailed(Context context, ConnectionInfo info, String action, Exception e) {
                 Log.e("=======fail=========", "连接失败=" + info.clone().getIp());
                 if (ip_bei.equals(info.clone().getIp())) {
-                    if (index > (ip_array.length-1)) {
+                    if (index > (ip_array.length - 1)) {
                         return;
                     }
                     index++;
@@ -143,6 +144,13 @@ public class SocketUtil {
                 mInfo = new ConnectionInfo(ip_bei, 1985);
                 mInfo.setBackupInfo(mInfo.getBackupInfo());
                 mManager.disConnect(new RedirectException());
+                new android.os.Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mManager.isConnect())
+                            mManager.send(new TestSendData());
+                    }
+                }, 500);
             }
         });
 
