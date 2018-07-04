@@ -286,7 +286,6 @@ public class MainWebviewActivity extends AppCompatActivity {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             super.onProgressChanged(view, newProgress);
-            LogUtil.e("=========newProgress===============" + newProgress);
             if (newProgress == 100) {
                 mWebView.setVisibility(View.VISIBLE);
                 ivLoading.setVisibility(View.GONE);
