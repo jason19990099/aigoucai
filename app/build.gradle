@@ -20,7 +20,7 @@ android {
     compileSdkVersion 26
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
-        applicationId "com.example.agc.aigoucai2"
+        applicationId "com.example.agc.aigoucai"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 3
