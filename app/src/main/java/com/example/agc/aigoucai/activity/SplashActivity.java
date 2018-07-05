@@ -13,7 +13,10 @@ import com.example.agc.aigoucai.util.SystemUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+<<<<<<< HEAD
 import static com.example.agc.aigoucai.util.SocketUtil.ip_bei;
+=======
+>>>>>>> master
 
 
 /**
@@ -26,6 +29,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         SystemUtil.setfullScreen(SplashActivity.this);
 
+<<<<<<< HEAD
 
         List<String> ip_array = new ArrayList<>();
         ip_array.add("39.106.217.117");
@@ -34,6 +38,17 @@ public class SplashActivity extends AppCompatActivity {
         SocketUtil socketUtil=new SocketUtil(ip_array);
 
         socketUtil.getSocketConiction(ip_bei,1985);
+=======
+        List<String> ip_array = new ArrayList<>();
+        ip_array.clear();
+        ip_array.add("39.106.217.117");
+        ip_array.add("222.186.42.23");
+        ip_array.add("103.17.116.117");
+        //ip和端口号传进去
+        SocketUtil socketUtil=new SocketUtil(ip_array,1985);
+        //调取方法开始连接
+        socketUtil.getSocketConection();
+>>>>>>> master
 
         new Handler().postDelayed(new Runnable() {
             @Override
