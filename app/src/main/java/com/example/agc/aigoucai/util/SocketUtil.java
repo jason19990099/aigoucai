@@ -29,12 +29,20 @@ public class SocketUtil {
     private static int index = 0;
     private static int net_port=1985;
 
+
+    /**
+     * 传入进去ip地址和端口号
+     */
     public SocketUtil(List list, int port) {
         ip_array = list;
         ip_bei = ip_array.get(index);
         net_port=port;
     }
 
+
+    /**
+     *  socket链接方法
+     */
     public static void getSocketConection() {
         //socket连接
         mInfo = new ConnectionInfo(SocketUtil.ip_bei, net_port);
