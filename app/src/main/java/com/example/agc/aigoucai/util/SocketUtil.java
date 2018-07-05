@@ -1,9 +1,7 @@
 package com.example.agc.aigoucai.util;
 
-
 import android.content.Context;
 import android.util.Log;
-
 import com.example.agc.aigoucai.bean.DataSynevent;
 import com.example.agc.aigoucai.bean.TestSendData;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
@@ -12,14 +10,11 @@ import com.xuhao.android.libsocket.sdk.SocketActionAdapter;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
 import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
-
 import org.apache.http.client.RedirectException;
 import org.greenrobot.eventbus.EventBus;
-
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
-
 import static com.xuhao.android.libsocket.sdk.OkSocket.open;
 
 /**
@@ -29,14 +24,20 @@ public class SocketUtil {
     private static ConnectionInfo mInfo;
     private static OkSocketOptions mOkOptions;
     private static IConnectionManager mManager;
-    private static String ip_array[] = {"39.106.217.117", "222.186.42.23", "103.17.116.117"};
-    private static String ip_bei = ip_array[0];
+    private static List<String> ip_array = new ArrayList<>();
+    public static String ip_bei = "";
     private static int index = 0;
-    private static String[] url_array = null;
+    private static int net_port=1985;
 
-    public static void getSocketConiction() {
+    public SocketUtil(List list, int port) {
+        ip_array = list;
+        ip_bei = ip_array.get(index);
+        net_port=port;
+    }
+
+    public static void getSocketConection() {
         //socket连接
-        mInfo = new ConnectionInfo(ip_bei, 1985);
+        mInfo = new ConnectionInfo(SocketUtil.ip_bei, net_port);
         mOkOptions = new OkSocketOptions.Builder(OkSocketOptions.getDefault()).setReconnectionManager(new NoneReconnect()).build();
         mManager = open(mInfo, mOkOptions);
 
@@ -72,13 +73,11 @@ public class SocketUtil {
                 if (e != null) {
                     if (e instanceof RedirectException) {
                         LogUtil.e("==onSocketDisconnection=异常断开===正在重定向连接===");
-                        mManager.switchConnectionInfo(mInfo);
-                        mManager.connect();
                     } else {
                         LogUtil.e("==onSocketDisconnection=socket已經断开======" + e.getMessage());
-                        mManager.switchConnectionInfo(mInfo);
-                        mManager.connect();
                     }
+                    mManager.switchConnectionInfo(mInfo);
+                    mManager.connect();
                 } else {
                     LogUtil.e("==onSocketDisconnection=正常断开======");
                 }
@@ -99,7 +98,7 @@ public class SocketUtil {
                     String nums_str = substring.substring(0, 4 * 2); //获取网址数量
                     byte[] bytes_nums = FormatTransfer.hexStringToByte(nums_str);
                     int nums_wangzhi = FormatTransfer.lBytesToInt(bytes_nums);  //网址数量
-                    url_array = new String[nums_wangzhi];
+                    String[] url_array = new String[nums_wangzhi];
                     String _www_string = bytesToHex_16.substring(2 * (4 + 1 + 4), bytesToHex_16.length());
                     byte[] bytes_www = FormatTransfer.hexStringToByte(_www_string); //所有网址字节
 
@@ -132,16 +131,16 @@ public class SocketUtil {
             @Override
             public void onSocketConnectionFailed(Context context, ConnectionInfo info, String action, Exception e) {
                 Log.e("=======fail=========", "连接失败=" + info.clone().getIp());
-                if (ip_bei.equals(info.clone().getIp())) {
-                    if (index > (ip_array.length - 1)) {
+                if (SocketUtil.ip_bei.equals(info.clone().getIp())) {
+                    if (index > (ip_array.size() - 1)) {
                         return;
                     }
                     index++;
                     LogUtil.e("===========index========" + index);
-                    ip_bei = ip_array[index];
-                    LogUtil.e("=======正在重新连接其他网址========" + ip_bei);
+                    SocketUtil.ip_bei = ip_array.get(index);
+                    LogUtil.e("=======正在重新连接其他网址========" + SocketUtil.ip_bei);
                 }
-                mInfo = new ConnectionInfo(ip_bei, 1985);
+                mInfo = new ConnectionInfo(SocketUtil.ip_bei, net_port);
                 mInfo.setBackupInfo(mInfo.getBackupInfo());
                 mManager.disConnect(new RedirectException());
                 new android.os.Handler().postDelayed(new Runnable() {
