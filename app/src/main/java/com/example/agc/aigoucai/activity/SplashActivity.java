@@ -10,6 +10,10 @@ import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.util.SocketUtil;
 import com.example.agc.aigoucai.util.SystemUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 
 /**
  * 启动页
@@ -22,7 +26,15 @@ public class SplashActivity extends AppCompatActivity {
 
         SystemUtil.setfullScreen(SplashActivity.this);
 
-        SocketUtil.getSocketConiction();
+        List<String> ip_array = new ArrayList<>();
+        ip_array.clear();
+        ip_array.add("39.106.217.117");
+        ip_array.add("222.186.42.23");
+        ip_array.add("103.17.116.117");
+        //ip和端口号传进去
+        SocketUtil socketUtil=new SocketUtil(ip_array,1985);
+        //调取方法开始连接
+        socketUtil.getSocketConection();
 
         new Handler().postDelayed(new Runnable() {
             @Override
