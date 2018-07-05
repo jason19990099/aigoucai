@@ -25,13 +25,16 @@ import android.widget.TextView;
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.bean.DataSynevent;
 import com.example.agc.aigoucai.bean.TestSendData;
+import com.example.agc.aigoucai.bean.base;
 import com.example.agc.aigoucai.util.Apputil;
+import com.example.agc.aigoucai.util.ByteUtil;
 import com.example.agc.aigoucai.util.CustomDialog;
 import com.example.agc.aigoucai.util.IntentUtil;
 import com.example.agc.aigoucai.util.LogUtil;
 import com.example.agc.aigoucai.util.SB;
 import com.example.agc.aigoucai.util.SharePreferencesUtil;
 import com.example.agc.aigoucai.util.SocketUtil;
+import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -40,7 +43,11 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 
@@ -60,8 +67,10 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     TextView tvVertion;
     private Adapter_url adapter_url = new Adapter_url();
     private CustomDialog.Builder ibuilder;
-    private String[] url_array = null;
-    private String[] time_array = null;
+    private String[] url_array ;
+    private String[] time_array ;
+    private String responsecode;
+    private String badurl;
     // 退出时间
     private static long currentBackPressedTime = 0;
     private Handler hander = new Handler() {
@@ -118,6 +127,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
 
 
     }
+
 
 
     /**
@@ -257,7 +267,12 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                         time_string = "超时";
                         time_array[i] = time_string;
                         hander.sendEmptyMessage(0); // 下载完成后发送处理消息
+                        responsecode=String.valueOf(responseCode);
+                        badurl=address;
+                        SocketsendMessage();
                     }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -317,5 +332,80 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+
+    public class SendhijackMessage2 implements ISendable {
+        @Override
+        public byte[] parse() {
+            //根据服务器的解析规则,构建byte数组
+            String id = base.appid;  //发送的代号
+            byte b = 0;
+            String network = "";
+            if (Apputil.isVpnUsed()) {
+                network = network + 1 + ":" + Apputil.netState(SelectLinesActivity.this) + ":" + Apputil.getOperator(SelectLinesActivity.this);
+            } else {
+                network = network + 0 + ":" + Apputil.netState(SelectLinesActivity.this) + ":" + Apputil.getOperator(SelectLinesActivity.this);
+            }
+            byte[] byte_network = network.getBytes(Charset.defaultCharset());
+            String beijichi = badurl;
+            byte[] byte_beijichi = beijichi.getBytes(Charset.defaultCharset());
+            String jiechidao = responsecode;
+            byte[] byte_jiechidao = jiechidao.getBytes();
+            LogUtil.e("====beijichi==========" + beijichi);
+            LogUtil.e("====jiechidao==========" + jiechidao);
+            byte[] byte_id = id.getBytes(Charset.defaultCharset());
+
+
+            int totalsize = 4 + 4 + 1 + byte_id.length + 4 + byte_network.length + byte_beijichi.length + byte_jiechidao.length + 2 * 4;
+            ByteBuffer bb = ByteBuffer.allocate(totalsize);
+
+
+            byte[] bytes_totallength = ByteUtil.toLH(totalsize);
+            byte[] byte_baotou = ByteUtil.toLH(5);
+
+            bb.put(bytes_totallength); //包长度
+            bb.put(byte_baotou);  //包头
+            bb.put(b);  //是否压缩
+
+
+            byte[] bytes1 = id.getBytes();
+            short idlength = Short.parseShort(id.getBytes().length + "");
+            bb.put(ByteUtil.toLH2(idlength));
+            bb.put(bytes1);  //id
+
+            int SyscurrentMills = Integer.parseInt(String.valueOf(Calendar.getInstance().getTimeInMillis() / 1000));
+            byte[] bytes_SyscurrentMills = ByteUtil.toLH(SyscurrentMills);
+            bb.put(bytes_SyscurrentMills);  //时间戳
+
+            short netLength = Short.parseShort(byte_network.length + "");
+            bb.put(ByteUtil.toLH2(netLength));
+            bb.put(byte_network);  //网络
+
+            short beijiechi = Short.parseShort(byte_beijichi.length + "");
+            bb.put(ByteUtil.toLH2(beijiechi));
+            bb.put(byte_beijichi);
+
+            short yijiechi = Short.parseShort(byte_jiechidao.length + "");
+            bb.put(ByteUtil.toLH2(yijiechi));
+            bb.put(byte_jiechidao);
+
+            bb.order(ByteOrder.LITTLE_ENDIAN);
+            return bb.array();
+        }
+    }
+
+
+
+    /**
+     * socket发送信息到服务器
+     */
+    private void SocketsendMessage() {
+        mManager = SocketUtil.getmManager();
+        if (!mManager.isConnect()) {
+            mManager.connect();
+        }
+        mManager.send(new SendhijackMessage2());
+
     }
 }

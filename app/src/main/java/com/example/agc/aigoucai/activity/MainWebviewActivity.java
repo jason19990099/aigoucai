@@ -83,6 +83,8 @@ public class MainWebviewActivity extends AppCompatActivity {
     ImageView ivBack;
     @BindView(R.id.ll_title)
     RelativeLayout llTitle;
+    @BindView(R.id.view_line)
+    View viewLine;
     private String mUrl;
     private LinearLayout mLayout;
     private WebView mWebView;
@@ -121,7 +123,6 @@ public class MainWebviewActivity extends AppCompatActivity {
 
         initWebSetting(mUrl);
 
-        llTitle.setVisibility(View.GONE);
     }
 
 
@@ -213,10 +214,12 @@ public class MainWebviewActivity extends AppCompatActivity {
 
                 }
 
-                if (domain1.equals(domain2)){
+                if (domain1.equals(domain2)) {
                     llTitle.setVisibility(View.GONE);
-                }else{
+                    viewLine.setVisibility(View.GONE);
+                } else {
                     llTitle.setVisibility(View.VISIBLE);
+                    viewLine.setVisibility(View.VISIBLE);
                 }
 
                 /********************************调起支付宝支付或者QQ第三方支付*************************************************************************/
