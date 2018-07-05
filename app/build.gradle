@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+﻿apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 //加入下面这段代码
@@ -23,9 +23,11 @@ android {
         applicationId "com.example.agc.aigoucai"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
-        flavorDimensions "1"
+
+        versionCode 3
+        versionName "1.2"
+        flavorDimensions "3"
+
         ndk {
             //选择要添加的对应cpu类型的.so库（不需要的删除即可）。
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'

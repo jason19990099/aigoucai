@@ -37,6 +37,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.bean.base;
@@ -78,6 +79,12 @@ public class MainWebviewActivity extends AppCompatActivity {
     ImageView ivLoading;
     @BindView(R.id.web_layout)
     LinearLayout webLayout;
+    @BindView(R.id.iv_back)
+    ImageView ivBack;
+    @BindView(R.id.ll_title)
+    RelativeLayout llTitle;
+    @BindView(R.id.view_line)
+    View viewLine;
     private String mUrl;
     private LinearLayout mLayout;
     private WebView mWebView;
@@ -115,6 +122,7 @@ public class MainWebviewActivity extends AppCompatActivity {
         mLayout.addView(mWebView);
 
         initWebSetting(mUrl);
+
     }
 
 
@@ -201,17 +209,26 @@ public class MainWebviewActivity extends AppCompatActivity {
                             jiechiurl = url;
                             SocketsendMessage();
                         }
-
                         ischecked = true;
                     }
 
                 }
+
+                if (domain1.equals(domain2)) {
+                    llTitle.setVisibility(View.GONE);
+                    viewLine.setVisibility(View.GONE);
+                } else {
+                    llTitle.setVisibility(View.VISIBLE);
+                    viewLine.setVisibility(View.VISIBLE);
+                }
+
                 /********************************调起支付宝支付或者QQ第三方支付*************************************************************************/
                 try {
                     if (url.startsWith("mqqapi://")
                             || url.contains("alipays://platformapi")
                             || url.startsWith("https://messenger")
                             || url.startsWith("https://www.agcapp.me/app.apk")) {
+
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                         startActivity(intent);
                         //是聊天页就关闭  不然白屏
@@ -221,7 +238,6 @@ public class MainWebviewActivity extends AppCompatActivity {
                     } else {
                         view.loadUrl(url);
                     }
-
 
 
                 } catch (Exception e) {
@@ -259,7 +275,7 @@ public class MainWebviewActivity extends AppCompatActivity {
     private final static int FILECHOOSER_RESULTCODE = 1;// 表单的结果回调</span>
     private ValueCallback<Uri> mUploadMessage;// 表单的数据信息
 
-    @OnClick({R.id.ll_home, R.id.ll_refresh, R.id.ll_xianlu, R.id.ll_fenxiang})
+    @OnClick({R.id.ll_home, R.id.ll_refresh, R.id.ll_xianlu, R.id.ll_fenxiang, R.id.iv_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_home:
@@ -278,8 +294,14 @@ public class MainWebviewActivity extends AppCompatActivity {
                 changeSelectState(3);
                 ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", base.share_url);
                 break;
+            case R.id.iv_back:
+                changeSelectState(0);
+                initWebSetting(mUrl);
+                break;
+
         }
     }
+
 
     private class AppCacheWebChromeClient extends WebChromeClient {
 
