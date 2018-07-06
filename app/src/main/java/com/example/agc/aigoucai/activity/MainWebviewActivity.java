@@ -93,8 +93,9 @@ public class MainWebviewActivity extends AppCompatActivity {
     private IConnectionManager mManager;
     private String jiechiurl = "";
     private boolean ischecked = false;
-    private String domain2;
+    private String domain1, domain2;
     private boolean mistake = false;
+    private String  changeUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,46 +183,6 @@ public class MainWebviewActivity extends AppCompatActivity {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
                 /***************************************判断是否被劫持******************************************************************/
-                LogUtil.e("===========mainurl=========" + SharePreferencesUtil.getString(MainWebviewActivity.this, "main_url", ""));
-                LogUtil.e("=========shouldOverrideUrlLoading===========" + url);
-                //这样获取的方式，不请求就能获取到域名
-                URL url_1 = null;
-                try {
-                    url_1 = new URL(SharePreferencesUtil.getString(MainWebviewActivity.this, "main_url", ""));
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-                String domain1 = url_1.getHost();
-
-
-                try {
-                    URL url_2 = new URL(url);
-                    domain2 = url_2.getHost();
-                } catch (Exception e) {
-                    mistake = true;
-                    e.printStackTrace();
-                }
-
-                LogUtil.e("===========mistake=======" + mistake);
-                if (!mistake) {
-                    if (!ischecked) {
-                        if (!domain1.equals(domain2)) {
-                            jiechiurl = url;
-                            SocketsendMessage();
-                        }
-                        ischecked = true;
-                    }
-
-                }
-
-                if (domain1.equals(domain2)) {
-                    llTitle.setVisibility(View.GONE);
-                    viewLine.setVisibility(View.GONE);
-                } else {
-                    llTitle.setVisibility(View.VISIBLE);
-                    viewLine.setVisibility(View.VISIBLE);
-                }
-
                 /********************************调起支付宝支付或者QQ第三方支付*************************************************************************/
                 try {
                     if (url.startsWith("mqqapi://")
@@ -258,8 +219,62 @@ public class MainWebviewActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                LogUtil.e("========***===onPageFinished=======" + url);
+                if (url.contains("mobile")&&url.contains("bank")){
+                       changeUrl=url;
+                }
                 if (dialog != null && dialog.isShowing())
                     dialog.dismiss();
+
+                URL url_1 = null;
+                try {
+                    url_1 = new URL(SharePreferencesUtil.getString(MainWebviewActivity.this, "main_url", ""));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                domain1 = url_1.getHost();
+
+
+                try {
+                    URL url_2 = new URL(url);
+                    domain2 = url_2.getHost();
+                } catch (Exception e) {
+                    mistake = true;
+                    e.printStackTrace();
+                }
+
+                LogUtil.e("===========mistake=======" + mistake);
+                if (!mistake) {
+                    if (!ischecked) {
+                        if (!domain1.equals(domain2)) {
+                            jiechiurl = url;
+                            SocketsendMessage();
+                        }
+                        ischecked = true;
+                    }
+
+                }
+
+                /**
+                 * 头部标题栏的展示否
+                 */
+                if (url.contains("mobile")&&url.contains("bank")){
+                    llTitle.setVisibility(View.GONE);
+                    viewLine.setVisibility(View.GONE);
+                }else{
+                    LogUtil.e("=========domain1========"+domain1);
+                    LogUtil.e("=========domain2========"+domain2);
+                    if (null!=domain1&&null!=domain2){
+                        if (domain1.equals(domain2)) {
+                            llTitle.setVisibility(View.GONE);
+                            viewLine.setVisibility(View.GONE);
+                        } else {
+                            llTitle.setVisibility(View.VISIBLE);
+                            viewLine.setVisibility(View.VISIBLE);
+                        }
+
+                    }
+                }
             }
 
             @Override
@@ -295,8 +310,9 @@ public class MainWebviewActivity extends AppCompatActivity {
                 ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", base.share_url);
                 break;
             case R.id.iv_back:
-                changeSelectState(0);
-                initWebSetting(mUrl);
+                LogUtil.e("=========iv_back====");
+                if (null!=changeUrl)
+                initWebSetting(changeUrl);
                 break;
 
         }
