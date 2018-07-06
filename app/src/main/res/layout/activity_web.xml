@@ -21,7 +21,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:src="@mipmap/irrow_back" />
+            android:src="@mipmap/iv_back" />
 
         <TextView
             android:layout_width="wrap_content"
