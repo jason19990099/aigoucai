@@ -310,9 +310,11 @@ public class MainWebviewActivity extends AppCompatActivity {
                 ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", base.share_url);
                 break;
             case R.id.iv_back:
-                LogUtil.e("=========iv_back====");
-                if (null!=changeUrl)
-                initWebSetting(changeUrl);
+                if (null==changeUrl){
+                    finish();
+                }else{
+                    initWebSetting(changeUrl);
+                }
                 break;
 
         }
