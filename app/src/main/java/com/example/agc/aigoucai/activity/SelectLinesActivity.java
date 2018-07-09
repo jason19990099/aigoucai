@@ -274,7 +274,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    responsecode="连接超时";
+                    responsecode=e.toString();
                     badurl=address;
                     SocketsendMessage();
 
