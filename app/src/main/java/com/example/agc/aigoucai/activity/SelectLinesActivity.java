@@ -272,9 +272,12 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                         SocketsendMessage();
                     }
 
-
                 } catch (Exception e) {
                     e.printStackTrace();
+                    responsecode="连接超时";
+                    badurl=address;
+                    SocketsendMessage();
+
                 } finally {
                     if (connection != null) {
                         connection.disconnect();
@@ -309,7 +312,6 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         refresh();
     }
 
-
     /**
      * EventBus的接收方法
      */
@@ -327,13 +329,6 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
             adapter_url.notifyDataSetChanged();
 
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
-    }
-
 
     public class SendhijackMessage2 implements ISendable {
         @Override
@@ -407,5 +402,12 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         }
         mManager.send(new SendhijackMessage2());
 
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }
