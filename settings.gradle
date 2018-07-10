@@ -1,1 +1,1 @@
-include ':app', ':mylibrary_socketutil'
+include ':app', ':mylibrary_socketutil', ':socketutil'
