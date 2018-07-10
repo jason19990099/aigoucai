@@ -9,10 +9,9 @@ import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.example.agc.aigoucai.R;
-import com.example.agc.aigoucai.util.LogUtil;
-
+import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.UnknownHostException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.Collections;
@@ -24,8 +23,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-
-import static android.media.audiofx.AcousticEchoCanceler.isAvailable;
 
 public class Apputil {
 
@@ -172,5 +169,30 @@ public class Apputil {
         } catch (Exception ignored) {
 
         }
+    }
+
+
+    /**
+     * 根据连接解析ip地址
+     * @param name
+     * @return
+     */
+    public static String getIP(String name)  {
+        if (name.contains("http://")){
+            name=  name.substring(7,name.length());
+        }else{
+            if (name.contains("https://")){
+              name=  name.substring(8,name.length());
+            }
+        }
+        try {
+            System.out.println(InetAddress.getByName(name));
+            return InetAddress.getByName(name).toString();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+            return e.toString();
+        }
+
+
     }
 }
