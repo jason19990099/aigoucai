@@ -272,12 +272,21 @@ public class MainWebviewActivity extends AppCompatActivity {
                             llTitle.setVisibility(View.GONE);
                             viewLine.setVisibility(View.GONE);
                         } else {
-                            llTitle.setVisibility(View.VISIBLE);
-                            viewLine.setVisibility(View.VISIBLE);
+                            Configuration mConfiguration = getResources().getConfiguration(); //获取设置的配置信息
+                            int ori = mConfiguration.orientation; //获取屏幕方向
+                            if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
+                                //横屏
+                                llTitle.setVisibility(View.GONE);
+                                viewLine.setVisibility(View.GONE);
+                            } else if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
+                                //竖屏
+                                llTitle.setVisibility(View.VISIBLE);
+                                viewLine.setVisibility(View.VISIBLE);
+                            }
                         }
-
                     }
                 }
+                mWebView.setVisibility(View.VISIBLE);
             }
 
             @Override
