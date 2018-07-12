@@ -175,6 +175,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
 
         @Override
         public View getView(final int i, View view, ViewGroup viewGroup) {
+
             LayoutInflater inflater = LayoutInflater.from(SelectLinesActivity.this);
             View view1 = inflater.inflate(R.layout.item, null);
             TextView text_id = view1.findViewById(R.id.text_id);
@@ -197,7 +198,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
 
 //          text_id.setText(url_array[i]);
             text_id.setText("线路" + (i + 1));//使用綫路123代表網址避免被劫持
-            if (!TextUtils.isEmpty(time_array[i])) {
+            try{
+                if (!TextUtils.isEmpty(time_array[i])) {
                 if (!time_array[i].equals("超时")) {
                     String s = time_array[i].split("#")[0];
                     String ms = time_array[i].split("#")[1];
@@ -216,7 +218,11 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                     text_id_sp.setTextColor(Color.parseColor("#FFFF4081"));
                     text_id_sp.setText(time_array[i]);
                 }
+            }}
+            catch (Exception e){
+                 e.printStackTrace();
             }
+
             return view1;
         }
     }
@@ -272,6 +278,12 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                         SocketsendMessage();
                     }
                 } catch (Exception e) {
+                    //有错误就设置成超时
+                    time_string = "超时*";
+                    time_array[i] = time_string;
+                    hander.sendEmptyMessage(0); // 下载完成后发送处理消息
+
+
                     e.printStackTrace();
                     badurl=address;
                     responsecode=e.toString()+"###"+Apputil.getIP(badurl);
