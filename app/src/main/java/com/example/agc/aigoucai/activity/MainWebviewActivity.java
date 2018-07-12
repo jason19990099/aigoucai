@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -85,6 +86,8 @@ public class MainWebviewActivity extends AppCompatActivity {
     RelativeLayout llTitle;
     @BindView(R.id.view_line)
     View viewLine;
+    @BindView(R.id.ll_bottom)
+    LinearLayout llBottom;
     private String mUrl;
     private LinearLayout mLayout;
     private WebView mWebView;
@@ -95,7 +98,7 @@ public class MainWebviewActivity extends AppCompatActivity {
     private boolean ischecked = false;
     private String domain1, domain2;
     private boolean mistake = false;
-    private String  changeUrl;
+    private String changeUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,8 +222,8 @@ public class MainWebviewActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 LogUtil.e("========***===onPageFinished=======" + url);
-                if (url.contains("mobile")&&url.contains("bank")){
-                       changeUrl=url;
+                if (url.contains("mobile") && url.contains("bank")) {
+                    changeUrl = url;
                 }
                 if (dialog != null && dialog.isShowing())
                     dialog.dismiss();
@@ -257,13 +260,13 @@ public class MainWebviewActivity extends AppCompatActivity {
                 /**
                  * 头部标题栏的展示否
                  */
-                if (url.contains("mobile")&&url.contains("bank")){
+                if (url.contains("mobile") && url.contains("bank")) {
                     llTitle.setVisibility(View.GONE);
                     viewLine.setVisibility(View.GONE);
-                }else{
-                    LogUtil.e("=========domain1========"+domain1);
-                    LogUtil.e("=========domain2========"+domain2);
-                    if (null!=domain1&&null!=domain2){
+                } else {
+                    LogUtil.e("=========domain1========" + domain1);
+                    LogUtil.e("=========domain2========" + domain2);
+                    if (null != domain1 && null != domain2) {
                         if (domain1.equals(domain2)) {
                             llTitle.setVisibility(View.GONE);
                             viewLine.setVisibility(View.GONE);
@@ -284,6 +287,30 @@ public class MainWebviewActivity extends AppCompatActivity {
 
         mWebView.loadUrl(url);
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            llBottom.setVisibility(View.GONE);
+            llTitle.setVisibility(View.GONE);
+            viewLine.setVisibility(View.GONE);
+
+        } else {
+            if (null != domain1 && null != domain2) {
+                if (domain1.equals(domain2)) {
+                    llTitle.setVisibility(View.GONE);
+                    viewLine.setVisibility(View.GONE);
+                } else {
+                    llTitle.setVisibility(View.VISIBLE);
+                    viewLine.setVisibility(View.VISIBLE);
+                }
+
+            }
+            llBottom.setVisibility(View.VISIBLE);
+        }
+    }
+
 
     private ValueCallback<Uri[]> mUploadCallbackAboveL;
     private final static int FILECHOOSER_RESULTCODE = 1;// 表单的结果回调</span>
@@ -309,9 +336,9 @@ public class MainWebviewActivity extends AppCompatActivity {
                 ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", base.share_url);
                 break;
             case R.id.iv_back:
-                if (null==changeUrl){
+                if (null == changeUrl) {
                     finish();
-                }else{
+                } else {
                     initWebSetting(changeUrl);
                 }
                 break;
