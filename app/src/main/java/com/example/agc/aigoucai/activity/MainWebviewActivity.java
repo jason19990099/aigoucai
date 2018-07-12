@@ -353,14 +353,24 @@ public class MainWebviewActivity extends AppCompatActivity {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             super.onProgressChanged(view, newProgress);
+            Configuration mConfiguration = getResources().getConfiguration(); //获取设置的配置信息
+            int ori = mConfiguration.orientation; //获取屏幕方向
             if (newProgress == 100) {
                 mWebView.setVisibility(View.VISIBLE);
                 ivLoading.setVisibility(View.GONE);
+                if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
+                    //横屏
+                    llBottom.setVisibility(View.GONE);
+                    llTitle.setVisibility(View.GONE);
+                    viewLine.setVisibility(View.GONE);
+
+                } else if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
+                    //竖屏
+                }
             } else {
                 mWebView.setVisibility(View.GONE);
                 ivLoading.setVisibility(View.VISIBLE);
-                Configuration mConfiguration = getResources().getConfiguration(); //获取设置的配置信息
-                int ori = mConfiguration.orientation; //获取屏幕方向
+
                 if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
                     //横屏
 //                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//强制为竖屏
