@@ -370,15 +370,18 @@ public class MainWebviewActivity extends AppCompatActivity {
             } else {
                 mWebView.setVisibility(View.GONE);
                 ivLoading.setVisibility(View.VISIBLE);
-
                 if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
                     //横屏
-//                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);//强制为竖屏
                     ivLoading.setImageDrawable(getResources().getDrawable(R.mipmap.loading_land));
+                    llBottom.setVisibility(View.GONE);
+                    llTitle.setVisibility(View.GONE);
+                    viewLine.setVisibility(View.GONE);
                 } else if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
                     //竖屏
-//                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);//强制为横屏
                     ivLoading.setImageDrawable(getResources().getDrawable(R.mipmap.loading));
+                    llBottom.setVisibility(View.VISIBLE);
+                    llTitle.setVisibility(View.VISIBLE);
+                    viewLine.setVisibility(View.VISIBLE);
                 }
             }
 
