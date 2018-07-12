@@ -88,6 +88,8 @@ public class MainWebviewActivity extends AppCompatActivity {
     View viewLine;
     @BindView(R.id.ll_bottom)
     LinearLayout llBottom;
+    @BindView(R.id.line_bottom)
+    View lineBottom;
     private String mUrl;
     private LinearLayout mLayout;
     private WebView mWebView;
@@ -271,12 +273,21 @@ public class MainWebviewActivity extends AppCompatActivity {
                             llTitle.setVisibility(View.GONE);
                             viewLine.setVisibility(View.GONE);
                         } else {
-                            llTitle.setVisibility(View.VISIBLE);
-                            viewLine.setVisibility(View.VISIBLE);
+                            Configuration mConfiguration = getResources().getConfiguration(); //获取设置的配置信息
+                            int ori = mConfiguration.orientation; //获取屏幕方向
+                            if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
+                                //横屏
+                                llTitle.setVisibility(View.GONE);
+                                viewLine.setVisibility(View.GONE);
+                            } else if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
+                                //竖屏
+                                llTitle.setVisibility(View.VISIBLE);
+                                viewLine.setVisibility(View.VISIBLE);
+                            }
                         }
-
                     }
                 }
+                mWebView.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -292,6 +303,7 @@ public class MainWebviewActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            lineBottom.setVisibility(View.GONE);
             llBottom.setVisibility(View.GONE);
             llTitle.setVisibility(View.GONE);
             viewLine.setVisibility(View.GONE);
@@ -308,6 +320,7 @@ public class MainWebviewActivity extends AppCompatActivity {
 
             }
             llBottom.setVisibility(View.VISIBLE);
+            lineBottom.setVisibility(View.VISIBLE);
         }
     }
 
@@ -352,12 +365,39 @@ public class MainWebviewActivity extends AppCompatActivity {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             super.onProgressChanged(view, newProgress);
+            Configuration mConfiguration = getResources().getConfiguration(); //获取设置的配置信息
+            int ori = mConfiguration.orientation; //获取屏幕方向
             if (newProgress == 100) {
                 mWebView.setVisibility(View.VISIBLE);
                 ivLoading.setVisibility(View.GONE);
+                if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
+                    //横屏
+                    llBottom.setVisibility(View.GONE);
+                    lineBottom.setVisibility(View.GONE);
+                    llTitle.setVisibility(View.GONE);
+                    viewLine.setVisibility(View.GONE);
+
+                } else if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
+                    //竖屏
+                }
             } else {
                 mWebView.setVisibility(View.GONE);
                 ivLoading.setVisibility(View.VISIBLE);
+                if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
+                    //横屏
+                    ivLoading.setImageDrawable(getResources().getDrawable(R.mipmap.loading_land));
+                    llBottom.setVisibility(View.GONE);
+                    lineBottom.setVisibility(View.GONE);
+                    llTitle.setVisibility(View.GONE);
+                    viewLine.setVisibility(View.GONE);
+                } else if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
+                    //竖屏
+                    ivLoading.setImageDrawable(getResources().getDrawable(R.mipmap.loading));
+                    llBottom.setVisibility(View.VISIBLE);
+                    lineBottom.setVisibility(View.VISIBLE);
+                    llTitle.setVisibility(View.VISIBLE);
+                    viewLine.setVisibility(View.VISIBLE);
+                }
             }
 
         }
