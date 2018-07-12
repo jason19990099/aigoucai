@@ -8,7 +8,6 @@ import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
@@ -89,6 +88,8 @@ public class MainWebviewActivity extends AppCompatActivity {
     View viewLine;
     @BindView(R.id.ll_bottom)
     LinearLayout llBottom;
+    @BindView(R.id.line_bottom)
+    View lineBottom;
     private String mUrl;
     private LinearLayout mLayout;
     private WebView mWebView;
@@ -302,6 +303,7 @@ public class MainWebviewActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            lineBottom.setVisibility(View.GONE);
             llBottom.setVisibility(View.GONE);
             llTitle.setVisibility(View.GONE);
             viewLine.setVisibility(View.GONE);
@@ -318,6 +320,7 @@ public class MainWebviewActivity extends AppCompatActivity {
 
             }
             llBottom.setVisibility(View.VISIBLE);
+            lineBottom.setVisibility(View.VISIBLE);
         }
     }
 
@@ -370,6 +373,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                 if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
                     //横屏
                     llBottom.setVisibility(View.GONE);
+                    lineBottom.setVisibility(View.GONE);
                     llTitle.setVisibility(View.GONE);
                     viewLine.setVisibility(View.GONE);
 
@@ -383,12 +387,14 @@ public class MainWebviewActivity extends AppCompatActivity {
                     //横屏
                     ivLoading.setImageDrawable(getResources().getDrawable(R.mipmap.loading_land));
                     llBottom.setVisibility(View.GONE);
+                    lineBottom.setVisibility(View.GONE);
                     llTitle.setVisibility(View.GONE);
                     viewLine.setVisibility(View.GONE);
                 } else if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
                     //竖屏
                     ivLoading.setImageDrawable(getResources().getDrawable(R.mipmap.loading));
                     llBottom.setVisibility(View.VISIBLE);
+                    lineBottom.setVisibility(View.VISIBLE);
                     llTitle.setVisibility(View.VISIBLE);
                     viewLine.setVisibility(View.VISIBLE);
                 }
