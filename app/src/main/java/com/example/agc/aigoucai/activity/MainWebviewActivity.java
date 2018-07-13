@@ -190,9 +190,11 @@ public class MainWebviewActivity extends AppCompatActivity {
                 /********************************调起支付宝支付或者QQ第三方支付*************************************************************************/
                 try {
                     if (url.startsWith("mqqapi://")
-                            || url.contains("alipays://platformapi")
-                            || url.startsWith("https://messenger")
-                            || url.startsWith("https://www.agcapp.me/app.apk")) {
+                            || url.contains("alipays://platformapi")//支付宝支付
+                            || url.startsWith("https://messenger")  //聊天页
+                            || url.startsWith("https://www.agcapp.me/app.apk")
+                            || url.startsWith("upwrp://")   //银联云闪付
+                            ) {
 
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                         startActivity(intent);
