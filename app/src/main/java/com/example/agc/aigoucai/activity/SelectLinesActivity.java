@@ -270,12 +270,16 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                         time_array[i] = time_string;
                         hander.sendEmptyMessage(0); // 下载完成后发送处理消息
                     } else {
-                        time_string = "超时";
-                        time_array[i] = time_string;
-                        hander.sendEmptyMessage(0); // 下载完成后发送处理消息
-                        badurl=address;
-                        responsecode=String.valueOf(responseCode)+"###"+Apputil.getIP(badurl);
-                        SocketsendMessage();
+                        //30開頭的過濾掉
+                        if (!String.valueOf(responseCode).startsWith("30")){
+                            time_string = "超时";
+                            time_array[i] = time_string;
+                            hander.sendEmptyMessage(0); // 下载完成后发送处理消息
+                            badurl=address;
+                            responsecode=String.valueOf(responseCode)+"###"+Apputil.getIP(badurl);
+                            SocketsendMessage();
+                        }
+
                     }
                 } catch (Exception e) {
                     //有错误就设置成超时
