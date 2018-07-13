@@ -3,15 +3,12 @@ package com.example.socketutil;
 import android.content.Context;
 import android.util.Log;
 
-
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.SocketActionAdapter;
 import com.xuhao.android.libsocket.sdk.bean.OriginalData;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
 import com.xuhao.android.libsocket.sdk.protocol.IHeaderProtocol;
-
-
 import org.greenrobot.eventbus.EventBus;
 
 import java.nio.ByteOrder;
@@ -33,6 +30,7 @@ public class SocketUtil {
     public static String ip_bei = "";
     private static int index = 0;
     private static int net_port=1985;
+    private static DataSynevent dataSynevent;
 
 
     /**
@@ -133,10 +131,13 @@ public class SocketUtil {
                         Log.e("=====网址====", _www);
 
                     }
-                    DataSynevent dataSynevent = new DataSynevent();
+                     dataSynevent = new DataSynevent();
                     dataSynevent.setList(list);
                     //发送粘性事件
                     EventBus.getDefault().postSticky(dataSynevent);
+
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -189,6 +190,11 @@ public class SocketUtil {
      */
     public static IConnectionManager getmManager() {
         return mManager;
+    }
+
+
+    public static DataSynevent getData(){
+        return dataSynevent;
     }
 
 }
