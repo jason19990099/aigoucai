@@ -41,6 +41,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.example.agc.aigoucai.R;
+import com.example.agc.aigoucai.R2;
 import com.example.agc.aigoucai.bean.base;
 import com.example.agc.aigoucai.util.Apputil;
 import com.example.agc.aigoucai.util.ByteUtil;
@@ -68,27 +69,27 @@ import butterknife.OnClick;
 
 
 public class MainWebviewActivity extends AppCompatActivity {
-    @BindView(R.id.ll_home)
+    @BindView(R2.id.ll_home)
     LinearLayout llHome;
-    @BindView(R.id.ll_refresh)
+    @BindView(R2.id.ll_refresh)
     LinearLayout llRefresh;
-    @BindView(R.id.ll_xianlu)
+    @BindView(R2.id.ll_xianlu)
     LinearLayout llXianlu;
-    @BindView(R.id.ll_fenxiang)
+    @BindView(R2.id.ll_fenxiang)
     LinearLayout llFenxiang;
-    @BindView(R.id.iv_loading)
+    @BindView(R2.id.iv_loading)
     ImageView ivLoading;
-    @BindView(R.id.web_layout)
+    @BindView(R2.id.web_layout)
     LinearLayout webLayout;
-    @BindView(R.id.iv_back)
+    @BindView(R2.id.iv_back)
     ImageView ivBack;
-    @BindView(R.id.ll_title)
+    @BindView(R2.id.ll_title)
     RelativeLayout llTitle;
-    @BindView(R.id.view_line)
+    @BindView(R2.id.view_line)
     View viewLine;
-    @BindView(R.id.ll_bottom)
+    @BindView(R2.id.ll_bottom)
     LinearLayout llBottom;
-    @BindView(R.id.line_bottom)
+    @BindView(R2.id.line_bottom)
     View lineBottom;
     private String mUrl;
     private LinearLayout mLayout;
@@ -331,26 +332,26 @@ public class MainWebviewActivity extends AppCompatActivity {
     private final static int FILECHOOSER_RESULTCODE = 1;// 表单的结果回调</span>
     private ValueCallback<Uri> mUploadMessage;// 表单的数据信息
 
-    @OnClick({R.id.ll_home, R.id.ll_refresh, R.id.ll_xianlu, R.id.ll_fenxiang, R.id.iv_back})
+    @OnClick({R2.id.ll_home, R2.id.ll_refresh, R2.id.ll_xianlu, R2.id.ll_fenxiang, R2.id.iv_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.ll_home:
+            case R2.id.ll_home:
                 changeSelectState(0);
                 initWebSetting(mUrl);
                 break;
-            case R.id.ll_refresh:
+            case R2.id.ll_refresh:
                 changeSelectState(1);
                 mWebView.reload();  //刷新
                 break;
-            case R.id.ll_xianlu:
+            case R2.id.ll_xianlu:
                 changeSelectState(2);
                 finish();
                 break;
-            case R.id.ll_fenxiang:
+            case R2.id.ll_fenxiang:
                 changeSelectState(3);
                 ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", base.share_url);
                 break;
-            case R.id.iv_back:
+            case R2.id.iv_back:
                 if (null == changeUrl) {
                     finish();
                 } else {

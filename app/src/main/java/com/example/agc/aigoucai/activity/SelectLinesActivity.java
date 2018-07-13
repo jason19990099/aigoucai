@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.agc.aigoucai.R;
+import com.example.agc.aigoucai.R2;
 import com.example.agc.aigoucai.bean.DataSynevent;
 import com.example.agc.aigoucai.bean.TestSendData;
 import com.example.agc.aigoucai.bean.base;
@@ -58,13 +59,13 @@ import butterknife.ButterKnife;
 
 public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener,senddata {
     public IConnectionManager mManager;
-    @BindView(R.id.listvie_id)
+    @BindView(R2.id.listvie_id)
     ListView listvieId;
-    @BindView(R.id.swipe_container)
+    @BindView(R2.id.swipe_container)
     SwipeRefreshLayout swipeContainer;
-    @BindView(R.id.fl_layout)
+    @BindView(R2.id.fl_layout)
     FrameLayout flLayout;
-    @BindView(R.id.tv_vertion)
+    @BindView(R2.id.tv_vertion)
     TextView tvVertion;
     private Adapter_url adapter_url = new Adapter_url();
     private CustomDialog.Builder ibuilder;
