@@ -2,6 +2,8 @@ package com.example.agc.aigoucai.util;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.example.agc.aigoucai.activity.MainWebviewActivity;
 import com.example.agc.aigoucai.bean.DataSynevent;
 import com.example.agc.aigoucai.bean.TestSendData;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
@@ -132,6 +134,12 @@ public class SocketUtil {
                     dataSynevent.setList(list);
                     //发送粘性事件
                     EventBus.getDefault().postSticky(dataSynevent);
+
+                    MainWebviewActivity MainWebviewActivity=new MainWebviewActivity();
+                    senddata senddata= (com.example.agc.aigoucai.util.senddata) MainWebviewActivity;
+
+                    senddata.getDate();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

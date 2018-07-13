@@ -34,6 +34,7 @@ import com.example.agc.aigoucai.util.LogUtil;
 import com.example.agc.aigoucai.util.SB;
 import com.example.agc.aigoucai.util.SharePreferencesUtil;
 import com.example.agc.aigoucai.util.SocketUtil;
+import com.example.agc.aigoucai.util.senddata;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
 
@@ -55,7 +56,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener {
+public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener,senddata {
     public IConnectionManager mManager;
     @BindView(R.id.listvie_id)
     ListView listvieId;
@@ -154,6 +155,11 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     public void onRefresh() {
         refresh();
         swipeContainer.setRefreshing(false);
+    }
+
+    @Override
+    public void getDate() {
+        LogUtil.e("==========取得数据============");
     }
 
 
