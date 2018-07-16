@@ -2,6 +2,9 @@ package com.example.agc.aigoucai.bean;
 
 import java.util.List;
 
+/**
+ *  发送劫持数据
+ */
 public class DataSynevent {
     private List<String> list;
 
