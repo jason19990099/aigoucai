@@ -3,7 +3,7 @@ package com.example.agc.aigoucai.util;
 import android.content.Context;
 import android.util.Log;
 import com.example.agc.aigoucai.bean.DataSynevent;
-import com.example.agc.aigoucai.bean.TestSendData;
+import com.example.agc.aigoucai.bean.GetUrlDatas;
 import com.xuhao.android.libsocket.sdk.ConnectionInfo;
 import com.xuhao.android.libsocket.sdk.OkSocketOptions;
 import com.xuhao.android.libsocket.sdk.SocketActionAdapter;
@@ -155,7 +155,7 @@ public class SocketUtil {
                     @Override
                     public void run() {
                         if (mManager.isConnect())
-                            mManager.send(new TestSendData());
+                            mManager.send(new GetUrlDatas());
                     }
                 }, 500);
             }
