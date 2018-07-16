@@ -31,6 +31,7 @@ public class SocketUtil {
     public static String ip_bei = "";
     private static int index = 0;
     private static int net_port=1985;
+    private static List urllist;
 
 
     /**
@@ -118,7 +119,7 @@ public class SocketUtil {
                     int index_len = 0;
                     int index_cout = 2;
                     int nums_wangleng = 0;
-                    List list = new ArrayList();
+                    urllist = new ArrayList();
                     for (int i = 0; i < nums_wangzhi; i++) {
                         byte[] bytes = ByteUtil.subBytes(bytes_www, index_len, 2);
                         nums_wangleng = FormatTransfer.lBytesToShort(bytes);  //网址长度(1)
@@ -127,19 +128,19 @@ public class SocketUtil {
                         index_len += (nums_wangleng + 2);
                         index_cout += (nums_wangleng + 2);
                         url_array[i] = _www;
-                        list.add(url_array[i]);
+                        urllist.add(url_array[i]);
                         Log.e("=====网址====", _www);
 
                     }
                     DataSynevent dataSynevent = new DataSynevent();
-                    dataSynevent.setList(list);
+                    dataSynevent.setList(urllist);
                     //发送粘性事件
                     EventBus.getDefault().postSticky(dataSynevent);
-
-                    SelectLinesActivity selectLinesActivity=new SelectLinesActivity();
-                    senddata senddata=  selectLinesActivity;
-
-                    senddata.getDate();
+//
+//                    SelectLinesActivity selectLinesActivity=new SelectLinesActivity();
+//                    senddata senddata=  selectLinesActivity;
+//
+//                    senddata.getDate();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -194,5 +195,15 @@ public class SocketUtil {
     public static IConnectionManager getmManager() {
         return mManager;
     }
+
+    /**
+     * 获取url的集合
+     * @return
+     */
+    public static List getUrlList() {
+        return urllist;
+    }
+
+
 
 }
