@@ -334,31 +334,25 @@ public class MainWebviewActivity extends AppCompatActivity {
 
     @OnClick({R2.id.ll_home, R2.id.ll_refresh, R2.id.ll_xianlu, R2.id.ll_fenxiang, R2.id.iv_back})
     public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R2.id.ll_home:
-                changeSelectState(0);
-                initWebSetting(mUrl);
-                break;
-            case R2.id.ll_refresh:
-                changeSelectState(1);
-                mWebView.reload();  //刷新
-                break;
-            case R2.id.ll_xianlu:
-                changeSelectState(2);
+        int id=view.getId();
+        if (id==R.id.ll_home){
+            changeSelectState(0);
+            initWebSetting(mUrl);
+        }else if (id==R.id.ll_refresh){
+            changeSelectState(1);
+            mWebView.reload();  //刷新
+        }else if (id==R.id.ll_xianlu){
+            changeSelectState(2);
+            finish();
+        }else if (id==R.id.ll_fenxiang){
+            changeSelectState(3);
+            ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", base.share_url);
+        }else if (id==R.id.iv_back){
+            if (null == changeUrl) {
                 finish();
-                break;
-            case R2.id.ll_fenxiang:
-                changeSelectState(3);
-                ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", base.share_url);
-                break;
-            case R2.id.iv_back:
-                if (null == changeUrl) {
-                    finish();
-                } else {
-                    initWebSetting(changeUrl);
-                }
-                break;
-
+            } else {
+                initWebSetting(changeUrl);
+            }
         }
     }
 
