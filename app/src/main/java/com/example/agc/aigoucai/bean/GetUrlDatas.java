@@ -8,10 +8,11 @@ import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 
 /**
- * Created by Administrator on 2018/3/26 0026.
+ *   获取url返回的连接
+ *
+ *   发送的数据
  */
-
-public class TestSendData implements ISendable {
+public class GetUrlDatas implements ISendable {
     String str = base.appid;  //发送的代号
     byte b = 0;
 
