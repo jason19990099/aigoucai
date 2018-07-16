@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.bean.DataSynevent;
-import com.example.agc.aigoucai.bean.TestSendData;
+import com.example.agc.aigoucai.bean.GetUrlDatas;
 import com.example.agc.aigoucai.bean.base;
 import com.example.agc.aigoucai.util.Apputil;
 import com.example.agc.aigoucai.util.ByteUtil;
@@ -49,7 +49,6 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Timer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -122,7 +121,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
             if (!mManager.isConnect()) {
                 mManager.connect();
             }
-            mManager.send(new TestSendData());
+            mManager.send(new GetUrlDatas());
         }
 
 
@@ -142,7 +141,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                 Log.e("=================", "socket未连接，正在连接中.....");
                 mManager.connect();
             }
-            mManager.send(new TestSendData());
+            mManager.send(new GetUrlDatas());
 
             Log.e("=================", "發送已经发送.......");
         }
