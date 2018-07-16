@@ -65,6 +65,14 @@ def static releaseTime() {
 }
 
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+
+}
+
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
@@ -90,4 +98,5 @@ dependencies {
     implementation 'cn.jiguang.sdk:jcore:1.1.9'  // 此处以JCore 1.1.9 版本为例。
     implementation'com.wang.avi:library:1.0.0'
     implementation'com.nineoldandroids:library:2.4.0'
+    implementation(name: 'app-release2', ext: 'aar')
 }

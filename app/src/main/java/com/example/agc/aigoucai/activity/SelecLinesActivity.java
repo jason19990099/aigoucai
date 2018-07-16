@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
-import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.agc.aigoucai.R;
+import com.example.agc.aigoucai.R2;
 import com.example.agc.aigoucai.bean.DataSynevent;
 import com.example.agc.aigoucai.bean.GetUrlDatas;
 import com.example.agc.aigoucai.bean.base;
@@ -34,6 +34,7 @@ import com.example.agc.aigoucai.util.LogUtil;
 import com.example.agc.aigoucai.util.SB;
 import com.example.agc.aigoucai.util.SharePreferencesUtil;
 import com.example.agc.aigoucai.util.SocketUtil;
+import com.example.agc.aigoucai.util.senddata;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
 
@@ -54,17 +55,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener {
+public class SelecLinesActivity  extends Activity implements SwipeRefreshLayout.OnRefreshListener,senddata {
     public IConnectionManager mManager;
-    @BindView(R.id.listvie_id)
+    @BindView(R2.id.listvie_id)
     ListView listvieId;
-    @BindView(R.id.swipe_container)
+    @BindView(R2.id.swipe_container)
     SwipeRefreshLayout swipeContainer;
-    @BindView(R.id.fl_layout)
+    @BindView(R2.id.fl_layout)
     FrameLayout flLayout;
-    @BindView(R.id.tv_vertion)
+    @BindView(R2.id.tv_vertion)
     TextView tvVertion;
-    private Adapter_url adapter_url = new Adapter_url();
+    private SelecLinesActivity.Adapter_url adapter_url = new SelecLinesActivity.Adapter_url();
     private CustomDialog.Builder ibuilder;
     private String[] url_array ;
     private String[] time_array ;
@@ -84,14 +85,16 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         }
     };
 
-
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selectlines);
+
+
+
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        tvVertion.setText("版本号:"+Apputil.getVersion(SelectLinesActivity.this));
+        tvVertion.setText("版本号:"+ Apputil.getVersion(SelecLinesActivity.this));
 //        swipeLayout.setRefreshing(true);
         swipeContainer.setOnRefreshListener(this);
         swipeContainer.setColorSchemeResources(android.R.color.holo_orange_dark,
@@ -99,8 +102,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-        if (!Apputil.isNetConnection(SelectLinesActivity.this)) {
-            ibuilder = new CustomDialog.Builder(SelectLinesActivity.this);
+        if (!Apputil.isNetConnection(SelecLinesActivity.this)) {
+            ibuilder = new CustomDialog.Builder(SelecLinesActivity.this);
             ibuilder.setTitle("");
             ibuilder.setMessage("请检查你的网络是否连接");
             ibuilder.setPositiveButton("查看", new DialogInterface.OnClickListener() {
@@ -125,8 +128,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         }
 
 
-    }
 
+    }
 
 
     /**
@@ -155,6 +158,10 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         swipeContainer.setRefreshing(false);
     }
 
+    @Override
+    public void getDate() {
+
+    }
 
     class Adapter_url extends BaseAdapter {
         @Override
@@ -175,22 +182,22 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         @Override
         public View getView(final int i, View view, ViewGroup viewGroup) {
 
-            LayoutInflater inflater = LayoutInflater.from(SelectLinesActivity.this);
-            View view1 = inflater.inflate(R.layout.item, null);
-            TextView text_id = view1.findViewById(R.id.text_id);
-            TextView text_id_sp = view1.findViewById(R.id.text_id_sp);
-            final LinearLayout ll_listview = view1.findViewById(R.id.ll_listview);
+            LayoutInflater inflater = LayoutInflater.from(SelecLinesActivity.this);
+            View view1 = inflater.inflate(com.example.agc.aigoucai.R.layout.item, null);
+            TextView text_id = view1.findViewById(com.example.agc.aigoucai.R.id.text_id);
+            TextView text_id_sp = view1.findViewById(com.example.agc.aigoucai.R.id.text_id_sp);
+            final LinearLayout ll_listview = view1.findViewById(com.example.agc.aigoucai.R.id.ll_listview);
 
             ll_listview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ll_listview.setBackgroundColor(getResources().getColor(R.color.blue_00ffff));
+                    ll_listview.setBackgroundColor(getResources().getColor(com.example.agc.aigoucai.R.color.blue_00ffff));
                     ll_listview.getBackground().setAlpha(25);
 
                     Bundle bundleTab = new Bundle();
                     bundleTab.putString("url", url_array[i]);
-                    SharePreferencesUtil.addString(SelectLinesActivity.this, "main_url", url_array[i]);
-                    IntentUtil.gotoActivity(SelectLinesActivity.this, MainWebviewActivity.class, bundleTab, false);
+                    SharePreferencesUtil.addString(SelecLinesActivity.this, "main_url", url_array[i]);
+                    IntentUtil.gotoActivity(SelecLinesActivity.this, MainWebviewActivity.class, bundleTab, false);
 
                 }
             });
@@ -199,33 +206,32 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
             text_id.setText("线路" + (i + 1));//使用綫路123代表網址避免被劫持
             try{
                 if (!TextUtils.isEmpty(time_array[i])) {
-                if (!time_array[i].equals("超时")) {
-                    String s = time_array[i].split("#")[0];
-                    String ms = time_array[i].split("#")[1];
-                    if (Integer.valueOf(s) > 0) {
-                        text_id_sp.setTextColor(Color.parseColor("#FFFF4081"));
-                        text_id_sp.setText(s + "s" + " " + ms + "ms");
-                    }
-                    if (Integer.valueOf(s) == 0) {
-                        text_id_sp.setTextColor(Color.parseColor("#FF277E42"));
-                        text_id_sp.setText(ms + "ms");
+                    if (!time_array[i].equals("超时")) {
+                        String s = time_array[i].split("#")[0];
+                        String ms = time_array[i].split("#")[1];
+                        if (Integer.valueOf(s) > 0) {
+                            text_id_sp.setTextColor(Color.parseColor("#FFFF4081"));
+                            text_id_sp.setText(s + "s" + " " + ms + "ms");
+                        }
+                        if (Integer.valueOf(s) == 0) {
+                            text_id_sp.setTextColor(Color.parseColor("#FF277E42"));
+                            text_id_sp.setText(ms + "ms");
+                        } else {
+                            text_id_sp.setTextColor(Color.parseColor("#FFFF4081"));
+                            text_id_sp.setText(s + "s" + "" + ms + "ms");
+                        }
                     } else {
                         text_id_sp.setTextColor(Color.parseColor("#FFFF4081"));
-                        text_id_sp.setText(s + "s" + "" + ms + "ms");
+                        text_id_sp.setText(time_array[i]);
                     }
-                } else {
-                    text_id_sp.setTextColor(Color.parseColor("#FFFF4081"));
-                    text_id_sp.setText(time_array[i]);
-                }
-            }}
+                }}
             catch (Exception e){
-                 e.printStackTrace();
+                e.printStackTrace();
             }
 
             return view1;
         }
     }
-
 
     public SimpleDateFormat dfs = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");//设置日期格式
     String time_string = "";
@@ -275,7 +281,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                             time_array[i] = time_string;
                             hander.sendEmptyMessage(0); // 下载完成后发送处理消息
                             badurl=address;
-                            responsecode=String.valueOf(responseCode)+"###"+Apputil.getIP(badurl);
+                            responsecode= String.valueOf(responseCode)+"###"+ Apputil.getIP(badurl);
                             SocketsendMessage();
                         }
 
@@ -289,7 +295,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
 
                     e.printStackTrace();
                     badurl=address;
-                    responsecode=e.toString()+"###"+Apputil.getIP(badurl);
+                    responsecode=e.toString()+"###"+ Apputil.getIP(badurl);
                     SocketsendMessage();
 
                 } finally {
@@ -308,7 +314,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
             if (event.getAction() == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {
                 // 判断2次点击事件时间
                 if ((System.currentTimeMillis() - currentBackPressedTime) > 2000) {
-                    SB.showShortMessage(SelectLinesActivity.this, "再按一次退出应用");
+                    SB.showShortMessage(SelecLinesActivity.this, "再按一次退出应用");
                     currentBackPressedTime = System.currentTimeMillis();
                 } else {
                     finish();
@@ -352,9 +358,9 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
             byte b = 0;
             String network = "";
             if (Apputil.isVpnUsed()) {
-                network = network + 1 + ":" + Apputil.netState(SelectLinesActivity.this) + ":" + Apputil.getOperator(SelectLinesActivity.this);
+                network = network + 1 + ":" + Apputil.netState(SelecLinesActivity.this) + ":" + Apputil.getOperator(SelecLinesActivity.this);
             } else {
-                network = network + 0 + ":" + Apputil.netState(SelectLinesActivity.this) + ":" + Apputil.getOperator(SelectLinesActivity.this);
+                network = network + 0 + ":" + Apputil.netState(SelecLinesActivity.this) + ":" + Apputil.getOperator(SelecLinesActivity.this);
             }
             byte[] byte_network = network.getBytes(Charset.defaultCharset());
             String beijichi = badurl;
@@ -414,7 +420,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         if (!mManager.isConnect()) {
             mManager.connect();
         }
-        mManager.send(new SendhijackMessage2());
+        mManager.send(new SelecLinesActivity.SendhijackMessage2());
 
     }
 
@@ -424,4 +430,6 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
+
 }
