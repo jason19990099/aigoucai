@@ -120,6 +120,7 @@ public class MainWebviewActivity extends AppCompatActivity {
 
         dialog = new SimpleProgressDialog(MainWebviewActivity.this, "请稍等...");
         Bundle bundle = this.getIntent().getExtras();
+        if (null!=bundle)
         mUrl = bundle.getString("url");
 
         mLayout = (LinearLayout) findViewById(R.id.web_layout);
