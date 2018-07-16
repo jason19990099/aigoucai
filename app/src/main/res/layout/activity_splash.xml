@@ -16,13 +16,13 @@
         android:id="@+id/iv_welcome"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@mipmap/welcome_500" />
+        android:background="@mipmap/welcome" />
 
     <ImageView
         android:id="@+id/iv_weihu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@mipmap/weihu"
+        android:src="@mipmap/welcome"
         android:visibility="gone" />
 
     </LinearLayout>
