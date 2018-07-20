@@ -357,7 +357,8 @@ public class MainWebviewActivity extends AppCompatActivity {
 
                 if (null == changeUrl) {
                     if (appid.equals("android906")||appid.equals("android905")){
-                        initWebSetting(mUrl);
+                        if (mWebView.canGoBack())
+                            mWebView.goBack();
                         return;
                     }
                    finish();
