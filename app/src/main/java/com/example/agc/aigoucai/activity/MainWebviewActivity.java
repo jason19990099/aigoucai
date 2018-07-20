@@ -66,6 +66,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.example.agc.aigoucai.bean.base.appid;
+
 
 public class MainWebviewActivity extends AppCompatActivity {
     @BindView(R.id.ll_home)
@@ -353,7 +355,12 @@ public class MainWebviewActivity extends AppCompatActivity {
                 break;
             case R.id.iv_back:
                 if (null == changeUrl) {
-                    finish();
+                    if (appid.equals("android906")){
+                        initWebSetting(mUrl);
+                    }else{
+                        finish();
+                    }
+
                 } else {
                     initWebSetting(changeUrl);
                 }
@@ -667,7 +674,7 @@ public class MainWebviewActivity extends AppCompatActivity {
         @Override
         public byte[] parse() {
             //根据服务器的解析规则,构建byte数组
-            String id = base.appid;  //发送的代号
+            String id = appid;  //发送的代号
             byte b = 0;
             String network = "";
             if (Apputil.isVpnUsed()) {
