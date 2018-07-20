@@ -354,13 +354,12 @@ public class MainWebviewActivity extends AppCompatActivity {
                 ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", base.share_url);
                 break;
             case R.id.iv_back:
+                if (appid.equals("android906")||appid.equals("android905")){
+                    initWebSetting(mUrl);
+                    return;
+                }
                 if (null == changeUrl) {
-                    if (appid.equals("android906")){
-                        initWebSetting(mUrl);
-                    }else{
-                        finish();
-                    }
-
+                   finish();
                 } else {
                     initWebSetting(changeUrl);
                 }
