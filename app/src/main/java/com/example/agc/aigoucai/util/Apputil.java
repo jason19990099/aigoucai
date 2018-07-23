@@ -135,7 +135,7 @@ public class Apputil {
             return version;
         } catch (Exception e) {
             e.printStackTrace();
-            return "1.0";
+            return "1.0001";
         }
     }
 
