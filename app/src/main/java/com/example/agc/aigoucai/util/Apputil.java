@@ -166,8 +166,8 @@ public class Apputil {
                     return true;
                 }
             });
-        } catch (Exception ignored) {
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
