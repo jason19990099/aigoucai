@@ -23,9 +23,9 @@ android {
         applicationId "com.example.agc.aigoucai2"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 6
-        versionName "1.22"
-        flavorDimensions "6"
+        versionCode 7
+        versionName "1.24"
+        flavorDimensions "7"
         ndk {
             //选择要添加的对应cpu类型的.so库（不需要的删除即可）。
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
