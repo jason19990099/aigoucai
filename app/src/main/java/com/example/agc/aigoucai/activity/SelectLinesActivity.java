@@ -248,8 +248,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                     URL url = new URL(address);
                     connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("GET");
-                    connection.setConnectTimeout(3000);
-                    connection.setReadTimeout(3000);
+                    connection.setConnectTimeout(9900);
+                    connection.setReadTimeout(9900);
                     final String date1 = dfs.format(new Date());// new Date()为获取当前系统时间，也可使用当前时间戳
                     connection.connect();
                     int responseCode = connection.getResponseCode();
