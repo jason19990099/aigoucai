@@ -68,8 +68,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     TextView tvVertion;
     private Adapter_url adapter_url = new Adapter_url();
     private CustomDialog.Builder ibuilder;
-    private String[] url_array ;
-    private String[] time_array ;
+    private String[] url_array;
+    private String[] time_array;
     private String responsecode;
     private String badurl;
     // 退出时间
@@ -86,14 +86,13 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         }
     };
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selectlines);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
-        tvVertion.setText("版本号:"+Apputil.getVersion(SelectLinesActivity.this));
+        tvVertion.setText("版本号:" + Apputil.getVersion(SelectLinesActivity.this));
 //        swipeLayout.setRefreshing(true);
         swipeContainer.setOnRefreshListener(this);
         swipeContainer.setColorSchemeResources(android.R.color.holo_orange_dark,
@@ -115,8 +114,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
             ibuilder.create().show();
         }
 
-
-        if (null==mManager){
+        if (null == mManager) {
             mManager = SocketUtil.getmManager();
         }
         if (null != mManager) {
@@ -125,20 +123,17 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
             }
             mManager.send(new GetUrlDatas());
         }
-
-
     }
-
 
 
     /**
      * 刷新網址鏈接
      */
     private void refresh() {
-        if (null==mManager){
+        if (null == mManager) {
             mManager = SocketUtil.getmManager();
         }
-        if (null!=mManager){
+        if (null != mManager) {
             if (!mManager.isConnect()) {
                 Log.e("=================", "socket未连接，正在连接中.....");
                 mManager.connect();
@@ -147,8 +142,6 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
 
             Log.e("=================", "發送已经发送.......");
         }
-
-
     }
 
     @Override
@@ -204,29 +197,29 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
 
 //          text_id.setText(url_array[i]);
             text_id.setText("线路" + (i + 1));//使用綫路123代表網址避免被劫持
-            try{
+            try {
                 if (!TextUtils.isEmpty(time_array[i])) {
-                if (!time_array[i].equals("超时")) {
-                    String s = time_array[i].split("#")[0];
-                    String ms = time_array[i].split("#")[1];
-                    if (Integer.valueOf(s) > 0) {
-                        text_id_sp.setTextColor(Color.parseColor("#FFFF4081"));
-                        text_id_sp.setText(s + "s" + " " + ms + "ms");
-                    }
-                    if (Integer.valueOf(s) == 0) {
-                        text_id_sp.setTextColor(Color.parseColor("#FF277E42"));
-                        text_id_sp.setText(ms + "ms");
+                    if (!time_array[i].equals("超时")) {
+                        String s = time_array[i].split("#")[0];
+                        String ms = time_array[i].split("#")[1];
+                        if (Integer.valueOf(s) > 0) {
+                            text_id_sp.setTextColor(Color.parseColor("#FFFF4081"));
+                            text_id_sp.setText(s + "s" + " " + ms + "ms");
+                        }
+                        if (Integer.valueOf(s) == 0) {
+                            text_id_sp.setTextColor(Color.parseColor("#FF277E42"));
+                            text_id_sp.setText(ms + "ms");
+                        } else {
+                            text_id_sp.setTextColor(Color.parseColor("#FFFF4081"));
+                            text_id_sp.setText(s + "s" + "" + ms + "ms");
+                        }
                     } else {
                         text_id_sp.setTextColor(Color.parseColor("#FFFF4081"));
-                        text_id_sp.setText(s + "s" + "" + ms + "ms");
+                        text_id_sp.setText(time_array[i]);
                     }
-                } else {
-                    text_id_sp.setTextColor(Color.parseColor("#FFFF4081"));
-                    text_id_sp.setText(time_array[i]);
                 }
-            }}
-            catch (Exception e){
-                 e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
             return view1;
@@ -255,8 +248,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                     URL url = new URL(address);
                     connection = (HttpURLConnection) url.openConnection();
                     connection.setRequestMethod("GET");
-                    connection.setConnectTimeout(9900);
-                    connection.setReadTimeout(9900);
+                    connection.setConnectTimeout(9999);
+                    connection.setReadTimeout(9999);
                     final String date1 = dfs.format(new Date());// new Date()为获取当前系统时间，也可使用当前时间戳
                     connection.connect();
                     int responseCode = connection.getResponseCode();
@@ -277,28 +270,24 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                         hander.sendEmptyMessage(0); // 下载完成后发送处理消息
                     } else {
                         //30開頭的過濾掉
-                        if (!String.valueOf(responseCode).startsWith("30")){
+                        if (!String.valueOf(responseCode).startsWith("30")) {
                             time_string = "超时";
                             time_array[i] = time_string;
                             hander.sendEmptyMessage(0); // 下载完成后发送处理消息
-                            badurl=address;
-                            responsecode=String.valueOf(responseCode)+"###"+Apputil.getIP(badurl);
+                            badurl = address;
+                            responsecode = "版本号:" + Apputil.getVersion(SelectLinesActivity.this) + "###" + String.valueOf(responseCode) + "###" + Apputil.getIP(badurl);
                             SocketsendMessage();
                         }
-
                     }
                 } catch (Exception e) {
                     //有错误就设置成超时
                     time_string = "超时*";
                     time_array[i] = time_string;
                     hander.sendEmptyMessage(0); // 下载完成后发送处理消息
-
-
                     e.printStackTrace();
-                    badurl=address;
-                    responsecode=e.toString()+"###"+Apputil.getIP(badurl);
+                    badurl = address;
+                    responsecode = "版本号:" + Apputil.getVersion(SelectLinesActivity.this) + "###" + e.toString() + "###" + Apputil.getIP(badurl);
                     SocketsendMessage();
-
                 } finally {
                     if (connection != null) {
                         connection.disconnect();
@@ -410,7 +399,6 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
             return bb.array();
         }
     }
-
 
 
     /**
