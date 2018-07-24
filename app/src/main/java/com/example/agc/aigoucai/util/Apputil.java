@@ -192,7 +192,13 @@ public class Apputil {
             e.printStackTrace();
             return e.toString();
         }
-
-
     }
+
+    /**
+     *   获取手机的版本号
+     */
+    public static String getSystemVersion() {
+        return android.os.Build.VERSION.RELEASE;
+    }
+
 }
