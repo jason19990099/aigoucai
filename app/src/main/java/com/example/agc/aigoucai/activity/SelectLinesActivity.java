@@ -56,7 +56,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-
 public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener, senddata {
     public IConnectionManager mManager;
     @BindView(R2.id.listvie_id)
@@ -75,7 +74,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     private String[] time_array;
     private String responsecode;
     private String badurl;
-    public static String  appid,share_url;
+    public static String appid, share_url;
     // 退出时间
     private static long currentBackPressedTime = 0;
     private Handler hander = new Handler() {
@@ -105,12 +104,15 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                 android.R.color.holo_red_light);
 
 
-        appid=getIntent().getStringExtra("appid");
-        share_url=getIntent().getStringExtra("share_url");
+        appid = getIntent().getStringExtra("appid");
+        share_url = getIntent().getStringExtra("share_url");
         LogUtil.e("========appid=====" + appid);
-//        if (appid.equals("a1007") || appid.equals("a1002") || appid.equals("a1003")) {
-//            ivFloat.setImageDrawable(getResources().getDrawable(R.mipmap.icon500));
-//        }
+        if (appid.equals("a1001") || appid.equals("a1002") || appid.equals("a1003")) {
+            ivFloat.setImageDrawable(getResources().getDrawable(R.mipmap.float_aigoucai));
+        }
+        if (appid.equals("a1004") || appid.equals("a1005") || appid.equals("a1006") || appid.equals("a1007")) {
+            ivFloat.setImageDrawable(getResources().getDrawable(R.mipmap.float_xpj));
+        }
 
         if (!Apputil.isNetConnection(SelectLinesActivity.this)) {
             ibuilder = new CustomDialog.Builder(SelectLinesActivity.this);
@@ -201,8 +203,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
 
                     Bundle bundleTab = new Bundle();
                     bundleTab.putString("url", url_array[i]);
-                    bundleTab.putString("appid",appid);
-                    bundleTab.putString("share_url",share_url);
+                    bundleTab.putString("appid", appid);
+                    bundleTab.putString("share_url", share_url);
                     SharePreferencesUtil.addString(SelectLinesActivity.this, "main_url", url_array[i]);
                     IntentUtil.gotoActivity(SelectLinesActivity.this, MainWebviewActivity.class, bundleTab, false);
 
