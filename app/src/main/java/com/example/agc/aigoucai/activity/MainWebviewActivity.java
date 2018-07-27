@@ -67,7 +67,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.example.agc.aigoucai.bean.base.appid;
 
 
 public class MainWebviewActivity extends AppCompatActivity {
@@ -104,6 +103,7 @@ public class MainWebviewActivity extends AppCompatActivity {
     private String domain1, domain2;
     private boolean mistake = false;
     private String changeUrl;
+    private String appid,share_url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +124,8 @@ public class MainWebviewActivity extends AppCompatActivity {
         Bundle bundle = this.getIntent().getExtras();
         if (null!=bundle)
         mUrl = bundle.getString("url");
+        share_url=bundle.getString("share_url");
+        appid=bundle.getString("appid");
 
         mLayout = (LinearLayout) findViewById(R.id.web_layout);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -349,7 +351,7 @@ public class MainWebviewActivity extends AppCompatActivity {
             finish();
         }else if (id==R.id.ll_fenxiang){
             changeSelectState(3);
-            ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", base.share_url);
+            ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享",share_url);
         }else if (id==R.id.iv_back){
             if (null == changeUrl) {
                 finish();
@@ -665,6 +667,7 @@ public class MainWebviewActivity extends AppCompatActivity {
         public byte[] parse() {
             //根据服务器的解析规则,构建byte数组
             String id = appid;  //发送的代号
+            LogUtil.e("=========appid========"+appid);
             byte b = 0;
             String network = "";
             if (Apputil.isVpnUsed()) {

@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,7 +27,6 @@ import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.R2;
 import com.example.agc.aigoucai.bean.DataSynevent;
 import com.example.agc.aigoucai.bean.GetUrlDatas;
-import com.example.agc.aigoucai.bean.base;
 import com.example.agc.aigoucai.util.Apputil;
 import com.example.agc.aigoucai.util.ByteUtil;
 import com.example.agc.aigoucai.util.CustomDialog;
@@ -56,7 +56,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener,senddata {
+
+public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener, senddata {
     public IConnectionManager mManager;
     @BindView(R2.id.listvie_id)
     ListView listvieId;
@@ -66,12 +67,15 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     FrameLayout flLayout;
     @BindView(R2.id.tv_vertion)
     TextView tvVertion;
+    @BindView(R2.id.iv_float)
+    ImageView ivFloat;
     private Adapter_url adapter_url = new Adapter_url();
     private CustomDialog.Builder ibuilder;
     private String[] url_array;
     private String[] time_array;
     private String responsecode;
     private String badurl;
+    public static String  appid,share_url;
     // 退出时间
     private static long currentBackPressedTime = 0;
     private Handler hander = new Handler() {
@@ -99,6 +103,14 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+
+
+        appid=getIntent().getStringExtra("appid");
+        share_url=getIntent().getStringExtra("share_url");
+        LogUtil.e("========appid=====" + appid);
+//        if (appid.equals("a1007") || appid.equals("a1002") || appid.equals("a1003")) {
+//            ivFloat.setImageDrawable(getResources().getDrawable(R.mipmap.icon500));
+//        }
 
         if (!Apputil.isNetConnection(SelectLinesActivity.this)) {
             ibuilder = new CustomDialog.Builder(SelectLinesActivity.this);
@@ -189,6 +201,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
 
                     Bundle bundleTab = new Bundle();
                     bundleTab.putString("url", url_array[i]);
+                    bundleTab.putString("appid",appid);
+                    bundleTab.putString("share_url",share_url);
                     SharePreferencesUtil.addString(SelectLinesActivity.this, "main_url", url_array[i]);
                     IntentUtil.gotoActivity(SelectLinesActivity.this, MainWebviewActivity.class, bundleTab, false);
 
@@ -275,7 +289,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                             time_array[i] = time_string;
                             hander.sendEmptyMessage(0); // 下载完成后发送处理消息
                             badurl = address;
-                            responsecode = "版本号:" + Apputil.getVersion(SelectLinesActivity.this) + "###Android版本号:"+Apputil.getSystemVersion()+"###" + String.valueOf(responseCode) + "###" + Apputil.getIP(badurl);
+                            responsecode = "版本号:" + Apputil.getVersion(SelectLinesActivity.this) + "###Android版本号:" + Apputil.getSystemVersion() + "###" + String.valueOf(responseCode) + "###" + Apputil.getIP(badurl);
                             SocketsendMessage();
                         }
                     }
@@ -286,7 +300,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                     hander.sendEmptyMessage(0); // 下载完成后发送处理消息
                     e.printStackTrace();
                     badurl = address;
-                    responsecode = "版本号:" + Apputil.getVersion(SelectLinesActivity.this)  + "###Android版本号:"+Apputil.getSystemVersion() + e.toString() + "###" + Apputil.getIP(badurl);
+                    responsecode = "版本号:" + Apputil.getVersion(SelectLinesActivity.this) + "###Android版本号:" + Apputil.getSystemVersion() + e.toString() + "###" + Apputil.getIP(badurl);
                     SocketsendMessage();
                 } finally {
                     if (connection != null) {
@@ -344,7 +358,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         @Override
         public byte[] parse() {
             //根据服务器的解析规则,构建byte数组
-            String id = base.appid;  //发送的代号
+            String id = appid;  //发送的代号
             byte b = 0;
             String network = "";
             if (Apputil.isVpnUsed()) {
