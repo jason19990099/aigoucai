@@ -39,7 +39,7 @@ public class SocketUtil {
      */
     public SocketUtil(List list, int port) {
         ip_array = list;
-        ip_bei = ip_array.get(index);
+        ip_bei = ip_array.get(0);
         net_port=port;
     }
 
