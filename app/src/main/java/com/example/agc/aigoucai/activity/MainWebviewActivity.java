@@ -125,6 +125,13 @@ public class MainWebviewActivity extends AppCompatActivity {
         Bundle bundle = this.getIntent().getExtras();
         if (null != bundle)
             mUrl = bundle.getString("url");
+
+        mLayout = (LinearLayout) findViewById(R.id.web_layout);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        mWebView = new WebView(this);
+        mWebView.setLayoutParams(params);
+        mLayout.addView(mWebView);
+
         long0 = System.currentTimeMillis();
         try {
             URL url = new URL(mUrl);
@@ -141,11 +148,7 @@ public class MainWebviewActivity extends AppCompatActivity {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        mLayout = (LinearLayout) findViewById(R.id.web_layout);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        mWebView = new WebView(this);
-        mWebView.setLayoutParams(params);
-        mLayout.addView(mWebView);
+
         initWebSetting(mUrl);
     }
 
