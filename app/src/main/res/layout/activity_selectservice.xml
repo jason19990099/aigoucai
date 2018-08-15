@@ -59,7 +59,7 @@
         android:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="如果没有线路，请下拉刷新。"
+        android:text="如果没有联系方式，请下拉刷新。"
         android:textColor="#ffffff"
         android:textSize="15sp" />
 
@@ -76,15 +76,5 @@
         android:textSize="15sp" />
 
 
-    <Button
-        android:id="@+id/be_selectservice"
-        android:layout_marginBottom="10dp"
-        android:layout_gravity="center_horizontal"
-        android:visibility="visible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="联系客服"
-        android:textColor="#ffffff"
-        android:textSize="15sp" />
 </LinearLayout>
 </LinearLayout>
