@@ -37,8 +37,6 @@
                     android:id="@+id/listvie_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
-
-
             </android.support.v4.widget.SwipeRefreshLayout>
 
         </LinearLayout>
@@ -66,7 +64,7 @@
 
     <TextView
         android:id="@+id/tv_vertion"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="5dp"
         android:layout_gravity="center_horizontal"
         android:visibility="visible"
         android:layout_width="wrap_content"
@@ -76,15 +74,20 @@
         android:textSize="15sp" />
 
 
+
+
     <Button
+        android:background="#00000000"
+        android:drawablePadding="5dp"
+        android:text="在线客服"
+        android:drawableLeft="@mipmap/icom_line"
         android:id="@+id/be_selectservice"
         android:layout_marginBottom="10dp"
         android:layout_gravity="center_horizontal"
         android:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="联系客服"
-        android:textColor="#ffffff"
+        android:textColor="#3ccbff"
         android:textSize="15sp" />
 </LinearLayout>
 </LinearLayout>
