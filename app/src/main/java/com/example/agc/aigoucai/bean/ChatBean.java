@@ -5,10 +5,12 @@ public class ChatBean {
 
     /**
      * Key : QQ
-     * Value : 29423
+     * Code : qq
+     * Value : 2500055788
      */
 
     private String Key;
+    private String Code;
     private String Value;
 
     public String getKey() {
@@ -17,6 +19,14 @@ public class ChatBean {
 
     public void setKey(String Key) {
         this.Key = Key;
+    }
+
+    public String getCode() {
+        return Code;
+    }
+
+    public void setCode(String Code) {
+        this.Code = Code;
     }
 
     public String getValue() {

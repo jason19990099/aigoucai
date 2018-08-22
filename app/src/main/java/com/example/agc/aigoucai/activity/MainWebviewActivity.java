@@ -261,10 +261,11 @@ public class MainWebviewActivity extends AppCompatActivity {
                 URL url_1 = null;
                 try {
                     url_1 = new URL(SharePreferencesUtil.getString(MainWebviewActivity.this, "main_url", ""));
-                } catch (MalformedURLException e) {
+                    domain1 = url_1.getHost();
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                domain1 = url_1.getHost();
+
 
 
                 try {
@@ -278,9 +279,11 @@ public class MainWebviewActivity extends AppCompatActivity {
                 LogUtil.e("===========mistake=======" + mistake);
                 if (!mistake) {
                     if (!ischecked) {
-                        if (!domain1.equals(domain2)) {
-                            jiechiurl = url;
-                            SocketsendMessage();
+                        if (null!=domain1&&null!=domain2){
+                            if (!domain1.equals(domain2)) {
+                                jiechiurl = url;
+                                SocketsendMessage();
+                            }
                         }
                         ischecked = true;
                     }
