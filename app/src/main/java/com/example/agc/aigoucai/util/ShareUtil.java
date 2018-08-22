@@ -16,7 +16,14 @@ import java.util.ArrayList;
 
 public class ShareUtil {
 
-
+    /**
+     *  存对象
+     * @param context
+     * @param preferenceName
+     * @param key
+     * @param user
+     * @throws Exception
+     */
     public static void saveUser(Context context, String preferenceName, String key, ArrayList<ChatBean> user) throws Exception {
         if(user instanceof Serializable) {
             SharedPreferences sharedPreferences = context.getSharedPreferences(preferenceName, context.MODE_PRIVATE);
@@ -37,8 +44,13 @@ public class ShareUtil {
     }
 
 
-
-
+    /**
+     * 取对象
+     * @param context
+     * @param preferenceName
+     * @param key
+     * @return
+     */
     public static ArrayList<ChatBean> getUser(Context context, String preferenceName,String key) {
         SharedPreferences sharedPreferences=context.getSharedPreferences(preferenceName,context.MODE_PRIVATE);
         String temp = sharedPreferences.getString(key, "");

@@ -1,38 +1,45 @@
 package com.example.agc.aigoucai.activity;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.adapter.ChatAdapter;
 import com.example.agc.aigoucai.bean.ChatBean;
 import com.example.agc.aigoucai.bean.base;
 import com.example.agc.aigoucai.util.Apputil;
+import com.example.agc.aigoucai.util.LogUtil;
 import com.example.agc.aigoucai.util.ShareUtil;
 import com.example.agc.aigoucai.util.TrustAllCerts;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+
 import org.greenrobot.eventbus.EventBus;
+
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class SelectServiceActivity extends Activity  {
+public class SelectServiceActivity extends Activity {
     @BindView(R.id.listvie_id)
     ListView listvieId;
     @BindView(R.id.fl_layout)
@@ -41,21 +48,22 @@ public class SelectServiceActivity extends Activity  {
     TextView tvVertion;
     private Gson gson = new Gson();
     private ChatAdapter chatAdapter;
-    private  ListView listvie_id ;
+    private ListView listvie_id;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selectservice);
         ButterKnife.bind(this);
         tvVertion.setText("版本号:" + Apputil.getVersion(SelectServiceActivity.this));
-        listvie_id=findViewById(R.id.listvie_id);
-        List<ChatBean> userList2=  ShareUtil.getUser(SelectServiceActivity.this,"duixiang","userList");
-        if (null!=userList2&&userList2.size()>0){
-            chatAdapter=new ChatAdapter(SelectServiceActivity.this,userList2);
+        listvie_id = findViewById(R.id.listvie_id);
+        List<ChatBean> userList2 = ShareUtil.getUser(SelectServiceActivity.this, "duixiang", "userList");
+        if (null != userList2 && userList2.size() > 0) {
+            chatAdapter = new ChatAdapter(SelectServiceActivity.this, userList2);
             listvie_id.setAdapter(chatAdapter);
             chatAdapter.notifyDataSetChanged();
         }
-        if (base.ifgetService){
+        if (base.ifgetService) {
             getChatdata();
         }
 
@@ -84,8 +92,7 @@ public class SelectServiceActivity extends Activity  {
                                 }
                             })
                             .build();
-                 base.appid="test";
-                String url="https://appv1.whsurpass.com/appinfo/contact/"+ base.appid+"?date="+createdate;
+                    String url = "https://appv1.whsurpass.com/appinfo/contact/" + base.appid + "?date=" + createdate;
                     Request request = new Request.Builder()
                             .url(url)//请求接口。如果需要传参拼接到接口后面。
                             .build();//创建Request 对象
@@ -94,22 +101,24 @@ public class SelectServiceActivity extends Activity  {
                     final String s = response.body().string();
 
                     if (response.isSuccessful()) {
+                        LogUtil.e("=========getChatdata==========" + s);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                List<ChatBean> userList = gson.fromJson(s, new TypeToken<List<ChatBean>>(){}.getType());
+                                List<ChatBean> userList = gson.fromJson(s, new TypeToken<List<ChatBean>>() {}.getType());
 
                                 try {
-                                    ShareUtil.saveUser(SelectServiceActivity.this,"duixiang","userList", (ArrayList<ChatBean>) userList);
+                                    ShareUtil.saveUser(SelectServiceActivity.this, "duixiang", "userList", (ArrayList<ChatBean>) userList);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
 
-                                if (userList.size()>0)
-                                    chatAdapter=new ChatAdapter(SelectServiceActivity.this,userList);
-                                listvie_id.setAdapter(chatAdapter);
-                                chatAdapter.notifyDataSetChanged();
-                                //此时的代码执行在子线程，修改UI的操作请使用handler跳转到UI线程。
+                                if (userList.size() > 0) {
+                                    chatAdapter = new ChatAdapter(SelectServiceActivity.this, userList);
+                                    listvie_id.setAdapter(chatAdapter);
+                                    chatAdapter.notifyDataSetChanged();
+                                }
+
                             }
                         });
 
@@ -122,7 +131,7 @@ public class SelectServiceActivity extends Activity  {
         }).start();
 
         //设为false，不让重复请求/
-        base.ifgetService=false;
+        base.ifgetService = false;
     }
 
     @Override
