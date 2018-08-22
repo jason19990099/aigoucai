@@ -1,28 +1,20 @@
 package com.example.agc.aigoucai.activity;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.adapter.ChatAdapter;
 import com.example.agc.aigoucai.bean.ChatBean;
 import com.example.agc.aigoucai.bean.base;
 import com.example.agc.aigoucai.util.Apputil;
-import com.example.agc.aigoucai.util.LogUtil;
+import com.example.agc.aigoucai.util.ShareUtil;
 import com.example.agc.aigoucai.util.TrustAllCerts;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import org.greenrobot.eventbus.EventBus;
-
-import java.lang.reflect.Type;
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,37 +32,33 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class SelectServiceActivity extends Activity implements SwipeRefreshLayout.OnRefreshListener {
+public class SelectServiceActivity extends Activity  {
     @BindView(R.id.listvie_id)
     ListView listvieId;
-    @BindView(R.id.swipe_container)
-    SwipeRefreshLayout swipeContainer;
     @BindView(R.id.fl_layout)
     FrameLayout flLayout;
     @BindView(R.id.tv_vertion)
     TextView tvVertion;
     private Gson gson = new Gson();
-    private ChatBean chatBean;
     private ChatAdapter chatAdapter;
     private  ListView listvie_id ;
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selectservice);
         ButterKnife.bind(this);
         tvVertion.setText("版本号:" + Apputil.getVersion(SelectServiceActivity.this));
-        swipeContainer.setOnRefreshListener(this);
-        swipeContainer.setColorSchemeResources(android.R.color.holo_orange_dark,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
-
         listvie_id=findViewById(R.id.listvie_id);
+        List<ChatBean> userList2=  ShareUtil.getUser(SelectServiceActivity.this,"duixiang","userList");
+        if (null!=userList2&&userList2.size()>0){
+            chatAdapter=new ChatAdapter(SelectServiceActivity.this,userList2);
+            listvie_id.setAdapter(chatAdapter);
+            chatAdapter.notifyDataSetChanged();
+        }
+        if (base.ifgetService){
+            getChatdata();
+        }
 
-        getChatdata();
     }
 
     private void getChatdata() {
@@ -110,6 +98,13 @@ public class SelectServiceActivity extends Activity implements SwipeRefreshLayou
                             @Override
                             public void run() {
                                 List<ChatBean> userList = gson.fromJson(s, new TypeToken<List<ChatBean>>(){}.getType());
+
+                                try {
+                                    ShareUtil.saveUser(SelectServiceActivity.this,"duixiang","userList", (ArrayList<ChatBean>) userList);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
                                 if (userList.size()>0)
                                     chatAdapter=new ChatAdapter(SelectServiceActivity.this,userList);
                                 listvie_id.setAdapter(chatAdapter);
@@ -118,9 +113,6 @@ public class SelectServiceActivity extends Activity implements SwipeRefreshLayou
                             }
                         });
 
-
-                    } else {
-                        Toast.makeText(getApplicationContext(),"请求失败，请下来刷新。",Toast.LENGTH_LONG).show();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -128,15 +120,10 @@ public class SelectServiceActivity extends Activity implements SwipeRefreshLayou
                 }
             }
         }).start();
+
+        //设为false，不让重复请求/
+        base.ifgetService=false;
     }
-
-
-    @Override
-    public void onRefresh() {
-        getChatdata();
-        swipeContainer.setRefreshing(false);
-    }
-
 
     @Override
     protected void onDestroy() {
@@ -153,7 +140,6 @@ public class SelectServiceActivity extends Activity implements SwipeRefreshLayou
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return ssfFactory;
     }
 }

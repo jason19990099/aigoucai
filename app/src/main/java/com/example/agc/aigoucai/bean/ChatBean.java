@@ -1,6 +1,8 @@
 package com.example.agc.aigoucai.bean;
 
-public class ChatBean {
+import java.io.Serializable;
+
+public class ChatBean implements Serializable{
 
 
     /**

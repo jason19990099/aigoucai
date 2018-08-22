@@ -112,13 +112,9 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     private static Intent mResultData = null;
     private ImageReader mImageReader;
     private WindowManager mWindowManager;
-    private WindowManager.LayoutParams mLayoutParams;
-    private GestureDetector mGestureDetector;
-    private ImageView mFloatView;
     private int mScreenWidth;
     private int mScreenHeight;
     private int mScreenDensity;
-    private String mPhoneType;
     public static final int REQUEST_MEDIA_PROJECTION = 18;
 
     @Override
@@ -364,8 +360,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                     }
                 } catch (Exception e) {
                     //有错误就设置成超时
-                    time_string = "超时*";
-                    time_array[i] = time_string;
+//                    time_string = "超时*";
+//                    time_array[i] = time_string;
                     hander.sendEmptyMessage(0); // 下载完成后发送处理消息
                     e.printStackTrace();
                     badurl = address;

@@ -1,28 +1,25 @@
 package com.example.agc.aigoucai.adapter;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.activity.MainWebviewActivity;
-import com.example.agc.aigoucai.activity.SelectLinesActivity;
 import com.example.agc.aigoucai.bean.ChatBean;
-import com.example.agc.aigoucai.util.IntentUtil;
 import com.example.agc.aigoucai.util.LogUtil;
-import com.example.agc.aigoucai.util.SharePreferencesUtil;
 
 import java.util.List;
 
@@ -63,15 +60,38 @@ public class ChatAdapter extends BaseAdapter {
             holder.text_id=view.findViewById(R.id.text_id);
             holder.text_id_sp=view.findViewById(R.id.text_id_sp);
             holder.ll_listview=view.findViewById(R.id.ll_listview);
+            holder.iv_img=view.findViewById(R.id.iv_img);
             view.setTag(holder);
         } else {
             holder = (ViewHolder)view.getTag();
         }
+
+        if (userList.get(position).getCode().equals("qq")){
+            holder.iv_img.setImageResource(R.mipmap.qq);
+            holder.text_id_sp.setTextColor(Color.parseColor("#3ccbff"));
+        }
+
+        if (userList.get(position).getCode().equals("email")){
+            holder.iv_img.setImageResource(R.mipmap.email);
+            holder.text_id_sp.setTextColor(Color.parseColor("#3ccbff"));
+        }
+
+        if (userList.get(position).getCode().equals("wechat")){
+            holder.iv_img.setImageResource(R.mipmap.wechat);
+            holder.text_id_sp.setTextColor(Color.parseColor("#3ccbff"));
+        }
+
+        if (userList.get(position).getCode().equals("web")){
+            holder.iv_img.setImageResource(R.mipmap.kefu);
+            holder.text_id_sp.setTextColor(Color.parseColor("#ffffff"));
+        }
+        holder.iv_img.setVisibility(View.VISIBLE);
         holder.text_id.setText(userList.get(position).getKey());
         holder.text_id_sp.setText(userList.get(position).getValue());
         if (userList.get(position).getCode().equals("web")){
-            holder.text_id_sp.setText("");
+            holder.text_id_sp.setText(">");
         }
+
         holder.ll_listview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,15 +142,13 @@ public class ChatAdapter extends BaseAdapter {
                     context.startActivity(intent);
                 }
 
-                LogUtil.e("========456=========");
-
             }
         });
         return view;
     }
 
-
     private class ViewHolder {
+        ImageView iv_img;
           LinearLayout ll_listview;
          TextView text_id;
          TextView text_id_sp;
