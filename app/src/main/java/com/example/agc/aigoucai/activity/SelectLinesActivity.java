@@ -106,16 +106,16 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     };
 
     //
-    private MediaProjectionManager mediaProjectionManager;
-    private MediaProjection mMediaProjection;
-    private VirtualDisplay mVirtualDisplay;
-    private static Intent mResultData = null;
-    private ImageReader mImageReader;
-    private WindowManager mWindowManager;
-    private int mScreenWidth;
-    private int mScreenHeight;
-    private int mScreenDensity;
-    public static final int REQUEST_MEDIA_PROJECTION = 18;
+//    private MediaProjectionManager mediaProjectionManager;
+//    private MediaProjection mMediaProjection;
+//    private VirtualDisplay mVirtualDisplay;
+//    private static Intent mResultData = null;
+//    private ImageReader mImageReader;
+//    private WindowManager mWindowManager;
+//    private int mScreenWidth;
+//    private int mScreenHeight;
+//    private int mScreenDensity;
+//    public static final int REQUEST_MEDIA_PROJECTION = 18;
 
     @Override
     @SuppressLint("NewApi")
@@ -159,19 +159,19 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
 
 
 
-        /**
-         * 截图初始化变量
-         */
-        mediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-        startActivityForResult(mediaProjectionManager.createScreenCaptureIntent(), REQUEST_MEDIA_PROJECTION);
-
-        mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics metrics = new DisplayMetrics();
-        mWindowManager.getDefaultDisplay().getMetrics(metrics);
-        mScreenDensity = metrics.densityDpi;
-        mScreenWidth = metrics.widthPixels;
-        mScreenHeight = metrics.heightPixels;
-        mImageReader = ImageReader.newInstance(mScreenWidth, mScreenHeight, PixelFormat.RGBA_8888, 1);
+//        /**
+//         * 截图初始化变量
+//         */
+//        mediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+//        startActivityForResult(mediaProjectionManager.createScreenCaptureIntent(), REQUEST_MEDIA_PROJECTION);
+//
+//        mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+//        DisplayMetrics metrics = new DisplayMetrics();
+//        mWindowManager.getDefaultDisplay().getMetrics(metrics);
+//        mScreenDensity = metrics.densityDpi;
+//        mScreenWidth = metrics.widthPixels;
+//        mScreenHeight = metrics.heightPixels;
+//        mImageReader = ImageReader.newInstance(mScreenWidth, mScreenHeight, PixelFormat.RGBA_8888, 1);
 
 
 
@@ -179,26 +179,26 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
 
     }
 
-    /**
-     * 截图拥戴的代码
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode) {
-            case REQUEST_MEDIA_PROJECTION:
-
-                if (resultCode == RESULT_OK && data != null) {
-                    mResultData = data;
-                    //startService(new Intent(getApplicationContext(), FloatWindowsService.class));
-                }
-                break;
-        }
-    }
+//    /**
+//     * 截图拥戴的代码
+//     * @param requestCode
+//     * @param resultCode
+//     * @param data
+//     */
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        switch (requestCode) {
+//            case REQUEST_MEDIA_PROJECTION:
+//
+//                if (resultCode == RESULT_OK && data != null) {
+//                    mResultData = data;
+//                    //startService(new Intent(getApplicationContext(), FloatWindowsService.class));
+//                }
+//                break;
+//        }
+//    }
 
 
     /**
@@ -498,181 +498,181 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-        try {
-            stopVirtual();
-            tearDownMediaProjection();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            stopVirtual();
+//            tearDownMediaProjection();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
-    private void startScreenShot() {
-        Handler handler1 = new Handler();
-        handler1.postDelayed(new Runnable() {
-            public void run() {
-                // start virtual
-                startVirtual();
-            }
-        }, 5);
-
-        handler1.postDelayed(new Runnable() {
-            public void run() {
-                // capture the screen
-                startCapture();
-
-            }
-        }, 30);
-    }
-
-    public void startVirtual() {
-        if (mMediaProjection != null) {
-            virtualDisplay();
-        } else {
-            setUpMediaProjection();
-            virtualDisplay();
-        }
-    }
-    @SuppressLint("NewApi")
-    private void stopVirtual() {
-        if (mVirtualDisplay == null) {
-            return;
-        }
-        mVirtualDisplay.release();
-        mVirtualDisplay = null;
-    }
-    @SuppressLint("NewApi")
-    private void startCapture() {
-
-        Image image = mImageReader.acquireLatestImage();
-
-        if (image == null) {
-            startScreenShot();
-        } else {
-            SaveTask mSaveTask = new SaveTask();
-            // mSaveTask.execute(image);
-            if (Build.VERSION.SDK_INT >= 11) {
-                // From API 11 onwards, we need to manually select the
-                // THREAD_POOL_EXECUTOR
-                AsyncTaskCompatHoneycomb.executeParallel(mSaveTask, image);
-            } else {
-                // Before API 11, all tasks were run in parallel
-                mSaveTask.execute(image);
-            }
-            // AsyncTaskCompat.executeParallel(mSaveTask, image);
-        }
-    }
-
-
-    static class AsyncTaskCompatHoneycomb {
-
-        static <Params, Progress, Result> void executeParallel(AsyncTask<Params, Progress, Result> task, Params... params) {
-            // 这里显示调用了THREAD_POOL_EXECUTOR，所以就可以使用该线程池了
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
-        }
-
-    }
-
-    @SuppressLint("NewApi")
-    private void virtualDisplay() {
-        Surface sf = mImageReader.getSurface();
-        mVirtualDisplay = mMediaProjection.createVirtualDisplay(
-                "screen-mirror", mScreenWidth, mScreenHeight, mScreenDensity,
-                DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
-                mImageReader.getSurface(), null, null);
-    }
-    @SuppressLint("NewApi")
-    public void setUpMediaProjection() {
-        if (mResultData == null) {
-            Intent intent = new Intent(Intent.ACTION_MAIN);
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
-            startActivity(intent);
-        } else {
-            mMediaProjection = getMediaProjectionManager().getMediaProjection(
-                    Activity.RESULT_OK, mResultData);
-        }
-    }
-    @SuppressLint("NewApi")
-    private MediaProjectionManager getMediaProjectionManager() {
-        return (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-    }
-    @SuppressLint("NewApi")
-    public class SaveTask extends AsyncTask<Image, Void, Bitmap> {
-
-        @Override
-        protected Bitmap doInBackground(Image... params) {
-            if (params == null || params.length < 1 || params[0] == null) {
-                return null;
-            }
-
-            Image image = params[0];
-
-            int width = image.getWidth();
-            int height = image.getHeight();
-            final Image.Plane[] planes = image.getPlanes();
-            final ByteBuffer buffer = planes[0].getBuffer();
-            // 每个像素的间距
-            int pixelStride = planes[0].getPixelStride();
-            // 总的间距
-            int rowStride = planes[0].getRowStride();
-            int rowPadding = rowStride - pixelStride * width;
-            Bitmap bitmap = Bitmap.createBitmap(width + rowPadding / pixelStride, height, Bitmap.Config.ARGB_8888);
-            bitmap.copyPixelsFromBuffer(buffer);
-            bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height);
-            image.close();
-
-//			File file = new File(SAVE_REAL_PATH);
-//			if (bitmap != null) {
-//				try {
-//                    if (!file.exists()) {
-//                        file.mkdirs();
-//                    }
-//                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.US);
-//                    String fileImage = file.getAbsolutePath() + "/" + sdf.format(new Date()) + ".jpg";
-//					FileOutputStream out = new FileOutputStream(fileImage);
-//					if (out != null) {
-//						bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-//						out.flush();
-//						out.close();
-//						Intent media = new Intent(
-//								Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-//						Uri contentUri = Uri.fromFile(file);
-//						media.setData(contentUri);
-//						sendBroadcast(media);
-//						fileDestUri = fileImage;
-//					}
-//				} catch (FileNotFoundException e) {
-//					e.printStackTrace();
-//					file = null;
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//					file = null;
-//				}
-//			}
-
-//			if (file != null) {
-            return bitmap;
-//			}
-//			return null;
-        }
-
-        @Override
-        @SuppressLint("NewApi")
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
-            // 预览图片
-            if (bitmap != null) {
-                //也可以处理保存图片逻辑
-//                iv_soul.setImageBitmap(bitmap);
-                //TODO
-            }
-        }
-    }
-    @SuppressLint("NewApi")
-    private void tearDownMediaProjection() {
-        if (mMediaProjection != null) {
-            mMediaProjection.stop();
-            mMediaProjection = null;
-        }
-    }
+//    private void startScreenShot() {
+//        Handler handler1 = new Handler();
+//        handler1.postDelayed(new Runnable() {
+//            public void run() {
+//                // start virtual
+//                startVirtual();
+//            }
+//        }, 5);
+//
+//        handler1.postDelayed(new Runnable() {
+//            public void run() {
+//                // capture the screen
+//                startCapture();
+//
+//            }
+//        }, 30);
+//    }
+//
+//    public void startVirtual() {
+//        if (mMediaProjection != null) {
+//            virtualDisplay();
+//        } else {
+//            setUpMediaProjection();
+//            virtualDisplay();
+//        }
+//    }
+//    @SuppressLint("NewApi")
+//    private void stopVirtual() {
+//        if (mVirtualDisplay == null) {
+//            return;
+//        }
+//        mVirtualDisplay.release();
+//        mVirtualDisplay = null;
+//    }
+//    @SuppressLint("NewApi")
+//    private void startCapture() {
+//
+//        Image image = mImageReader.acquireLatestImage();
+//
+//        if (image == null) {
+//            startScreenShot();
+//        } else {
+//            SaveTask mSaveTask = new SaveTask();
+//            // mSaveTask.execute(image);
+//            if (Build.VERSION.SDK_INT >= 11) {
+//                // From API 11 onwards, we need to manually select the
+//                // THREAD_POOL_EXECUTOR
+//                AsyncTaskCompatHoneycomb.executeParallel(mSaveTask, image);
+//            } else {
+//                // Before API 11, all tasks were run in parallel
+//                mSaveTask.execute(image);
+//            }
+//            // AsyncTaskCompat.executeParallel(mSaveTask, image);
+//        }
+//    }
+//
+//
+//    static class AsyncTaskCompatHoneycomb {
+//
+//        static <Params, Progress, Result> void executeParallel(AsyncTask<Params, Progress, Result> task, Params... params) {
+//            // 这里显示调用了THREAD_POOL_EXECUTOR，所以就可以使用该线程池了
+//            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
+//        }
+//
+//    }
+//
+//    @SuppressLint("NewApi")
+//    private void virtualDisplay() {
+//        Surface sf = mImageReader.getSurface();
+//        mVirtualDisplay = mMediaProjection.createVirtualDisplay(
+//                "screen-mirror", mScreenWidth, mScreenHeight, mScreenDensity,
+//                DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+//                mImageReader.getSurface(), null, null);
+//    }
+//    @SuppressLint("NewApi")
+//    public void setUpMediaProjection() {
+//        if (mResultData == null) {
+//            Intent intent = new Intent(Intent.ACTION_MAIN);
+//            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+//            startActivity(intent);
+//        } else {
+//            mMediaProjection = getMediaProjectionManager().getMediaProjection(
+//                    Activity.RESULT_OK, mResultData);
+//        }
+//    }
+//    @SuppressLint("NewApi")
+//    private MediaProjectionManager getMediaProjectionManager() {
+//        return (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+//    }
+//    @SuppressLint("NewApi")
+//    public class SaveTask extends AsyncTask<Image, Void, Bitmap> {
+//
+//        @Override
+//        protected Bitmap doInBackground(Image... params) {
+//            if (params == null || params.length < 1 || params[0] == null) {
+//                return null;
+//            }
+//
+//            Image image = params[0];
+//
+//            int width = image.getWidth();
+//            int height = image.getHeight();
+//            final Image.Plane[] planes = image.getPlanes();
+//            final ByteBuffer buffer = planes[0].getBuffer();
+//            // 每个像素的间距
+//            int pixelStride = planes[0].getPixelStride();
+//            // 总的间距
+//            int rowStride = planes[0].getRowStride();
+//            int rowPadding = rowStride - pixelStride * width;
+//            Bitmap bitmap = Bitmap.createBitmap(width + rowPadding / pixelStride, height, Bitmap.Config.ARGB_8888);
+//            bitmap.copyPixelsFromBuffer(buffer);
+//            bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height);
+//            image.close();
+//
+////			File file = new File(SAVE_REAL_PATH);
+////			if (bitmap != null) {
+////				try {
+////                    if (!file.exists()) {
+////                        file.mkdirs();
+////                    }
+////                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.US);
+////                    String fileImage = file.getAbsolutePath() + "/" + sdf.format(new Date()) + ".jpg";
+////					FileOutputStream out = new FileOutputStream(fileImage);
+////					if (out != null) {
+////						bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+////						out.flush();
+////						out.close();
+////						Intent media = new Intent(
+////								Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+////						Uri contentUri = Uri.fromFile(file);
+////						media.setData(contentUri);
+////						sendBroadcast(media);
+////						fileDestUri = fileImage;
+////					}
+////				} catch (FileNotFoundException e) {
+////					e.printStackTrace();
+////					file = null;
+////				} catch (IOException e) {
+////					e.printStackTrace();
+////					file = null;
+////				}
+////			}
+//
+////			if (file != null) {
+//            return bitmap;
+////			}
+////			return null;
+//        }
+//
+//        @Override
+//        @SuppressLint("NewApi")
+//        protected void onPostExecute(Bitmap bitmap) {
+//            super.onPostExecute(bitmap);
+//            // 预览图片
+//            if (bitmap != null) {
+//                //也可以处理保存图片逻辑
+////                iv_soul.setImageBitmap(bitmap);
+//                //TODO
+//            }
+//        }
+//    }
+//    @SuppressLint("NewApi")
+//    private void tearDownMediaProjection() {
+//        if (mMediaProjection != null) {
+//            mMediaProjection.stop();
+//            mMediaProjection = null;
+//        }
+//    }
 
 }
