@@ -60,10 +60,8 @@ public class ChatAdapter extends BaseAdapter {
             holder.text_id = view.findViewById(R.id.text_id);
             holder.text_id_sp = view.findViewById(R.id.text_id_sp);
             holder.ll_listview = view.findViewById(R.id.ll_listview);
-            LogUtil.e("=====123============" + position);
-            if (userList.get(position).getValue().equals("")) {
-                holder.ll_listview.setVisibility(View.GONE);
-            }
+
+
             holder.iv_img = view.findViewById(R.id.iv_img);
             if (userList.get(position).getCode().equals("qq")) {
                 holder.iv_img.setImageResource(R.mipmap.qq);
@@ -133,7 +131,6 @@ public class ChatAdapter extends BaseAdapter {
                     }
 
                     if (userList.get(position).getCode().equals("web")) {
-                        LogUtil.e("========123=========");
                         Bundle bundleTab = new Bundle();
                         bundleTab.putString("url", userList.get(position).getValue());
                         Intent intent = new Intent();
@@ -149,6 +146,11 @@ public class ChatAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
 
+        if (userList.get(position).getValue().equals("")) {
+            holder.ll_listview.setVisibility(View.GONE);
+        }else{
+            holder.ll_listview.setVisibility(View.VISIBLE);
+        }
         return view;
     }
 
