@@ -3,6 +3,8 @@ package com.example.agc.aigoucai.bean;
 public class base {
 
     public static final String appid = "android907";
+    public static  boolean ifgetService = true;
+
     //分享链接 500  https://www.500app.me/app.html
     //爱购彩 https://www.agcapp.me/app.html
 //
