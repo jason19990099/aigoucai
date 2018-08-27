@@ -86,8 +86,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     TextView tvVertion;
     @BindView(R2.id.iv_float)
     ImageView ivFloat;
-    @BindView(R.id.be_selectservice)
-    Button beSelectservice;
+//    @BindView(R.id.be_selectservice)
+//    Button beSelectservice;
 
     private Adapter_url adapter_url = new Adapter_url();
     private CustomDialog.Builder ibuilder;
@@ -245,15 +245,16 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     @Override
     public void getDate() {
         LogUtil.e("==========取得数据============");     }
-    @OnClick(R.id.be_selectservice)
-    public void onViewClicked(View view) {
-        switch(view.getId()){
-            case  R.id.be_selectservice:
-              startActivity(new Intent(SelectLinesActivity.this,SelectServiceActivity.class));
-                break;
-        }
 
-    }
+//    @OnClick(R.id.be_selectservice)
+//    public void onViewClicked(View view) {
+//        switch(view.getId()){
+//            case  R.id.be_selectservice:
+//              startActivity(new Intent(SelectLinesActivity.this,SelectServiceActivity.class));
+//                break;
+//        }
+//
+//    }
 
 
     class Adapter_url extends BaseAdapter {

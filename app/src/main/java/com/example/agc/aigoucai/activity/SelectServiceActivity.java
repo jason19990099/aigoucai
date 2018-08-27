@@ -8,6 +8,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.agc.aigoucai.R;
+import com.example.agc.aigoucai.R2;
 import com.example.agc.aigoucai.adapter.ChatAdapter;
 import com.example.agc.aigoucai.bean.ChatBean;
 import com.example.agc.aigoucai.bean.base;
@@ -40,11 +41,11 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class SelectServiceActivity extends Activity {
-    @BindView(R.id.listvie_id)
+    @BindView(R2.id.listvie_id)
     ListView listvieId;
-    @BindView(R.id.fl_layout)
+    @BindView(R2.id.fl_layout)
     FrameLayout flLayout;
-    @BindView(R.id.tv_vertion)
+    @BindView(R2.id.tv_vertion)
     TextView tvVertion;
     private Gson gson = new Gson();
     private ChatAdapter chatAdapter;

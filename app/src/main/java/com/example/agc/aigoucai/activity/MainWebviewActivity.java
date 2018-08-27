@@ -384,32 +384,15 @@ public class MainWebviewActivity extends AppCompatActivity {
             ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享",share_url);
         }else if (id==R.id.iv_back){
             if (null == changeUrl) {
+                if (appid.equals("android906") || appid.equals("android905")) {
+                    if (mWebView.canGoBack())
+                        mWebView.goBack();
+                    return;
+                }
                 finish();
-<<<<<<< HEAD
             } else {
                 initWebSetting(changeUrl);
             }
-=======
-                break;
-            case R.id.ll_fenxiang:
-                changeSelectState(3);
-                ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", base.share_url);
-                break;
-            case R.id.iv_back:
-
-                if (null == changeUrl) {
-                    if (appid.equals("android906") || appid.equals("android905")) {
-                        if (mWebView.canGoBack())
-                            mWebView.goBack();
-                        return;
-                    }
-                    finish();
-                } else {
-                    initWebSetting(changeUrl);
-                }
-                break;
-
->>>>>>> master
         }
     }
 
