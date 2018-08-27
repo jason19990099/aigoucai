@@ -42,7 +42,6 @@ import android.widget.RelativeLayout;
 
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.R2;
-import com.example.agc.aigoucai.bean.base;
 import com.example.agc.aigoucai.util.Apputil;
 import com.example.agc.aigoucai.util.ByteUtil;
 import com.example.agc.aigoucai.util.LogUtil;

@@ -687,7 +687,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
 //            if (bitmap != null) {
 //                //也可以处理保存图片逻辑
 ////                iv_soul.setImageBitmap(bitmap);
-//                //TODO
+
 //            }
 //        }
 //    }
