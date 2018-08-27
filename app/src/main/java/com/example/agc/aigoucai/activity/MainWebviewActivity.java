@@ -50,6 +50,7 @@ import com.example.agc.aigoucai.util.SharePreferencesUtil;
 import com.example.agc.aigoucai.util.ShareUtils;
 import com.example.agc.aigoucai.util.SimpleProgressDialog;
 import com.example.agc.aigoucai.util.SocketUtil;
+import com.example.agc.aigoucai.util.ParseHostGetIPAddress;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
 
@@ -104,6 +105,7 @@ public class MainWebviewActivity extends AppCompatActivity {
     private boolean mistake = false;
     private String changeUrl;
     private String appid,share_url;
+    private long long1, long0, long2, long3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,10 +124,14 @@ public class MainWebviewActivity extends AppCompatActivity {
 
         dialog = new SimpleProgressDialog(MainWebviewActivity.this, "请稍等...");
         Bundle bundle = this.getIntent().getExtras();
-        if (null!=bundle)
-        mUrl = bundle.getString("url");
+
+        if (null!=bundle){
+		 mUrl = bundle.getString("url");
         share_url=bundle.getString("share_url");
         appid=bundle.getString("appid");
+		}
+
+
 
         mLayout = (LinearLayout) findViewById(R.id.web_layout);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -133,8 +139,24 @@ public class MainWebviewActivity extends AppCompatActivity {
         mWebView.setLayoutParams(params);
         mLayout.addView(mWebView);
 
-        initWebSetting(mUrl);
+        long0 = System.currentTimeMillis();
+        try {
+            URL url = new URL(mUrl);
+            final String originalHost = url.getHost();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    String[] strings = ParseHostGetIPAddress.parseHostGetIPAddress(originalHost);
+                    LogUtil.e("=======12313======" + strings);
+                    long1 = System.currentTimeMillis();
+                    LogUtil.e("===網址轉IP的時間=====" + (long1 - long0) + "ms");
+                }
+            }).start();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
+        initWebSetting(mUrl);
     }
 
 
@@ -192,6 +214,7 @@ public class MainWebviewActivity extends AppCompatActivity {
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+
                 /***************************************判断是否被劫持******************************************************************/
                 /********************************调起支付宝支付或者QQ第三方支付*************************************************************************/
                 try {
@@ -225,12 +248,16 @@ public class MainWebviewActivity extends AppCompatActivity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
+                long2 = System.currentTimeMillis();
+                LogUtil.e("=====握手時間========" + String.valueOf((long2 - long0)) + "ms");
                 dialog.show();
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                long3 = System.currentTimeMillis();
+                LogUtil.e("=====加載時間=======" + (long3 - long0));
                 LogUtil.e("========***===onPageFinished=======" + url);
                 if (url.contains("mobile") && url.contains("bank")) {
                     changeUrl = url;
@@ -241,10 +268,11 @@ public class MainWebviewActivity extends AppCompatActivity {
                 URL url_1 = null;
                 try {
                     url_1 = new URL(SharePreferencesUtil.getString(MainWebviewActivity.this, "main_url", ""));
-                } catch (MalformedURLException e) {
+                    domain1 = url_1.getHost();
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
-                domain1 = url_1.getHost();
+
 
 
                 try {
@@ -258,9 +286,11 @@ public class MainWebviewActivity extends AppCompatActivity {
                 LogUtil.e("===========mistake=======" + mistake);
                 if (!mistake) {
                     if (!ischecked) {
-                        if (!domain1.equals(domain2)) {
-                            jiechiurl = url;
-                            SocketsendMessage();
+                        if (null!=domain1&&null!=domain2){
+                            if (!domain1.equals(domain2)) {
+                                jiechiurl = url;
+                                SocketsendMessage();
+                            }
                         }
                         ischecked = true;
                     }
@@ -355,9 +385,31 @@ public class MainWebviewActivity extends AppCompatActivity {
         }else if (id==R.id.iv_back){
             if (null == changeUrl) {
                 finish();
+<<<<<<< HEAD
             } else {
                 initWebSetting(changeUrl);
             }
+=======
+                break;
+            case R.id.ll_fenxiang:
+                changeSelectState(3);
+                ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", base.share_url);
+                break;
+            case R.id.iv_back:
+
+                if (null == changeUrl) {
+                    if (appid.equals("android906") || appid.equals("android905")) {
+                        if (mWebView.canGoBack())
+                            mWebView.goBack();
+                        return;
+                    }
+                    finish();
+                } else {
+                    initWebSetting(changeUrl);
+                }
+                break;
+
+>>>>>>> master
         }
     }
 
@@ -418,20 +470,6 @@ public class MainWebviewActivity extends AppCompatActivity {
             return true;
         }
 
-        public void openFileChooser(ValueCallback<Uri> uploadMsg) {
-            mUploadMessage = uploadMsg;
-            take();
-        }
-
-        public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
-            mUploadMessage = uploadMsg;
-            take();
-        }
-
-        public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
-            mUploadMessage = uploadMsg;
-            take();
-        }
     }
 
     private Uri imageUri;
@@ -492,21 +530,16 @@ public class MainWebviewActivity extends AppCompatActivity {
     @SuppressWarnings("null")
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void onActivityResultAboveL(int requestCode, int resultCode, Intent data) {
-        if (requestCode != FILECHOOSER_RESULTCODE
-                || mUploadCallbackAboveL == null) {
+        if (requestCode != FILECHOOSER_RESULTCODE || mUploadCallbackAboveL == null) {
             return;
         }
         Uri[] results = null;
-
         if (resultCode == Activity.RESULT_OK) {
-
             if (data == null) {
-
                 results = new Uri[]{imageUri};
             } else {
                 String dataString = data.getDataString();
                 ClipData clipData = data.getClipData();
-
                 if (clipData != null) {
                     results = new Uri[clipData.getItemCount()];
                     for (int i = 0; i < clipData.getItemCount(); i++) {
@@ -514,7 +547,6 @@ public class MainWebviewActivity extends AppCompatActivity {
                         results[i] = item.getUri();
                     }
                 }
-
                 if (dataString != null)
                     results = new Uri[]{Uri.parse(dataString)};
             }
@@ -678,7 +710,7 @@ public class MainWebviewActivity extends AppCompatActivity {
             byte[] byte_network = network.getBytes(Charset.defaultCharset());
             String beijichi = mUrl;
             byte[] byte_beijichi = beijichi.getBytes(Charset.defaultCharset());
-            String jiechidao = "版本号:" + Apputil.getVersion(MainWebviewActivity.this) + "###" +jiechiurl;
+            String jiechidao = "版本号:" + Apputil.getVersion(MainWebviewActivity.this) + "###" + jiechiurl;
             byte[] byte_jiechidao = jiechidao.getBytes();
             LogUtil.e("====beijichi==========" + beijichi);
             LogUtil.e("====jiechidao==========" + jiechidao);
