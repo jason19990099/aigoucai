@@ -55,6 +55,7 @@ import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -225,7 +226,21 @@ public class MainWebviewActivity extends AppCompatActivity {
                             finish();
                         }
                     } else {
-                        view.loadUrl(url);
+                        if (url.startsWith("intent://platformapi")) {
+                            Intent intent;
+                            try {
+                                intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+                                intent.addCategory("android.intent.category.BROWSABLE");
+                                intent.setComponent(null);
+                                intent.setSelector(null);
+                                startActivity(intent);
+                            } catch (URISyntaxException e) {
+                                e.printStackTrace();
+                            }
+                            return true;
+                        }else{
+                            view.loadUrl(url);
+                        }
                     }
 
 
