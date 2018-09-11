@@ -127,7 +127,7 @@ public class MainWebviewActivity extends AppCompatActivity {
         if (null != bundle)
             mUrl = bundle.getString("url");
 
-        mLayout = (LinearLayout) findViewById(R.id.web_layout);
+        mLayout = findViewById(R.id.web_layout);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mWebView = new WebView(this);
         mWebView.setLayoutParams(params);
@@ -395,14 +395,12 @@ public class MainWebviewActivity extends AppCompatActivity {
                 ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", base.share_url);
                 break;
             case R.id.iv_back:
-
                 if (null == changeUrl) {
-                    if (appid.equals("android906") || appid.equals("android905")) {
-                        if (mWebView.canGoBack())
-                            mWebView.goBack();
-                        return;
+                    if (mWebView.canGoBack()){
+                        mWebView.goBack();
+                    }else{
+                        finish();
                     }
-                    finish();
                 } else {
                     initWebSetting(changeUrl);
                 }
