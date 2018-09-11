@@ -55,6 +55,7 @@ import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -126,7 +127,7 @@ public class MainWebviewActivity extends AppCompatActivity {
         if (null != bundle)
             mUrl = bundle.getString("url");
 
-        mLayout = (LinearLayout) findViewById(R.id.web_layout);
+        mLayout = findViewById(R.id.web_layout);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mWebView = new WebView(this);
         mWebView.setLayoutParams(params);
@@ -225,7 +226,21 @@ public class MainWebviewActivity extends AppCompatActivity {
                             finish();
                         }
                     } else {
-                        view.loadUrl(url);
+                        if (url.startsWith("intent://platformapi")) {
+                            Intent intent;
+                            try {
+                                intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+                                intent.addCategory("android.intent.category.BROWSABLE");
+                                intent.setComponent(null);
+                                intent.setSelector(null);
+                                startActivity(intent);
+                            } catch (URISyntaxException e) {
+                                e.printStackTrace();
+                            }
+                            return true;
+                        }else{
+                            view.loadUrl(url);
+                        }
                     }
 
 
@@ -380,14 +395,12 @@ public class MainWebviewActivity extends AppCompatActivity {
                 ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", base.share_url);
                 break;
             case R.id.iv_back:
-
                 if (null == changeUrl) {
-                    if (appid.equals("android906") || appid.equals("android905")) {
-                        if (mWebView.canGoBack())
-                            mWebView.goBack();
-                        return;
+                    if (mWebView.canGoBack()){
+                        mWebView.goBack();
+                    }else{
+                        finish();
                     }
-                    finish();
                 } else {
                     initWebSetting(changeUrl);
                 }
