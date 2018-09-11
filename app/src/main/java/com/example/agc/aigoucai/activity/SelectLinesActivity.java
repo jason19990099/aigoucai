@@ -41,6 +41,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.agc.aigoucai.R;
+import com.example.agc.aigoucai.bean.APPdata;
 import com.example.agc.aigoucai.bean.DataSynevent;
 import com.example.agc.aigoucai.bean.GetUrlDatas;
 import com.example.agc.aigoucai.bean.base;
@@ -52,6 +53,7 @@ import com.example.agc.aigoucai.util.LogUtil;
 import com.example.agc.aigoucai.util.SB;
 import com.example.agc.aigoucai.util.SharePreferencesUtil;
 import com.example.agc.aigoucai.util.SocketUtil;
+import com.google.gson.Gson;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
 
@@ -91,6 +93,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     private String[] time_array;
     private String responsecode;
     private String badurl;
+    private long long1, long2;
+    private String long3;
     // 退出时间
     private static long currentBackPressedTime = 0;
     private Handler hander = new Handler() {
@@ -145,7 +149,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
             });
             ibuilder.create().show();
         }
-
+        long1 = System.currentTimeMillis();
         if (null == mManager) {
             mManager = SocketUtil.getmManager();
         }
@@ -322,6 +326,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
             long ms;
 
             public void run() {
+
                 HttpURLConnection connection = null;
                 try {
                     URL url = new URL(address);
@@ -358,19 +363,31 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                             SocketsendMessage();
                         }
                     }
+
                 } catch (Exception e) {
-                    //有错误就设置成超时
-//                    time_string = "超时*";
-//                    time_array[i] = time_string;
                     hander.sendEmptyMessage(0); // 下载完成后发送处理消息
                     e.printStackTrace();
+
+                    APPdata apPdata=new  APPdata();
+                    apPdata.setB(Build.BRAND);
+                    apPdata.setM(Build.MODEL);
                     badurl = address;
-                    responsecode = "版本号:" + Apputil.getVersion(SelectLinesActivity.this) + "###Android版本号:" + Apputil.getSystemVersion() + e.toString() + "###" + Apputil.getIP(badurl);
+                    apPdata.setIp(Apputil.getIP(badurl));
+                    apPdata.setBv("Chromium_Blink");//浏览器版本
+                    apPdata.setAv(Apputil.getVersion(SelectLinesActivity.this));
+                    apPdata.setSt(long3);
+                    apPdata.setS(Apputil.getSystemVersion());
+                    apPdata.setErr(e.toString());
+                    apPdata.setS_ip(SharePreferencesUtil.getString(SelectLinesActivity.this,"s_ip","0"));
+                    apPdata.setPort(SharePreferencesUtil.getString(SelectLinesActivity.this,"port","0"));
+                    responsecode = new Gson().toJson(apPdata);
+                    LogUtil.e("======199999======="+responsecode);
                     SocketsendMessage();
                 } finally {
                     if (connection != null) {
                         connection.disconnect();
                     }
+
                 }
             }
         }).start();
@@ -407,6 +424,9 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void eventBusReceive(DataSynevent dataSynevent) {
         LogUtil.e("====SELECactivity==接收到eventbus传递过来的数据========");
+        long2 = System.currentTimeMillis();
+        long3=String.valueOf((long2 - long1)) + "ms";
+
         url_array = dataSynevent.getList().toArray(new String[0]);
         listvieId.setAdapter(adapter_url);
         time_array = new String[url_array.length];
