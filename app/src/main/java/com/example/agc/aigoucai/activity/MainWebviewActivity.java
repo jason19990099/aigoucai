@@ -127,7 +127,7 @@ public class MainWebviewActivity extends AppCompatActivity {
         if (null != bundle)
             mUrl = bundle.getString("url");
 
-        mLayout = (LinearLayout) findViewById(R.id.web_layout);
+        mLayout = findViewById(R.id.web_layout);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mWebView = new WebView(this);
         mWebView.setLayoutParams(params);
