@@ -359,8 +359,34 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                             time_array[i] = time_string;
                             hander.sendEmptyMessage(0); // 下载完成后发送处理消息
                             badurl = address;
-                            responsecode = "版本号:" + Apputil.getVersion(SelectLinesActivity.this) + "###Android版本号:" + Apputil.getSystemVersion() + "###" + String.valueOf(responseCode) + "###" + Apputil.getIP(badurl);
+
+                            APPdata apPdata=new  APPdata();
+                            apPdata.setB(Build.BRAND);
+                            apPdata.setM(Build.MODEL);
+                            apPdata.setIp(Apputil.getIP(badurl));
+                            apPdata.setBv("Chromium_Blink");//浏览器版本
+                            apPdata.setAv(Apputil.getVersion(SelectLinesActivity.this));
+                            apPdata.setSt(long3);
+                            apPdata.setS(Apputil.getSystemVersion());
+                            apPdata.setS_ip(SharePreferencesUtil.getString(SelectLinesActivity.this,"s_ip","0"));
+                            apPdata.setPort(SharePreferencesUtil.getString(SelectLinesActivity.this,"port","0"));
+                            responsecode = new Gson().toJson(apPdata);
                             SocketsendMessage();
+                        }else{
+                            date2 = dfs.format(new Date());// new Date()为获取当前系统时间，也可使用当前时间戳
+                            Date begin = dfs.parse(date1);
+                            Date end = dfs.parse(date2);
+                            between = Math.abs((end.getTime() - begin.getTime()));// 得到两者的毫秒数
+                            day = between / (24 * 60 * 60 * 1000);
+                            hour = (between / (60 * 60 * 1000) - day * 24);
+                            min = ((between / (60 * 1000)) - day * 24 * 60 - hour * 60);
+                            s = (between / 1000 - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60);
+                            ms = (between - day * 24 * 60 * 60 * 1000 - hour * 60 * 60 * 1000
+                                    - min * 60 * 1000 - s * 1000);
+                            Log.e("两个时间相差", min + "分" + s + "秒" + ms + "毫秒");
+                            time_string = s + "#" + ms + "";
+                            time_array[i] = time_string;
+                            hander.sendEmptyMessage(0); // 下载完成后发送处理消息
                         }
                     }
 
