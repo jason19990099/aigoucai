@@ -209,6 +209,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
      * 刷新網址鏈接
      */
     private void refresh() {
+        long1 = System.currentTimeMillis();
         if (null == mManager) {
             mManager = SocketUtil.getmManager();
         }
@@ -535,7 +536,6 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
             mManager.connect();
         }
         mManager.send(new SendhijackMessage2());
-
     }
 
 
