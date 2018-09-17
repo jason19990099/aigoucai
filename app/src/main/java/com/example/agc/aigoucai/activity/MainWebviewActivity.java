@@ -756,9 +756,9 @@ public class MainWebviewActivity extends AppCompatActivity {
         super.onDestroy();
         Log.e("TAG", "onDestroy");
         if (mWebView != null) {
-            ClearCookie();
-            mWebView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
-            mWebView.clearHistory();
+//            ClearCookie();
+//            mWebView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
+//            mWebView.clearHistory();
 
             ((ViewGroup) mWebView.getParent()).removeView(mWebView);
             mWebView.destroy();
