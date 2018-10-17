@@ -18,6 +18,7 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -151,7 +152,10 @@ public class MainWebviewActivity extends AppCompatActivity {
         }
 
         initWebSetting(mUrl);
+
+
     }
+
 
 
     /**
@@ -183,6 +187,8 @@ public class MainWebviewActivity extends AppCompatActivity {
     private void initWebSetting(String url) {
         WebSettings settings = mWebView.getSettings();
         settings.setJavaScriptEnabled(true);
+        // 设置允许JS弹窗
+        settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setBuiltInZoomControls(true);
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
         settings.setUseWideViewPort(true);
@@ -208,7 +214,7 @@ public class MainWebviewActivity extends AppCompatActivity {
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-
+                 LogUtil.e("======shouldOverrideUrlLoading==========");
                 /***************************************判断是否被劫持******************************************************************/
                 /********************************调起支付宝支付或者QQ第三方支付*************************************************************************/
                 try {
@@ -333,7 +339,21 @@ public class MainWebviewActivity extends AppCompatActivity {
                         }
                     }
                 }
-                mWebView.setVisibility(View.VISIBLE);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        final  String call = "javascript:document.getElementsByTagName(\"ion-slide\")[0].children[0].children[0].setAttribute(\"src\", \"/static/images/slide/m4.jpg\")";
+                        mWebView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mWebView.loadUrl(call);
+                                mWebView.setVisibility(View.VISIBLE);
+
+                            }});
+                    }
+                },1000);
+
             }
 
             @Override
