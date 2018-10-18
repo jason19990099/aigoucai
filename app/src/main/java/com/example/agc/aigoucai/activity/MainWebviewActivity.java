@@ -348,7 +348,6 @@ public class MainWebviewActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 mWebView.loadUrl(call);
-                                mWebView.setVisibility(View.VISIBLE);
 
                             }});
                     }
