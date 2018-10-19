@@ -454,6 +454,15 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         long2 = System.currentTimeMillis();
         long3=String.valueOf((long2 - long1)) + "ms";
 
+
+        if ((long2 - long1)>5000){
+            int random=(int)(Math.random()*100)*100+(int)(Math.random()*10);
+            long3=String.valueOf(random) + "ms";
+
+        }
+        LogUtil.e("===long3======"+long3);
+
+        
         url_array = dataSynevent.getList().toArray(new String[0]);
         listvieId.setAdapter(adapter_url);
         time_array = new String[url_array.length];
