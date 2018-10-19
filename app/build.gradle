@@ -18,7 +18,7 @@ android {
     compileSdkVersion 26
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
-        applicationId "com.example.agc.aigoucai2"
+        applicationId "com.example.agc.zhangxincai"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 12
@@ -31,8 +31,8 @@ android {
 
         manifestPlaceholders = [
                 JPUSH_PKGNAME: applicationId,
-                JPUSH_APPKEY : "75be422869412f48a88e9d9e", //JPush上注册的包名对应的appkey（*换成你的*）
-                JPUSH_CHANNEL: "aigoucai", //暂时填写默认值即可.
+                JPUSH_APPKEY : "c0107203f9555ca0688661a4", //JPush上注册的包名对应的appkey（*换成你的*）
+                JPUSH_CHANNEL: "aixincai", //暂时填写默认值即可.
         ]
 
 
