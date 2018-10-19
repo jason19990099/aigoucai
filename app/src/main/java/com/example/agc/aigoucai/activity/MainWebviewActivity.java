@@ -301,7 +301,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                                 LogUtil.e("===========网站被非法劫持=======" + mistake);
                                 jiechiurl = url;
                                 SocketsendMessage();
-                                Toast.makeText(MainWebviewActivity.this,"网站被非法劫持,请联系客服。",Toast.LENGTH_LONG).show();
+                                Toast.makeText(MainWebviewActivity.this,"网站暂时没办法使用,请联系客服。",Toast.LENGTH_LONG).show();
                                 finish();
                             }
                         }
