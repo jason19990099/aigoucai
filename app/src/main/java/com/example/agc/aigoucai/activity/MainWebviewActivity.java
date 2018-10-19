@@ -18,6 +18,7 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -340,7 +341,21 @@ public class MainWebviewActivity extends AppCompatActivity {
                         }
                     }
                 }
-                mWebView.setVisibility(View.VISIBLE);
+
+                if (url.contains("GameType=5110")){
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            LogUtil.e("=======javascript======");
+                            mWebView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mWebView.loadUrl("javascript:var testa = document.getElementById('fullscreen_div'); testa.parentNode.removeChild(testa)");
+                                }});
+                        }
+                    },6000);
+                }
+
             }
 
             @Override
