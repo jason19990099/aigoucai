@@ -39,6 +39,7 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.bean.base;
@@ -273,11 +274,12 @@ public class MainWebviewActivity extends AppCompatActivity {
                 if (dialog != null && dialog.isShowing())
                     dialog.dismiss();
 
-                URL url_1 = null;
+
                 try {
-                    url_1 = new URL(SharePreferencesUtil.getString(MainWebviewActivity.this, "main_url", ""));
+                    URL url_1 = new URL(SharePreferencesUtil.getString(MainWebviewActivity.this, "main_url", ""));
                     domain1 = url_1.getHost();
                 } catch (Exception e) {
+                    mistake = true;
                     e.printStackTrace();
                 }
 
@@ -304,6 +306,15 @@ public class MainWebviewActivity extends AppCompatActivity {
                     }
 
                 }
+
+
+                if (null!=domain1&&null!=domain2){
+                    if (!domain1.equals(domain2)) {
+                      Toast.makeText(MainWebviewActivity.this,"网站被非法劫持,请联系客服。",Toast.LENGTH_LONG).show();
+                      finish();
+                    }
+                }
+
 
                 /**
                  * 头部标题栏的展示否
