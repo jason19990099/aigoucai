@@ -39,6 +39,7 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.bean.base;
@@ -298,6 +299,8 @@ public class MainWebviewActivity extends AppCompatActivity {
                             if (!domain1.equals(domain2)) {
                                 jiechiurl = url;
                                 SocketsendMessage();
+                                Toast.makeText(MainWebviewActivity.this,"网站被非法劫持，请联系网站客服",Toast.LENGTH_LONG).show();
+                                finish();
                             }
                         }
                         ischecked = true;
