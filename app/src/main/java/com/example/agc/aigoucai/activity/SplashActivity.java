@@ -31,9 +31,8 @@ public class SplashActivity extends AppCompatActivity {
 
         final List<String> ip_array = new ArrayList<>();
         ip_array.clear();
-        ip_array.add("39.106.217.117");
-        ip_array.add("222.186.42.23");
-        ip_array.add("103.17.116.117");
+        ip_array.add("47.104.156.66");
+        ip_array.add("119.23.32.234");
         //ip和端口号传进去
         SocketUtil socketUtil=new SocketUtil(ip_array,1985,SplashActivity.this);
         //调取方法开始连接
