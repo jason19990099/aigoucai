@@ -81,8 +81,6 @@ public class MainWebviewActivity extends AppCompatActivity {
     LinearLayout llXianlu;
     @BindView(R.id.ll_fenxiang)
     LinearLayout llFenxiang;
-    @BindView(R.id.iv_loading)
-    ImageView ivLoading;
     @BindView(R.id.web_layout)
     LinearLayout webLayout;
     @BindView(R.id.iv_back)
@@ -426,7 +424,6 @@ public class MainWebviewActivity extends AppCompatActivity {
             int ori = mConfiguration.orientation; //获取屏幕方向
             if (newProgress == 100) {
                 mWebView.setVisibility(View.VISIBLE);
-                ivLoading.setVisibility(View.GONE);
                 if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
                     //横屏
                     llBottom.setVisibility(View.GONE);
@@ -439,17 +436,14 @@ public class MainWebviewActivity extends AppCompatActivity {
                 }
             } else {
                 mWebView.setVisibility(View.GONE);
-                ivLoading.setVisibility(View.VISIBLE);
                 if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
                     //横屏
-                    ivLoading.setImageDrawable(getResources().getDrawable(R.mipmap.loading_land));
                     llBottom.setVisibility(View.GONE);
                     lineBottom.setVisibility(View.GONE);
                     llTitle.setVisibility(View.GONE);
                     viewLine.setVisibility(View.GONE);
                 } else if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
                     //竖屏
-                    ivLoading.setImageDrawable(getResources().getDrawable(R.mipmap.loading));
                     llBottom.setVisibility(View.VISIBLE);
                     lineBottom.setVisibility(View.VISIBLE);
                     llTitle.setVisibility(View.VISIBLE);
