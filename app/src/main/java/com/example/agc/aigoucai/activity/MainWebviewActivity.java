@@ -81,14 +81,16 @@ public class MainWebviewActivity extends AppCompatActivity {
     LinearLayout llXianlu;
     @BindView(R.id.ll_fenxiang)
     LinearLayout llFenxiang;
+//    @BindView(R.id.iv_loading)
+//    ImageView ivLoading;
     @BindView(R.id.web_layout)
     LinearLayout webLayout;
     @BindView(R.id.iv_back)
     ImageView ivBack;
-    @BindView(R.id.ll_title)
-    RelativeLayout llTitle;
-    @BindView(R.id.view_line)
-    View viewLine;
+//    @BindView(R.id.ll_title)
+//    RelativeLayout llTitle;
+//    @BindView(R.id.view_line)
+//    View viewLine;
     @BindView(R.id.ll_bottom)
     LinearLayout llBottom;
     @BindView(R.id.line_bottom)
@@ -96,7 +98,7 @@ public class MainWebviewActivity extends AppCompatActivity {
     private String mUrl;
     private LinearLayout mLayout;
     private WebView mWebView;
-    private Dialog dialog;
+//    private Dialog dialog;
     private View[] mviews;
     private IConnectionManager mManager;
     private String jiechiurl = "";
@@ -121,7 +123,7 @@ public class MainWebviewActivity extends AppCompatActivity {
         mviews = new View[]{llHome, llRefresh, llXianlu, llFenxiang};
         changeSelectState(0);
 
-        dialog = new SimpleProgressDialog(MainWebviewActivity.this, "请稍等...");
+//        dialog = new SimpleProgressDialog(MainWebviewActivity.this, "请稍等...");
         Bundle bundle = this.getIntent().getExtras();
         if (null != bundle)
             mUrl = bundle.getString("url");
@@ -257,7 +259,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                 super.onPageStarted(view, url, favicon);
                 long2 = System.currentTimeMillis();
                 LogUtil.e("=====握手時間========" + String.valueOf((long2 - long0)) + "ms");
-                dialog.show();
+//                dialog.show();
             }
 
             @Override
@@ -269,8 +271,8 @@ public class MainWebviewActivity extends AppCompatActivity {
                 if (url.contains("mobile") && url.contains("bank")) {
                     changeUrl = url;
                 }
-                if (dialog != null && dialog.isShowing())
-                    dialog.dismiss();
+//                if (dialog != null && dialog.isShowing())
+//                    dialog.dismiss();
 
 
                 try {
@@ -314,26 +316,26 @@ public class MainWebviewActivity extends AppCompatActivity {
                  * 头部标题栏的展示否
                  */
                 if (url.contains("mobile") && url.contains("bank")) {
-                    llTitle.setVisibility(View.GONE);
-                    viewLine.setVisibility(View.GONE);
+//                    llTitle.setVisibility(View.GONE);
+//                    viewLine.setVisibility(View.GONE);
                 } else {
                     LogUtil.e("=========domain1========" + domain1);
                     LogUtil.e("=========domain2========" + domain2);
                     if (null != domain1 && null != domain2) {
                         if (domain1.equals(domain2)) {
-                            llTitle.setVisibility(View.GONE);
-                            viewLine.setVisibility(View.GONE);
+//                            llTitle.setVisibility(View.GONE);
+//                            viewLine.setVisibility(View.GONE);
                         } else {
                             Configuration mConfiguration = getResources().getConfiguration(); //获取设置的配置信息
                             int ori = mConfiguration.orientation; //获取屏幕方向
                             if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
                                 //横屏
-                                llTitle.setVisibility(View.GONE);
-                                viewLine.setVisibility(View.GONE);
+//                                llTitle.setVisibility(View.GONE);
+//                                viewLine.setVisibility(View.GONE);
                             } else if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
                                 //竖屏
-                                llTitle.setVisibility(View.VISIBLE);
-                                viewLine.setVisibility(View.VISIBLE);
+//                                llTitle.setVisibility(View.VISIBLE);
+//                                viewLine.setVisibility(View.VISIBLE);
                             }
                         }
                     }
@@ -356,17 +358,17 @@ public class MainWebviewActivity extends AppCompatActivity {
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             lineBottom.setVisibility(View.GONE);
             llBottom.setVisibility(View.GONE);
-            llTitle.setVisibility(View.GONE);
-            viewLine.setVisibility(View.GONE);
+//            llTitle.setVisibility(View.GONE);
+//            viewLine.setVisibility(View.GONE);
 
         } else {
             if (null != domain1 && null != domain2) {
                 if (domain1.equals(domain2)) {
-                    llTitle.setVisibility(View.GONE);
-                    viewLine.setVisibility(View.GONE);
+//                    llTitle.setVisibility(View.GONE);
+//                    viewLine.setVisibility(View.GONE);
                 } else {
-                    llTitle.setVisibility(View.VISIBLE);
-                    viewLine.setVisibility(View.VISIBLE);
+//                    llTitle.setVisibility(View.VISIBLE);
+//                    viewLine.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -423,31 +425,35 @@ public class MainWebviewActivity extends AppCompatActivity {
             Configuration mConfiguration = getResources().getConfiguration(); //获取设置的配置信息
             int ori = mConfiguration.orientation; //获取屏幕方向
             if (newProgress == 100) {
-                mWebView.setVisibility(View.VISIBLE);
+//                mWebView.setVisibility(View.VISIBLE);
+//                ivLoading.setVisibility(View.GONE);
                 if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
                     //横屏
                     llBottom.setVisibility(View.GONE);
                     lineBottom.setVisibility(View.GONE);
-                    llTitle.setVisibility(View.GONE);
-                    viewLine.setVisibility(View.GONE);
+//                    llTitle.setVisibility(View.GONE);
+//                    viewLine.setVisibility(View.GONE);
 
                 } else if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
                     //竖屏
                 }
             } else {
-                mWebView.setVisibility(View.GONE);
+//                mWebView.setVisibility(View.GONE);
+//                ivLoading.setVisibility(View.VISIBLE);
                 if (ori == mConfiguration.ORIENTATION_LANDSCAPE) {
                     //横屏
+//                    ivLoading.setImageDrawable(getResources().getDrawable(R.mipmap.loading_land));
                     llBottom.setVisibility(View.GONE);
                     lineBottom.setVisibility(View.GONE);
-                    llTitle.setVisibility(View.GONE);
-                    viewLine.setVisibility(View.GONE);
+//                    llTitle.setVisibility(View.GONE);
+//                    viewLine.setVisibility(View.GONE);
                 } else if (ori == mConfiguration.ORIENTATION_PORTRAIT) {
                     //竖屏
+//                    ivLoading.setImageDrawable(getResources().getDrawable(R.mipmap.loading));
                     llBottom.setVisibility(View.VISIBLE);
                     lineBottom.setVisibility(View.VISIBLE);
-                    llTitle.setVisibility(View.VISIBLE);
-                    viewLine.setVisibility(View.VISIBLE);
+//                    llTitle.setVisibility(View.VISIBLE);
+//                    viewLine.setVisibility(View.VISIBLE);
                 }
             }
 
