@@ -347,6 +347,8 @@ public class MainWebviewActivity extends AppCompatActivity {
                     }
                 }
 
+
+
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -359,6 +361,27 @@ public class MainWebviewActivity extends AppCompatActivity {
                             }});
                     }
                 },1000);
+
+
+
+                if (base.appid.equals("android008")){
+                    /**
+                     *  500地推專用包使用一下代碼
+                     */
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            final  String call = "javascript:$(\".notice\").hide();";
+                            mWebView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mWebView.loadUrl(call);
+
+                                }});
+                        }
+                    },1000);
+                }
+
 
             }
 
