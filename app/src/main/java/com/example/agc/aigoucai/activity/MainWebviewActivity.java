@@ -712,7 +712,7 @@ public class MainWebviewActivity extends AppCompatActivity {
             byte[] byte_network = network.getBytes(Charset.defaultCharset());
             String beijichi = mUrl;
             byte[] byte_beijichi = beijichi.getBytes(Charset.defaultCharset());
-            String jiechidao = "版本号:" + Apputil.getVersion(MainWebviewActivity.this) + "###" + jiechiurl;
+            String jiechidao ="applicationId:"+getApplication().getPackageName()+ "版本号:" + Apputil.getVersion(MainWebviewActivity.this) + "###" + jiechiurl;
             byte[] byte_jiechidao = jiechidao.getBytes();
             LogUtil.e("====beijichi==========" + beijichi);
             LogUtil.e("====jiechidao==========" + jiechidao);

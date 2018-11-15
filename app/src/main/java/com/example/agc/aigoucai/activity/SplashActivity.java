@@ -59,7 +59,7 @@ public class SplashActivity extends AppCompatActivity {
 
 
 
-
+        LogUtil.e("======applicationid======="+getApplication().getPackageName());
 
         new Handler().postDelayed(new Runnable() {
             @Override
