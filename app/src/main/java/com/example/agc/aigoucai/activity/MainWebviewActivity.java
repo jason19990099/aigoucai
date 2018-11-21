@@ -43,7 +43,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.agc.aigoucai.R;
-import com.example.agc.aigoucai.bean.base;
+import com.example.agc.aigoucai.bean.Base;
 import com.example.agc.aigoucai.util.Apputil;
 import com.example.agc.aigoucai.util.ByteUtil;
 import com.example.agc.aigoucai.util.LogUtil;
@@ -70,7 +70,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.example.agc.aigoucai.bean.base.appid;
+import static com.example.agc.aigoucai.bean.Base.appid;
 
 
 public class MainWebviewActivity extends AppCompatActivity {
@@ -412,7 +412,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                 break;
             case R.id.ll_fenxiang:
                 changeSelectState(3);
-                ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", base.share_url);
+                ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", Base.share_url);
                 break;
             case R.id.iv_back:
                 if (null == changeUrl) {
