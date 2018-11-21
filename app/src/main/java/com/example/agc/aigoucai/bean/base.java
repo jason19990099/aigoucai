@@ -1,6 +1,6 @@
 package com.example.agc.aigoucai.bean;
 
-public class base {
+public class Base {
 
     public static  String appid = "android909";
     public static  boolean ifgetService = true;
