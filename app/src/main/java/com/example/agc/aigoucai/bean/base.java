@@ -1,6 +1,6 @@
 package com.example.agc.aigoucai.bean;
 
-public class base {
+public class Base {
     public static final String appid = "android904";
     public static  boolean ifgetService = true;
     public static final String share_url = "https://www.appkings.me/xpj.html";
