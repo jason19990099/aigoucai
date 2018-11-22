@@ -1,7 +1,6 @@
 package com.example.agc.aigoucai.bean;
 
-public class Base {
-
+public class Basedata {
     public static final String appid = "android001";
     public static  boolean ifgetService = true;
 
@@ -23,8 +22,8 @@ public class Base {
 //    https://www.appkings.me/678.html
 //    新葡京
 //    https://www.appkings.me/xpj.html
-      public static  final String share_url="https://www.500app.me/app.html";
-      //500cp008
+    public static  final String share_url="https://www.500app.me/app.html";
+    //500cp008
 //      public static  final String share_url="https://www.500app.me/20181017.html";
 
 //    500cp009
