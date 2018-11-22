@@ -102,11 +102,11 @@ public class MainWebviewActivity extends AppCompatActivity {
     private View[] mviews;
     private IConnectionManager mManager;
     private String jiechiurl = "";
-    private boolean ischecked = false;
     private String domain1, domain2;
     private boolean mistake = false;
     private String changeUrl;
     private long long1, long0, long2, long3;
+    private int check=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -295,7 +295,9 @@ public class MainWebviewActivity extends AppCompatActivity {
 
 
                 if (!mistake) {
-                    if (!ischecked) {
+                    if (check==0) {
+                        check++;
+                    }else{
                         if (null!=domain1&&null!=domain2){
                             if (!domain1.equals(domain2)) {
                                 LogUtil.e("===========网站被非法劫持=======" + mistake);
@@ -305,7 +307,6 @@ public class MainWebviewActivity extends AppCompatActivity {
                                 finish();
                             }
                         }
-                        ischecked = true;
                     }
 
                 }
