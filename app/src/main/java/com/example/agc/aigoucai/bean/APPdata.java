@@ -14,6 +14,8 @@ public class APPdata  implements Serializable {
     private String err;//错误详情
     private String s_ip;//socket的服务器ip
     private String port;//端口
+    private String applicationid;
+    private String appvertion;
 
     public String getS_ip() {
         return s_ip;
@@ -93,5 +95,21 @@ public class APPdata  implements Serializable {
 
     public void setSt(String st) {
         this.st = st;
+    }
+
+    public String getApplicationid() {
+        return applicationid;
+    }
+
+    public void setApplicationid(String applicationid) {
+        this.applicationid = applicationid;
+    }
+
+    public String getAppvertion() {
+        return appvertion;
+    }
+
+    public void setAppvertion(String appvertion) {
+        this.appvertion = appvertion;
     }
 }
