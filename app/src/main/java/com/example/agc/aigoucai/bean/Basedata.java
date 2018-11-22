@@ -1,7 +1,6 @@
 package com.example.agc.aigoucai.bean;
 
-
-public class Base {
+public class Basedata {
     public static final String appid = "8a";
 //    public static final String appid = "7777a";
 
