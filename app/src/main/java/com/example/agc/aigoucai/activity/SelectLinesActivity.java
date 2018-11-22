@@ -28,7 +28,7 @@ import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.bean.APPdata;
 import com.example.agc.aigoucai.bean.DataSynevent;
 import com.example.agc.aigoucai.bean.GetUrlDatas;
-import com.example.agc.aigoucai.bean.Base;
+import com.example.agc.aigoucai.bean.Basedata;
 import com.example.agc.aigoucai.util.Apputil;
 import com.example.agc.aigoucai.util.ByteUtil;
 import com.example.agc.aigoucai.util.CustomDialog;
@@ -406,7 +406,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         @Override
         public byte[] parse() {
             //根据服务器的解析规则,构建byte数组
-            String id = Base.appid;  //发送的代号
+            String id = Basedata.appid;  //发送的代号
             byte b = 0;
             String network = "";
             if (Apputil.isVpnUsed()) {
