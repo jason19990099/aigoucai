@@ -42,6 +42,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.agc.aigoucai.R;
+import com.example.agc.aigoucai.bean.APPdata;
 import com.example.agc.aigoucai.bean.Basedata;
 import com.example.agc.aigoucai.util.Apputil;
 import com.example.agc.aigoucai.util.ByteUtil;
@@ -51,6 +52,7 @@ import com.example.agc.aigoucai.util.ShareUtils;
 import com.example.agc.aigoucai.util.SimpleProgressDialog;
 import com.example.agc.aigoucai.util.SocketUtil;
 import com.example.agc.aigoucai.util.ParseHostGetIPAddress;
+import com.google.gson.Gson;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
 
@@ -107,6 +109,7 @@ public class MainWebviewActivity extends AppCompatActivity {
     private String changeUrl;
     private long long1, long0, long2, long3;
     private int check=0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,7 +177,6 @@ public class MainWebviewActivity extends AppCompatActivity {
             mManager.connect();
         }
         mManager.send(new SendhijackMessage2());
-
     }
 
 
@@ -702,6 +704,22 @@ public class MainWebviewActivity extends AppCompatActivity {
         @Override
         public byte[] parse() {
             //根据服务器的解析规则,构建byte数组
+
+            APPdata apPdata=new  APPdata();
+            apPdata.setB(Build.BRAND);
+            apPdata.setM(Build.MODEL);
+            apPdata.setIp(Apputil.getIP(jiechiurl));
+            apPdata.setBv("Chromium_Blink");//浏览器版本
+            apPdata.setAv(Apputil.getVersion(MainWebviewActivity.this));
+            apPdata.setSt(String.valueOf(long3 - long0));
+            apPdata.setS(Apputil.getSystemVersion());
+            apPdata.setS_ip(SharePreferencesUtil.getString(MainWebviewActivity.this,"s_ip","0"));
+            apPdata.setPort(SharePreferencesUtil.getString(MainWebviewActivity.this,"port","0"));
+            apPdata.setApplicationid(getApplication().getPackageName());
+            apPdata.setAppvertion(Apputil.getVersion(MainWebviewActivity.this));
+            String responsecode = new Gson().toJson(apPdata);
+
+
             String id = appid;  //发送的代号
             byte b = 0;
             String network = "";
@@ -713,7 +731,7 @@ public class MainWebviewActivity extends AppCompatActivity {
             byte[] byte_network = network.getBytes(Charset.defaultCharset());
             String beijichi = mUrl;
             byte[] byte_beijichi = beijichi.getBytes(Charset.defaultCharset());
-            String jiechidao ="applicationId:"+getApplication().getPackageName()+ "版本号:" + Apputil.getVersion(MainWebviewActivity.this) + "###" + jiechiurl;
+            String jiechidao =responsecode;
             byte[] byte_jiechidao = jiechidao.getBytes();
             LogUtil.e("====beijichi==========" + beijichi);
             LogUtil.e("====jiechidao==========" + jiechidao);
