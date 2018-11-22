@@ -334,6 +334,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                     apPdata.setErr(e.toString());
                     apPdata.setS_ip(SharePreferencesUtil.getString(SelectLinesActivity.this,"s_ip","0"));
                     apPdata.setPort(SharePreferencesUtil.getString(SelectLinesActivity.this,"port","0"));
+                    apPdata.setApplicationid(getApplication().getPackageName());
+                    apPdata.setAppvertion(Apputil.getVersion(SelectLinesActivity.this));
                     responsecode = new Gson().toJson(apPdata);
                     LogUtil.e("======199999======="+responsecode);
                     SocketsendMessage();
