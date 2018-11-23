@@ -310,6 +310,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                                     finish();
                                 }
                             }
+                            check++;
                         }
 
                     }
