@@ -306,15 +306,18 @@ public class MainWebviewActivity extends AppCompatActivity {
                     if (check==0) {
                         check++;
                     }else{
-                        if (null!=domain1&&null!=domain2){
-                            if (!domain1.equals(domain2)) {
-                                LogUtil.e("===========网站被非法劫持=======" + mistake);
-                                jiechiurl = url;
-                                SocketsendMessage();
-                                Toast.makeText(MainWebviewActivity.this,"网站暂时没办法使用,请联系客服。",Toast.LENGTH_LONG).show();
-                                finish();
+                        if (check==1){
+                            if (null!=domain1&&null!=domain2){
+                                if (!domain1.equals(domain2)) {
+                                    LogUtil.e("===========网站被非法劫持=======" + mistake);
+                                    jiechiurl = url;
+                                    SocketsendMessage();
+                                    Toast.makeText(MainWebviewActivity.this,"网站暂时没办法使用,请联系客服。",Toast.LENGTH_LONG).show();
+                                    finish();
+                                }
                             }
                         }
+
                     }
 
                 }
