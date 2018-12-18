@@ -131,9 +131,6 @@ public class MainWebviewActivity extends AppCompatActivity {
         if (null != bundle)
             mUrl = bundle.getString("url");
 
-        mUrl="http://10.7.0.4";
-
-
         mLayout = findViewById(R.id.web_layout);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mWebView = new WebView(this);
@@ -214,7 +211,7 @@ public class MainWebviewActivity extends AppCompatActivity {
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-
+                  LogUtil.e("=====shouldOverrideUrlLoading========"+url);
                 /***************************************判断是否被劫持******************************************************************/
                 /********************************调起支付宝支付或者QQ第三方支付*************************************************************************/
                 try {
@@ -254,8 +251,6 @@ public class MainWebviewActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-//                view.loadUrl(url);
-//                return true;
                 return super.shouldOverrideUrlLoading(view, url);//设置不重新加载 依旧加载原来链接 （在个别手机上重新 view.loadUrl(url) 返回按钮失效）
             }
 
@@ -277,7 +272,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                 super.onPageFinished(view, url);
                 long3 = System.currentTimeMillis();
                 LogUtil.e("=====加載時間=======" + (long3 - long0));
-                LogUtil.e("========***===onPageFinished=======" + url);
+                LogUtil.e("=========onPageFinished=======" + url);
                 if (url.contains("mobile") && url.contains("bank")) {
                     changeUrl = url;
                 }
@@ -303,27 +298,26 @@ public class MainWebviewActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-//
-//                if (!mistake) {
-//                    if (check==0) {
-//                        check++;
-//                    }else{
-//                        if (check==1){
-//                            if (null!=domain1&&null!=domain2){
-//                                if (!domain1.equals(domain2)) {
-//                                    LogUtil.e("===========网站被非法劫持=======" + mistake);
-//                                    jiechiurl = url;
-//                                    SocketsendMessage();
-//                                    Toast.makeText(MainWebviewActivity.this,"网站暂时没办法使用,请联系客服。",Toast.LENGTH_LONG).show();
-//                                    finish();
-//                                }
-//                            }
-//                            check++;
-//                        }
-//
-//                    }
-//
-//                }
+                if (!mistake) {
+                    if (check==0) {
+                        check++;
+                    }else{
+                        if (check==1){
+                            if (null!=domain1&&null!=domain2){
+                                if (!domain1.equals(domain2)) {
+                                    LogUtil.e("===========网站被非法劫持=======" + mistake);
+                                    jiechiurl = url;
+                                    SocketsendMessage();
+                                    Toast.makeText(MainWebviewActivity.this,"网站暂时没办法使用,请联系客服。",Toast.LENGTH_LONG).show();
+                                    finish();
+                                }
+                            }
+                            check++;
+                        }
+
+                    }
+
+                }
 
 
 
@@ -364,7 +358,7 @@ public class MainWebviewActivity extends AppCompatActivity {
             }
         });
 
-
+        //这个加了好像也没啥效果
         if (url.contains("payment/deposit")){
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
             startActivity(intent);
