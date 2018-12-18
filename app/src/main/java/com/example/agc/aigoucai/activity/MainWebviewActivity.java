@@ -131,6 +131,9 @@ public class MainWebviewActivity extends AppCompatActivity {
         if (null != bundle)
             mUrl = bundle.getString("url");
 
+        mUrl="http://10.7.0.4";
+
+
         mLayout = findViewById(R.id.web_layout);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mWebView = new WebView(this);
@@ -295,27 +298,27 @@ public class MainWebviewActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-
-                if (!mistake) {
-                    if (check==0) {
-                        check++;
-                    }else{
-                        if (check==1){
-                            if (null!=domain1&&null!=domain2){
-                                if (!domain1.equals(domain2)) {
-                                    LogUtil.e("===========网站被非法劫持=======" + mistake);
-                                    jiechiurl = url;
-                                    SocketsendMessage();
-                                    Toast.makeText(MainWebviewActivity.this,"网站暂时没办法使用,请联系客服。",Toast.LENGTH_LONG).show();
-                                    finish();
-                                }
-                            }
-                            check++;
-                        }
-
-                    }
-
-                }
+//
+//                if (!mistake) {
+//                    if (check==0) {
+//                        check++;
+//                    }else{
+//                        if (check==1){
+//                            if (null!=domain1&&null!=domain2){
+//                                if (!domain1.equals(domain2)) {
+//                                    LogUtil.e("===========网站被非法劫持=======" + mistake);
+//                                    jiechiurl = url;
+//                                    SocketsendMessage();
+//                                    Toast.makeText(MainWebviewActivity.this,"网站暂时没办法使用,请联系客服。",Toast.LENGTH_LONG).show();
+//                                    finish();
+//                                }
+//                            }
+//                            check++;
+//                        }
+//
+//                    }
+//
+//                }
 
 
 
