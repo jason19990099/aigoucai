@@ -356,7 +356,14 @@ public class MainWebviewActivity extends AppCompatActivity {
             }
         });
 
-        mWebView.loadUrl(url);
+
+        if (url.contains("payment/deposit")){
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(intent);
+        }else{
+            mWebView.loadUrl(url);
+        }
+
     }
 
     @Override
