@@ -265,6 +265,11 @@ public class MainWebviewActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onLoadResource(WebView view, String url) {
+                LogUtil.e("====onLoadResource=========="+url);
+            }
+
+            @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 long3 = System.currentTimeMillis();
