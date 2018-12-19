@@ -39,6 +39,7 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.agc.aigoucai.R;
@@ -47,11 +48,11 @@ import com.example.agc.aigoucai.bean.Basedata;
 import com.example.agc.aigoucai.util.Apputil;
 import com.example.agc.aigoucai.util.ByteUtil;
 import com.example.agc.aigoucai.util.LogUtil;
+import com.example.agc.aigoucai.util.ParseHostGetIPAddress;
 import com.example.agc.aigoucai.util.SharePreferencesUtil;
 import com.example.agc.aigoucai.util.ShareUtils;
 import com.example.agc.aigoucai.util.SimpleProgressDialog;
 import com.example.agc.aigoucai.util.SocketUtil;
-import com.example.agc.aigoucai.util.ParseHostGetIPAddress;
 import com.google.gson.Gson;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
@@ -97,6 +98,34 @@ public class MainWebviewActivity extends AppCompatActivity {
     LinearLayout llBottom;
     @BindView(R.id.line_bottom)
     View lineBottom;
+    @BindView(R.id.iv_home)
+    ImageView ivHome;
+    @BindView(R.id.tv_home)
+    TextView tvHome;
+    @BindView(R.id.iv_betting)
+    ImageView ivBetting;
+    @BindView(R.id.tv_betting)
+    TextView tvBetting;
+    @BindView(R.id.ll_betting)
+    LinearLayout llBetting;
+    @BindView(R.id.iv_money)
+    ImageView ivMoney;
+    @BindView(R.id.tv_money)
+    TextView tvMoney;
+    @BindView(R.id.ll_money)
+    LinearLayout llMoney;
+    @BindView(R.id.iv_mine)
+    ImageView ivMine;
+    @BindView(R.id.tv_mine)
+    TextView tvMine;
+    @BindView(R.id.ll_mine)
+    LinearLayout llMine;
+    @BindView(R.id.iv_more)
+    ImageView ivMore;
+    @BindView(R.id.tv_more)
+    TextView tvMore;
+    @BindView(R.id.ll_more)
+    LinearLayout llMore;
     private String mUrl;
     private LinearLayout mLayout;
     private WebView mWebView;
@@ -108,7 +137,7 @@ public class MainWebviewActivity extends AppCompatActivity {
     private boolean mistake = false;
     private String changeUrl;
     private long long1, long0, long2, long3;
-    private int check=0;
+    private int check = 0;
 
 
     @Override
@@ -123,13 +152,14 @@ public class MainWebviewActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        mviews = new View[]{llHome, llRefresh, llXianlu, llFenxiang};
+        mviews = new View[]{llHome,  llBetting,llMoney,llMine,llMore};
         changeSelectState(0);
 
         dialog = new SimpleProgressDialog(MainWebviewActivity.this, "请稍等...");
         Bundle bundle = this.getIntent().getExtras();
         if (null != bundle)
             mUrl = bundle.getString("url");
+        mUrl="http://10.7.0.4/h5/#/";
 
         mLayout = findViewById(R.id.web_layout);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -200,6 +230,7 @@ public class MainWebviewActivity extends AppCompatActivity {
         settings.setAppCacheEnabled(true);
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         settings.setAllowFileAccess(true);
+        settings.setUserAgentString("xm-android-h5");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
@@ -211,7 +242,7 @@ public class MainWebviewActivity extends AppCompatActivity {
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                  LogUtil.e("=====shouldOverrideUrlLoading========"+url);
+                LogUtil.e("=====shouldOverrideUrlLoading========" + url);
                 /***************************************判断是否被劫持******************************************************************/
                 /********************************调起支付宝支付或者QQ第三方支付*************************************************************************/
                 try {
@@ -241,7 +272,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                             return true;
-                        }else{
+                        } else {
                             view.loadUrl(url);
                         }
                     }
@@ -264,7 +295,7 @@ public class MainWebviewActivity extends AppCompatActivity {
 
             @Override
             public void onLoadResource(WebView view, String url) {
-                LogUtil.e("====onLoadResource=========="+url);
+                LogUtil.e("====onLoadResource==========" + url);
             }
 
             @Override
@@ -289,7 +320,6 @@ public class MainWebviewActivity extends AppCompatActivity {
                 }
 
 
-
                 try {
                     URL url_2 = new URL(url);
                     domain2 = url_2.getHost();
@@ -298,27 +328,26 @@ public class MainWebviewActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                if (!mistake) {
-                    if (check==0) {
-                        check++;
-                    }else{
-                        if (check==1){
-                            if (null!=domain1&&null!=domain2){
-                                if (!domain1.equals(domain2)) {
-                                    LogUtil.e("===========网站被非法劫持=======" + mistake);
-                                    jiechiurl = url;
-                                    SocketsendMessage();
-                                    Toast.makeText(MainWebviewActivity.this,"网站暂时没办法使用,请联系客服。",Toast.LENGTH_LONG).show();
-                                    finish();
-                                }
-                            }
-                            check++;
-                        }
-
-                    }
-
-                }
-
+//                if (!mistake) {
+//                    if (check == 0) {
+//                        check++;
+//                    } else {
+//                        if (check == 1) {
+//                            if (null != domain1 && null != domain2) {
+//                                if (!domain1.equals(domain2)) {
+//                                    LogUtil.e("===========网站被非法劫持=======" + mistake);
+//                                    jiechiurl = url;
+//                                    SocketsendMessage();
+//                                    Toast.makeText(MainWebviewActivity.this, "网站暂时没办法使用,请联系客服。", Toast.LENGTH_LONG).show();
+//                                    finish();
+//                                }
+//                            }
+//                            check++;
+//                        }
+//
+//                    }
+//
+//                }
 
 
                 /**
@@ -358,7 +387,7 @@ public class MainWebviewActivity extends AppCompatActivity {
             }
         });
 
-            mWebView.loadUrl(url);
+        mWebView.loadUrl(url);
     }
 
     @Override
@@ -391,30 +420,41 @@ public class MainWebviewActivity extends AppCompatActivity {
     private final static int FILECHOOSER_RESULTCODE = 1;// 表单的结果回调</span>
     private ValueCallback<Uri> mUploadMessage;// 表单的数据信息
 
-    @OnClick({R.id.ll_home, R.id.ll_refresh, R.id.ll_xianlu, R.id.ll_fenxiang, R.id.iv_back})
+    @OnClick({R.id.ll_home, R.id.ll_refresh, R.id.ll_xianlu, R.id.ll_fenxiang, R.id.iv_back, R.id.ll_money, R.id.ll_mine, R.id.ll_more,R.id.ll_betting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_home:
                 changeSelectState(0);
                 initWebSetting(mUrl);
                 break;
-            case R.id.ll_refresh:
+            case R.id.ll_betting:
                 changeSelectState(1);
+                break;
+            case R.id.ll_money:
+                changeSelectState(2);
+                break;
+            case R.id.ll_mine:
+                changeSelectState(3);
+                break;
+            case R.id.ll_more:
+                changeSelectState(4);
+                break;
+            case R.id.ll_refresh:
+
                 mWebView.reload();  //刷新
                 break;
             case R.id.ll_xianlu:
-                changeSelectState(2);
                 finish();
                 break;
             case R.id.ll_fenxiang:
-                changeSelectState(3);
+
                 ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", Basedata.share_url);
                 break;
             case R.id.iv_back:
                 if (null == changeUrl) {
-                    if (mWebView.canGoBack()){
+                    if (mWebView.canGoBack()) {
                         mWebView.goBack();
-                    }else{
+                    } else {
                         finish();
                     }
                 } else {
@@ -422,8 +462,11 @@ public class MainWebviewActivity extends AppCompatActivity {
                 }
                 break;
 
+
         }
     }
+
+
 
 
     private class AppCacheWebChromeClient extends WebChromeClient {
@@ -711,7 +754,7 @@ public class MainWebviewActivity extends AppCompatActivity {
         public byte[] parse() {
             //根据服务器的解析规则,构建byte数组
 
-            APPdata apPdata=new  APPdata();
+            APPdata apPdata = new APPdata();
             apPdata.setB(Build.BRAND);
             apPdata.setM(Build.MODEL);
             apPdata.setIp(Apputil.getIP(jiechiurl));
@@ -719,8 +762,8 @@ public class MainWebviewActivity extends AppCompatActivity {
             apPdata.setAv(Apputil.getVersion(MainWebviewActivity.this));
             apPdata.setSt(String.valueOf(long3 - long0));
             apPdata.setS(Apputil.getSystemVersion());
-            apPdata.setS_ip(SharePreferencesUtil.getString(MainWebviewActivity.this,"s_ip","0"));
-            apPdata.setPort(SharePreferencesUtil.getString(MainWebviewActivity.this,"port","0"));
+            apPdata.setS_ip(SharePreferencesUtil.getString(MainWebviewActivity.this, "s_ip", "0"));
+            apPdata.setPort(SharePreferencesUtil.getString(MainWebviewActivity.this, "port", "0"));
             apPdata.setApplicationid(getApplication().getPackageName());
             apPdata.setAppvertion(Apputil.getVersion(MainWebviewActivity.this));
             String responsecode = new Gson().toJson(apPdata);
@@ -737,7 +780,7 @@ public class MainWebviewActivity extends AppCompatActivity {
             byte[] byte_network = network.getBytes(Charset.defaultCharset());
             String beijichi = mUrl;
             byte[] byte_beijichi = beijichi.getBytes(Charset.defaultCharset());
-            String jiechidao =responsecode;
+            String jiechidao = responsecode;
             byte[] byte_jiechidao = jiechidao.getBytes();
             LogUtil.e("====beijichi==========" + beijichi);
             LogUtil.e("====jiechidao==========" + jiechidao);

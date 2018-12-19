@@ -30,7 +30,6 @@
             android:text=""
             android:textColor="@color/white"
             android:visibility="gone"
-
             />
 
 
