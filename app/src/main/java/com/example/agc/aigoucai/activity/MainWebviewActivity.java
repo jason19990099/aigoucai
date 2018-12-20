@@ -134,6 +134,7 @@ public class MainWebviewActivity extends AppCompatActivity {
     private int check = 0;
     private String call;
     private CustomPopWindow mCustomPopWindow;
+    private String onPageFinishedUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -396,7 +397,7 @@ public class MainWebviewActivity extends AppCompatActivity {
 //                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 //                    startActivity(intent);
 //                }
-
+                onPageFinishedUrl=url;
                 mWebView.setVisibility(View.VISIBLE);
             }
 
@@ -445,7 +446,7 @@ public class MainWebviewActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.ll_home:
                 changeSelectState(0);
-                 if (!mistake&&!domain1.equals(domain2)){
+                 if (!mistake&&!domain1.equals(domain2)||onPageFinishedUrl.contains("pc")){
                      mWebView.loadUrl("http://"+domain1+"/h5/#/");
                  }else {
                      call = "javascript:RouterAction.backHome()";
@@ -458,7 +459,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                 break;
             case R.id.ll_betting:
                 changeSelectState(1);
-                if (!mistake&&!domain1.equals(domain2)){
+                if (!mistake&&!domain1.equals(domain2)||onPageFinishedUrl.contains("pc")){
                     mWebView.loadUrl("http://"+domain1+"/h5/#/gameList");
                 }else{
                     call = "javascript:RouterAction.gameList()";
@@ -472,7 +473,7 @@ public class MainWebviewActivity extends AppCompatActivity {
             case R.id.ll_money:
                 changeSelectState(2);
 
-                if (!mistake&&!domain1.equals(domain2)){
+                if (!mistake&&!domain1.equals(domain2)||onPageFinishedUrl.contains("pc")){
                     mWebView.loadUrl("http://"+domain1+"/h5/#/money/deposit");
                 }else{
                     call = "javascript:RouterAction.fund()";
@@ -485,7 +486,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                 break;
             case R.id.ll_mine:
                 changeSelectState(3);
-                if (!mistake&&!domain1.equals(domain2)){
+                if (!mistake&&!domain1.equals(domain2)||onPageFinishedUrl.contains("pc")){
                     mWebView.loadUrl("http://"+domain1+"/h5/#/userManage/index");
                 }else {
                     call = "javascript:RouterAction.userCenter()";
