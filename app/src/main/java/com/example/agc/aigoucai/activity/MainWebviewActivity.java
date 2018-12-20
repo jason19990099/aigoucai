@@ -1,5 +1,4 @@
 package com.example.agc.aigoucai.activity;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
@@ -23,7 +22,9 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -38,10 +39,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.bean.APPdata;
 import com.example.agc.aigoucai.bean.Basedata;
@@ -53,10 +54,10 @@ import com.example.agc.aigoucai.util.SharePreferencesUtil;
 import com.example.agc.aigoucai.util.ShareUtils;
 import com.example.agc.aigoucai.util.SimpleProgressDialog;
 import com.example.agc.aigoucai.util.SocketUtil;
+import com.example.zhouwei.library.CustomPopWindow;
 import com.google.gson.Gson;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
-
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -67,11 +68,9 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 import static com.example.agc.aigoucai.bean.Basedata.appid;
 
 
@@ -138,28 +137,23 @@ public class MainWebviewActivity extends AppCompatActivity {
     private String changeUrl;
     private long long1, long0, long2, long3;
     private int check = 0;
-
+    private String call;
+    private CustomPopWindow mCustomPopWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
-
         //解決挼鍵盤把輸入框遮擋的問題
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
         setContentView(R.layout.activity_web);
-
         ButterKnife.bind(this);
-
         mviews = new View[]{llHome,  llBetting,llMoney,llMine,llMore};
         changeSelectState(0);
-
         dialog = new SimpleProgressDialog(MainWebviewActivity.this, "请稍等...");
         Bundle bundle = this.getIntent().getExtras();
         if (null != bundle)
             mUrl = bundle.getString("url");
-        mUrl="http://10.7.0.4/h5/#/";
 
         mLayout = findViewById(R.id.web_layout);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -197,7 +191,6 @@ public class MainWebviewActivity extends AppCompatActivity {
         }
     }
 
-
     /**
      * socket发送信息到服务器
      */
@@ -208,7 +201,6 @@ public class MainWebviewActivity extends AppCompatActivity {
         }
         mManager.send(new SendhijackMessage2());
     }
-
 
     /**
      * 初始化webview
@@ -328,26 +320,26 @@ public class MainWebviewActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-//                if (!mistake) {
-//                    if (check == 0) {
-//                        check++;
-//                    } else {
-//                        if (check == 1) {
-//                            if (null != domain1 && null != domain2) {
-//                                if (!domain1.equals(domain2)) {
-//                                    LogUtil.e("===========网站被非法劫持=======" + mistake);
-//                                    jiechiurl = url;
-//                                    SocketsendMessage();
-//                                    Toast.makeText(MainWebviewActivity.this, "网站暂时没办法使用,请联系客服。", Toast.LENGTH_LONG).show();
-//                                    finish();
-//                                }
-//                            }
-//                            check++;
-//                        }
-//
-//                    }
-//
-//                }
+                if (!mistake) {
+                    if (check == 0) {
+                        check++;
+                    } else {
+                        if (check == 1) {
+                            if (null != domain1 && null != domain2) {
+                                if (!domain1.equals(domain2)) {
+                                    LogUtil.e("===========网站被非法劫持=======" + mistake);
+                                    jiechiurl = url;
+                                    SocketsendMessage();
+                                    Toast.makeText(MainWebviewActivity.this, "网站暂时没办法使用,请联系客服。", Toast.LENGTH_LONG).show();
+                                    finish();
+                                }
+                            }
+                            check++;
+                        }
+
+                    }
+
+                }
 
 
                 /**
@@ -425,30 +417,59 @@ public class MainWebviewActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.ll_home:
                 changeSelectState(0);
-                initWebSetting(mUrl);
+//                initWebSetting(mUrl);
+                 call = "javascript:RouterAction.backHome()";
+                 mWebView.post(new Runnable() {
+                 @Override
+                 public void run() {
+                     mWebView.loadUrl(call);
+                 }});
                 break;
             case R.id.ll_betting:
                 changeSelectState(1);
+                call = "javascript:RouterAction.gameList()";
+                mWebView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWebView.loadUrl(call);
+                    }});
                 break;
             case R.id.ll_money:
                 changeSelectState(2);
+                call = "javascript:RouterAction.fund()";
+                mWebView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWebView.loadUrl(call);
+                    }});
                 break;
             case R.id.ll_mine:
                 changeSelectState(3);
+                call = "javascript:RouterAction.userCenter()";
+                mWebView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWebView.loadUrl(call);
+                    }});
                 break;
             case R.id.ll_more:
                 changeSelectState(4);
-                break;
-            case R.id.ll_refresh:
-
-                mWebView.reload();  //刷新
-                break;
-            case R.id.ll_xianlu:
-                finish();
-                break;
-            case R.id.ll_fenxiang:
-
-                ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", Basedata.share_url);
+                View contentView = LayoutInflater.from(this).inflate(R.layout.pop_menu,null);
+                //处理popWindow 显示内容
+                handleLogic(contentView);
+                //创建并显示popWindow
+                mCustomPopWindow= new CustomPopWindow.PopupWindowBuilder(this)
+                        .setView(contentView)
+                        .enableBackgroundDark(false) //弹出popWindow时，背景是否变暗
+                        .setBgDarkAlpha(0.7f) // 控制亮度
+                        .setOnDissmissListener(new PopupWindow.OnDismissListener() {
+                            @Override
+                            public void onDismiss() {
+                                Log.e("TAG","onDismiss");
+                            }
+                        })
+                        .create()
+                        .showAtLocation(llMore,Gravity.BOTTOM|Gravity.RIGHT,0,180);
                 break;
             case R.id.iv_back:
                 if (null == changeUrl) {
@@ -461,12 +482,34 @@ public class MainWebviewActivity extends AppCompatActivity {
                     initWebSetting(changeUrl);
                 }
                 break;
-
-
         }
     }
 
+    /**
+     * 处理弹出显示内容、点击事件等逻辑
+     * @param contentView
+     */
+    private void handleLogic(View contentView){
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mCustomPopWindow!=null){
+                    mCustomPopWindow.dissmiss();
+                }
 
+                switch (v.getId()){
+                    case R.id.menu1:
+                        finish();
+                        break;
+                    case R.id.menu2:
+                        ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", Basedata.share_url);
+                        break;
+                }
+            }
+        };
+        contentView.findViewById(R.id.menu1).setOnClickListener(listener);
+        contentView.findViewById(R.id.menu2).setOnClickListener(listener);
+    }
 
 
     private class AppCacheWebChromeClient extends WebChromeClient {

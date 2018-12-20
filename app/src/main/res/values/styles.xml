@@ -57,4 +57,10 @@
         <item name="android:textColor">@color/selector_rb_txt_color</item>
         <item name="android:textSize">12sp</item>
     </style>
+
+    <style name="PopupAnimation" parent="android:Animation" mce_bogus="1">
+        <item name="android:windowEnterAnimation">@anim/anim_popmenu_show</item>
+        <item name="android:windowExitAnimation">@anim/anim_popmenu_hide</item>
+    </style>
+
 </resources>

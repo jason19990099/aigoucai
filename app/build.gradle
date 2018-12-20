@@ -19,7 +19,7 @@ android {
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.example.agc.xiongmao"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 22
         versionCode 15
         versionName "1.32"
@@ -97,4 +97,5 @@ dependencies {
     implementation 'cn.jiguang.sdk:jcore:1.1.9'  // 此处以JCore 1.1.9 版本为例。
     implementation'com.wang.avi:library:1.0.0'
     implementation'com.nineoldandroids:library:2.4.0'
+    implementation 'com.github.pinguo-zhouwei:CustomPopwindow:2.1.1'
 }
