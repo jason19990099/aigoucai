@@ -8,6 +8,36 @@
     android:paddingRight="20dp"
 
     >
+
+    <LinearLayout
+        android:padding="5dp"
+        android:id="@+id/menu_clear_huancun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@mipmap/qingli"
+            />
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#585858"
+            android:text="清理"
+
+            />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#aaa"
+        />
     <LinearLayout
         android:padding="5dp"
         android:id="@+id/menu1"
@@ -17,8 +47,8 @@
         android:gravity="center"
         >
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:src="@mipmap/lines_false"
             />
         <TextView
@@ -46,8 +76,8 @@
         android:layout_marginTop="1dp"
         >
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:src="@mipmap/share_false"
             />
         <TextView
@@ -74,8 +104,8 @@
         android:layout_marginTop="1dp"
         >
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:src="@mipmap/refresh_false"
             />
         <TextView

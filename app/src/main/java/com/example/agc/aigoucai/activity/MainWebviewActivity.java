@@ -78,12 +78,6 @@ import static com.example.agc.aigoucai.bean.Basedata.appid;
 public class MainWebviewActivity extends AppCompatActivity {
     @BindView(R.id.ll_home)
     LinearLayout llHome;
-    @BindView(R.id.ll_refresh)
-    LinearLayout llRefresh;
-    @BindView(R.id.ll_xianlu)
-    LinearLayout llXianlu;
-    @BindView(R.id.ll_fenxiang)
-    LinearLayout llFenxiang;
     @BindView(R.id.iv_loading)
     ImageView ivLoading;
     @BindView(R.id.web_layout)
@@ -300,7 +294,6 @@ public class MainWebviewActivity extends AppCompatActivity {
                         }
                     }
 
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -333,7 +326,6 @@ public class MainWebviewActivity extends AppCompatActivity {
                 if (dialog != null && dialog.isShowing())
                     dialog.dismiss();
 
-
                 try {
                     URL url_1 = new URL(SharePreferencesUtil.getString(MainWebviewActivity.this, "main_url", ""));
                     domain1 = url_1.getHost();
@@ -341,7 +333,6 @@ public class MainWebviewActivity extends AppCompatActivity {
                     mistake = true;
                     e.printStackTrace();
                 }
-
 
                 try {
                     URL url_2 = new URL(url);
@@ -372,7 +363,6 @@ public class MainWebviewActivity extends AppCompatActivity {
 
                 }
 
-
                 /**
                  * 头部标题栏的展示否
                  */
@@ -401,6 +391,12 @@ public class MainWebviewActivity extends AppCompatActivity {
                         }
                     }
                 }
+
+//                if (url.contains("/payment/deposit?orderNo")){
+//                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+//                    startActivity(intent);
+//                }
+
                 mWebView.setVisibility(View.VISIBLE);
             }
 
@@ -443,46 +439,62 @@ public class MainWebviewActivity extends AppCompatActivity {
     private final static int FILECHOOSER_RESULTCODE = 1;// 表单的结果回调</span>
     private ValueCallback<Uri> mUploadMessage;// 表单的数据信息
 
-    @OnClick({R.id.ll_home, R.id.ll_refresh, R.id.ll_xianlu, R.id.ll_fenxiang, R.id.iv_back,
+    @OnClick({R.id.ll_home,R.id.iv_back,
             R.id.ll_money, R.id.ll_mine,R.id.ll_betting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_home:
                 changeSelectState(0);
-//                initWebSetting(mUrl);
-                 call = "javascript:RouterAction.backHome()";
-                 mWebView.post(new Runnable() {
-                 @Override
-                 public void run() {
-                     mWebView.loadUrl(call);
-                 }});
+                 if (!mistake&&!domain1.equals(domain2)){
+                     mWebView.loadUrl("http://"+domain1+"/h5/#/");
+                 }else {
+                     call = "javascript:RouterAction.backHome()";
+                     mWebView.post(new Runnable() {
+                         @Override
+                         public void run() {
+                             mWebView.loadUrl(call);
+                         }});
+                 }
                 break;
             case R.id.ll_betting:
                 changeSelectState(1);
-                call = "javascript:RouterAction.gameList()";
-                mWebView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mWebView.loadUrl(call);
-                    }});
+                if (!mistake&&!domain1.equals(domain2)){
+                    mWebView.loadUrl("http://"+domain1+"/h5/#/gameList");
+                }else{
+                    call = "javascript:RouterAction.gameList()";
+                    mWebView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mWebView.loadUrl(call);
+                        }});
+                }
                 break;
             case R.id.ll_money:
                 changeSelectState(2);
-                call = "javascript:RouterAction.fund()";
-                mWebView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mWebView.loadUrl(call);
-                    }});
+
+                if (!mistake&&!domain1.equals(domain2)){
+                    mWebView.loadUrl("http://"+domain1+"/h5/#/money/deposit");
+                }else{
+                    call = "javascript:RouterAction.fund()";
+                    mWebView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mWebView.loadUrl(call);
+                        }});
+                }
                 break;
             case R.id.ll_mine:
                 changeSelectState(3);
-                call = "javascript:RouterAction.userCenter()";
-                mWebView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mWebView.loadUrl(call);
-                    }});
+                if (!mistake&&!domain1.equals(domain2)){
+                    mWebView.loadUrl("http://"+domain1+"/h5/#/userManage/index");
+                }else {
+                    call = "javascript:RouterAction.userCenter()";
+                    mWebView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mWebView.loadUrl(call);
+                        }});
+                }
                 break;
             case R.id.iv_back:
                 if (null == changeUrl) {
@@ -519,12 +531,21 @@ public class MainWebviewActivity extends AppCompatActivity {
                     case R.id.menu_refresh:
                         mWebView.reload();
                         break;
+                    case R.id.menu_clear_huancun:
+                        ClearCookie();
+                        mWebView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
+                        mWebView.clearHistory();
+                        initWebSetting(mUrl);
+                        break;
+
+
                 }
             }
         };
         contentView.findViewById(R.id.menu1).setOnClickListener(listener);
         contentView.findViewById(R.id.menu2).setOnClickListener(listener);
         contentView.findViewById(R.id.menu_refresh).setOnClickListener(listener);
+        contentView.findViewById(R.id.menu_clear_huancun).setOnClickListener(listener);
     }
 
 

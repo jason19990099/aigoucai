@@ -149,91 +149,9 @@
         </LinearLayout>
 
 
-        <LinearLayout
-            android:visibility="gone"
-            android:id="@+id/ll_refresh"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:descendantFocusability="blocksDescendants"
-            android:focusable="true"
-            android:gravity="center"
-            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:duplicateParentState="true"
-                android:focusableInTouchMode="false"
-                android:scaleType="fitCenter"
-                android:src="@drawable/shuaixn" />
 
-            <TextView
-                android:textColor="@drawable/text_color_select"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:duplicateParentState="true"
-                android:focusableInTouchMode="false"
-                android:text="刷新"
-                android:textSize="12sp" />
-        </LinearLayout>
 
-        <LinearLayout
-            android:visibility="gone"
-            android:id="@+id/ll_xianlu"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:descendantFocusability="blocksDescendants"
-            android:focusable="true"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:duplicateParentState="true"
-                android:focusableInTouchMode="false"
-                android:scaleType="fitCenter"
-                android:src="@drawable/xianlu" />
-
-            <TextView
-                android:textColor="@drawable/text_color_select"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:duplicateParentState="true"
-                android:focusableInTouchMode="false"
-                android:text="线路"
-                android:textSize="12sp" />
-        </LinearLayout>
-        <LinearLayout
-            android:visibility="gone"
-            android:id="@+id/ll_fenxiang"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:descendantFocusability="blocksDescendants"
-            android:focusable="true"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:duplicateParentState="true"
-                android:focusableInTouchMode="false"
-                android:scaleType="fitCenter"
-                android:src="@drawable/shangyiye" />
-
-            <TextView
-                android:textColor="@drawable/text_color_select"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:duplicateParentState="true"
-                android:focusableInTouchMode="false"
-                android:text="分享"
-                android:textSize="12sp" />
-        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>
