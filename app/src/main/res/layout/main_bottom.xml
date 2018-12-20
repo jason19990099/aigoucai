@@ -63,7 +63,7 @@
                 style="@style/main_button_text"
                 android:duplicateParentState="true"
                 android:focusableInTouchMode="false"
-                android:text="游戏大厅"/>
+                android:text="游戏"/>
         </LinearLayout>
 
         <LinearLayout
@@ -90,7 +90,7 @@
                 style="@style/main_button_text"
                 android:duplicateParentState="true"
                 android:focusableInTouchMode="false"
-                android:text="资金管理"/>
+                android:text="资金"/>
         </LinearLayout>
 
         <LinearLayout

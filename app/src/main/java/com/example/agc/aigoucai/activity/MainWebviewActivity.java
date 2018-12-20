@@ -183,12 +183,28 @@ public class MainWebviewActivity extends AppCompatActivity {
 
             @Override
             public void oneClick() {
-
+                changeSelectState(4);
+                View contentView = LayoutInflater.from(MainWebviewActivity.this).inflate(R.layout.pop_menu,null);
+                //处理popWindow 显示内容
+                handleLogic(contentView);
+                //创建并显示popWindow
+                mCustomPopWindow= new CustomPopWindow.PopupWindowBuilder(MainWebviewActivity.this)
+                        .setView(contentView)
+                        .enableBackgroundDark(false) //弹出popWindow时，背景是否变暗
+                        .setBgDarkAlpha(0.7f) // 控制亮度
+                        .setOnDissmissListener(new PopupWindow.OnDismissListener() {
+                            @Override
+                            public void onDismiss() {
+                                Log.e("TAG","onDismiss");
+                            }
+                        })
+                        .create()
+                        .showAtLocation(llMore,Gravity.BOTTOM|Gravity.RIGHT,0,155);
             }
 
             @Override
             public void doubleClick() {
-
+                mWebView.reload();
             }
         }));
 
@@ -427,7 +443,8 @@ public class MainWebviewActivity extends AppCompatActivity {
     private final static int FILECHOOSER_RESULTCODE = 1;// 表单的结果回调</span>
     private ValueCallback<Uri> mUploadMessage;// 表单的数据信息
 
-    @OnClick({R.id.ll_home, R.id.ll_refresh, R.id.ll_xianlu, R.id.ll_fenxiang, R.id.iv_back, R.id.ll_money, R.id.ll_mine, R.id.ll_more,R.id.ll_betting})
+    @OnClick({R.id.ll_home, R.id.ll_refresh, R.id.ll_xianlu, R.id.ll_fenxiang, R.id.iv_back,
+            R.id.ll_money, R.id.ll_mine,R.id.ll_betting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_home:
@@ -467,25 +484,6 @@ public class MainWebviewActivity extends AppCompatActivity {
                         mWebView.loadUrl(call);
                     }});
                 break;
-            case R.id.ll_more:
-                changeSelectState(4);
-                View contentView = LayoutInflater.from(this).inflate(R.layout.pop_menu,null);
-                //处理popWindow 显示内容
-                handleLogic(contentView);
-                //创建并显示popWindow
-                mCustomPopWindow= new CustomPopWindow.PopupWindowBuilder(this)
-                        .setView(contentView)
-                        .enableBackgroundDark(false) //弹出popWindow时，背景是否变暗
-                        .setBgDarkAlpha(0.7f) // 控制亮度
-                        .setOnDissmissListener(new PopupWindow.OnDismissListener() {
-                            @Override
-                            public void onDismiss() {
-                                Log.e("TAG","onDismiss");
-                            }
-                        })
-                        .create()
-                        .showAtLocation(llMore,Gravity.BOTTOM|Gravity.RIGHT,0,150);
-                break;
             case R.id.iv_back:
                 if (null == changeUrl) {
                     if (mWebView.canGoBack()) {
@@ -511,7 +509,6 @@ public class MainWebviewActivity extends AppCompatActivity {
                 if(mCustomPopWindow!=null){
                     mCustomPopWindow.dissmiss();
                 }
-
                 switch (v.getId()){
                     case R.id.menu1:
                         finish();
@@ -519,11 +516,15 @@ public class MainWebviewActivity extends AppCompatActivity {
                     case R.id.menu2:
                         ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", Basedata.share_url);
                         break;
+                    case R.id.menu_refresh:
+                        mWebView.reload();
+                        break;
                 }
             }
         };
         contentView.findViewById(R.id.menu1).setOnClickListener(listener);
         contentView.findViewById(R.id.menu2).setOnClickListener(listener);
+        contentView.findViewById(R.id.menu_refresh).setOnClickListener(listener);
     }
 
 
