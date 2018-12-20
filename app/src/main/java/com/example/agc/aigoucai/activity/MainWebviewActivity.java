@@ -49,6 +49,7 @@ import com.example.agc.aigoucai.bean.Basedata;
 import com.example.agc.aigoucai.util.Apputil;
 import com.example.agc.aigoucai.util.ByteUtil;
 import com.example.agc.aigoucai.util.LogUtil;
+import com.example.agc.aigoucai.util.MyClickListener;
 import com.example.agc.aigoucai.util.ParseHostGetIPAddress;
 import com.example.agc.aigoucai.util.SharePreferencesUtil;
 import com.example.agc.aigoucai.util.ShareUtils;
@@ -177,6 +178,20 @@ public class MainWebviewActivity extends AppCompatActivity {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+
+        llMore.setOnTouchListener(new MyClickListener(new MyClickListener.MyClickCallBack() {
+
+            @Override
+            public void oneClick() {
+
+            }
+
+            @Override
+            public void doubleClick() {
+
+            }
+        }));
+
 
         initWebSetting(mUrl);
     }
@@ -469,7 +484,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                             }
                         })
                         .create()
-                        .showAtLocation(llMore,Gravity.BOTTOM|Gravity.RIGHT,0,180);
+                        .showAtLocation(llMore,Gravity.BOTTOM|Gravity.RIGHT,0,150);
                 break;
             case R.id.iv_back:
                 if (null == changeUrl) {
