@@ -31,15 +31,22 @@ public class SocketUtil {
     public static String ip_bei = "";
     private static int index = 0;
     private static int net_port=1985;
+<<<<<<< HEAD
     private static List urllist;
+=======
+    private Context context;
+>>>>>>> master
 
 
     /**
      * 传入进去ip地址和端口号
      */
-    public SocketUtil(List list, int port) {
+    public SocketUtil(List list, int port,Context context) {
         ip_array = list;
         ip_bei = ip_array.get(0);
+        this.context=context;
+        SharePreferencesUtil.addString(context,"s_ip",ip_bei);
+        SharePreferencesUtil.addString(context,"port",port+"");
         net_port=port;
     }
 
@@ -161,6 +168,7 @@ public class SocketUtil {
                     LogUtil.e("===========index========" + index);
 
                     SocketUtil.ip_bei = ip_array.get(index);
+                    SharePreferencesUtil.addString(context,"s_ip",ip_array.get(index));
                     LogUtil.e("=======正在重新连接其他网址========" + SocketUtil.ip_bei);
                 }
                 mInfo = new ConnectionInfo(SocketUtil.ip_bei, net_port);

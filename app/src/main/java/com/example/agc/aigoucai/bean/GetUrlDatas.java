@@ -15,8 +15,7 @@ import java.nio.charset.Charset;
  *   发送的数据
  */
 public class GetUrlDatas implements ISendable {
-    String str = SelectLinesActivity.appid;  //发送的代号
-
+    String str = Basedata.appid;  //发送的代号
     byte b = 0;
 
     @Override

@@ -2,19 +2,9 @@ package com.example.agc.aigoucai.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.PixelFormat;
-import android.hardware.display.DisplayManager;
-import android.hardware.display.VirtualDisplay;
-import android.media.Image;
-import android.media.ImageReader;
-import android.media.projection.MediaProjection;
-import android.media.projection.MediaProjectionManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,27 +13,25 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.R2;
 import com.example.agc.aigoucai.bean.DataSynevent;
 import com.example.agc.aigoucai.bean.GetUrlDatas;
+import com.example.agc.aigoucai.bean.APPdata;
+import com.example.agc.aigoucai.bean.DataSynevent;
+import com.example.agc.aigoucai.bean.GetUrlDatas;
+import com.example.agc.aigoucai.bean.Basedata;
 import com.example.agc.aigoucai.util.Apputil;
 import com.example.agc.aigoucai.util.ByteUtil;
 import com.example.agc.aigoucai.util.CustomDialog;
@@ -53,13 +41,12 @@ import com.example.agc.aigoucai.util.SB;
 import com.example.agc.aigoucai.util.SharePreferencesUtil;
 import com.example.agc.aigoucai.util.SocketUtil;
 import com.example.agc.aigoucai.util.senddata;
+import com.google.gson.Gson;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -68,7 +55,6 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -96,6 +82,9 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     private String responsecode;
     private String badurl;
     public static String appid, share_url;
+    private long long1, long2;
+    private String long3;
+
     // 退出时间
     private static long currentBackPressedTime = 0;
     private Handler hander = new Handler() {
@@ -110,17 +99,6 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         }
     };
 
-    //
-//    private MediaProjectionManager mediaProjectionManager;
-//    private MediaProjection mMediaProjection;
-//    private VirtualDisplay mVirtualDisplay;
-//    private static Intent mResultData = null;
-//    private ImageReader mImageReader;
-//    private WindowManager mWindowManager;
-//    private int mScreenWidth;
-//    private int mScreenHeight;
-//    private int mScreenDensity;
-//    public static final int REQUEST_MEDIA_PROJECTION = 18;
 
     @Override
     @SuppressLint("NewApi")
@@ -161,7 +139,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
             });
             ibuilder.create().show();
         }
-
+        long1 = System.currentTimeMillis();
         if (null == mManager) {
             mManager = SocketUtil.getmManager();
         }
@@ -173,54 +151,13 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         }
 
 
-
-
-//        /**
-//         * 截图初始化变量
-//         */
-//        mediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-//        startActivityForResult(mediaProjectionManager.createScreenCaptureIntent(), REQUEST_MEDIA_PROJECTION);
-//
-//        mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-//        DisplayMetrics metrics = new DisplayMetrics();
-//        mWindowManager.getDefaultDisplay().getMetrics(metrics);
-//        mScreenDensity = metrics.densityDpi;
-//        mScreenWidth = metrics.widthPixels;
-//        mScreenHeight = metrics.heightPixels;
-//        mImageReader = ImageReader.newInstance(mScreenWidth, mScreenHeight, PixelFormat.RGBA_8888, 1);
-
-
-
-//        startScreenShot();  截图的使用方法
-
     }
-
-//    /**
-//     * 截图拥戴的代码
-//     * @param requestCode
-//     * @param resultCode
-//     * @param data
-//     */
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        switch (requestCode) {
-//            case REQUEST_MEDIA_PROJECTION:
-//
-//                if (resultCode == RESULT_OK && data != null) {
-//                    mResultData = data;
-//                    //startService(new Intent(getApplicationContext(), FloatWindowsService.class));
-//                }
-//                break;
-//        }
-//    }
-
 
     /**
      * 刷新網址鏈接
      */
     private void refresh() {
+        long1 = System.currentTimeMillis();
         if (null == mManager) {
             mManager = SocketUtil.getmManager();
         }
@@ -346,6 +283,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
             long ms;
 
             public void run() {
+
                 HttpURLConnection connection = null;
                 try {
                     URL url = new URL(address);
@@ -378,23 +316,65 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                             time_array[i] = time_string;
                             hander.sendEmptyMessage(0); // 下载完成后发送处理消息
                             badurl = address;
-                            responsecode = "版本号:" + Apputil.getVersion(SelectLinesActivity.this) + "###Android版本号:" + Apputil.getSystemVersion() + "###" + String.valueOf(responseCode) + "###" + Apputil.getIP(badurl);
+
+                            APPdata apPdata=new  APPdata();
+                            apPdata.setB(Build.BRAND);
+                            apPdata.setM(Build.MODEL);
+                            apPdata.setIp(Apputil.getIP(badurl));
+                            apPdata.setBv("Chromium_Blink");//浏览器版本
+                            apPdata.setAv(Apputil.getVersion(SelectLinesActivity.this));
+                            apPdata.setSt(long3);
+                            apPdata.setS(Apputil.getSystemVersion());
+                            apPdata.setS_ip(SharePreferencesUtil.getString(SelectLinesActivity.this,"s_ip","0"));
+                            apPdata.setPort(SharePreferencesUtil.getString(SelectLinesActivity.this,"port","0"));
+                            apPdata.setApplicationid(getApplication().getPackageName());
+                            apPdata.setAppvertion(Apputil.getVersion(SelectLinesActivity.this));
+                            responsecode = new Gson().toJson(apPdata);
                             SocketsendMessage();
+                        }else{
+                            date2 = dfs.format(new Date());// new Date()为获取当前系统时间，也可使用当前时间戳
+                            Date begin = dfs.parse(date1);
+                            Date end = dfs.parse(date2);
+                            between = Math.abs((end.getTime() - begin.getTime()));// 得到两者的毫秒数
+                            day = between / (24 * 60 * 60 * 1000);
+                            hour = (between / (60 * 60 * 1000) - day * 24);
+                            min = ((between / (60 * 1000)) - day * 24 * 60 - hour * 60);
+                            s = (between / 1000 - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60);
+                            ms = (between - day * 24 * 60 * 60 * 1000 - hour * 60 * 60 * 1000
+                                    - min * 60 * 1000 - s * 1000);
+                            Log.e("两个时间相差", min + "分" + s + "秒" + ms + "毫秒");
+                            time_string = s + "#" + ms + "";
+                            time_array[i] = time_string;
+                            hander.sendEmptyMessage(0); // 下载完成后发送处理消息
                         }
                     }
+
                 } catch (Exception e) {
-                    //有错误就设置成超时
-//                    time_string = "超时*";
-//                    time_array[i] = time_string;
                     hander.sendEmptyMessage(0); // 下载完成后发送处理消息
                     e.printStackTrace();
+
+                    APPdata apPdata=new  APPdata();
+                    apPdata.setB(Build.BRAND);
+                    apPdata.setM(Build.MODEL);
                     badurl = address;
-                    responsecode = "版本号:" + Apputil.getVersion(SelectLinesActivity.this) + "###Android版本号:" + Apputil.getSystemVersion() + e.toString() + "###" + Apputil.getIP(badurl);
+                    apPdata.setIp(Apputil.getIP(badurl));
+                    apPdata.setBv("Chromium_Blink");//浏览器版本
+                    apPdata.setAv(Apputil.getVersion(SelectLinesActivity.this));
+                    apPdata.setSt(long3);
+                    apPdata.setS(Apputil.getSystemVersion());
+                    apPdata.setErr(e.toString());
+                    apPdata.setS_ip(SharePreferencesUtil.getString(SelectLinesActivity.this,"s_ip","0"));
+                    apPdata.setPort(SharePreferencesUtil.getString(SelectLinesActivity.this,"port","0"));
+                    apPdata.setApplicationid(getApplication().getPackageName());
+                    apPdata.setAppvertion(Apputil.getVersion(SelectLinesActivity.this));
+                    responsecode = new Gson().toJson(apPdata);
+                    LogUtil.e("======199999======="+responsecode);
                     SocketsendMessage();
                 } finally {
                     if (connection != null) {
                         connection.disconnect();
                     }
+
                 }
             }
         }).start();
@@ -431,6 +411,18 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void eventBusReceive(DataSynevent dataSynevent) {
         LogUtil.e("====SELECactivity==接收到eventbus传递过来的数据========");
+        long2 = System.currentTimeMillis();
+        long3=String.valueOf((long2 - long1)) + "ms";
+
+
+        if ((long2 - long1)>5000){
+            int random=(int)(Math.random()*100)*100+(int)(Math.random()*10);
+            long3=String.valueOf(random) + "ms";
+
+        }
+        LogUtil.e("===long3======"+long3);
+
+        
         url_array = dataSynevent.getList().toArray(new String[0]);
         listvieId.setAdapter(adapter_url);
         time_array = new String[url_array.length];
@@ -447,7 +439,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         @Override
         public byte[] parse() {
             //根据服务器的解析规则,构建byte数组
-            String id = appid;  //发送的代号
+            String id = Basedata.appid;  //发送的代号
+
             byte b = 0;
             String network = "";
             if (Apputil.isVpnUsed()) {
@@ -513,23 +506,15 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
             mManager.connect();
         }
         mManager.send(new SendhijackMessage2());
-
     }
 
 
- //====================== 以下是截图用到的代码  ==============================
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-//        try {
-//            stopVirtual();
-//            tearDownMediaProjection();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
     }
 
+<<<<<<< HEAD
 //    private void startScreenShot() {
 //        Handler handler1 = new Handler();
 //        handler1.postDelayed(new Runnable() {
@@ -698,5 +683,6 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
 //            mMediaProjection = null;
 //        }
 //    }
+
 
 }

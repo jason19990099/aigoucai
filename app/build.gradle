@@ -1,4 +1,4 @@
-apply plugin: 'com.android.library'
+﻿apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'kotlin-android-extensions'
@@ -21,9 +21,9 @@ android {
 //        applicationId "com.example.agc.aigoucai2"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 7
-        versionName "1.25"
-        flavorDimensions "8"
+        versionCode 15
+        versionName "1.32"
+        flavorDimensions "15"
         ndk {
             //选择要添加的对应cpu类型的.so库（不需要的删除即可）。
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
@@ -37,6 +37,15 @@ android {
 
 
     }
+
+
+    lintOptions {
+        //解除application黄色报警
+        disable 'GoogleAppIndexingWarning'
+        baseline file("lint-baseline.xml")
+    }
+
+
     buildTypes {
         release {
             minifyEnabled false
@@ -80,7 +89,8 @@ dependencies {
     //加入下面这两行代码
     implementation 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor  'com.jakewharton:butterknife-compiler:8.5.1'
-
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.squareup.okio:okio:1.14.0'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
