@@ -40,14 +40,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
 import com.example.agc.aigoucai.R;
-<<<<<<< HEAD
 import com.example.agc.aigoucai.R2;
-=======
 import com.example.agc.aigoucai.bean.APPdata;
 import com.example.agc.aigoucai.bean.Basedata;
->>>>>>> master
 import com.example.agc.aigoucai.util.Apputil;
 import com.example.agc.aigoucai.util.ByteUtil;
 import com.example.agc.aigoucai.util.LogUtil;
@@ -70,15 +66,11 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-<<<<<<< HEAD
-=======
 import static com.example.agc.aigoucai.bean.Basedata.appid;
->>>>>>> master
+
 
 
 public class MainWebviewActivity extends AppCompatActivity {
@@ -410,7 +402,6 @@ public class MainWebviewActivity extends AppCompatActivity {
 
     @OnClick({R2.id.ll_home, R2.id.ll_refresh, R2.id.ll_xianlu, R2.id.ll_fenxiang, R2.id.iv_back})
     public void onViewClicked(View view) {
-<<<<<<< HEAD
         int id=view.getId();
         if (id==R.id.ll_home){
             changeSelectState(0);
@@ -430,34 +421,6 @@ public class MainWebviewActivity extends AppCompatActivity {
                     if (mWebView.canGoBack())
                         mWebView.goBack();
                     return;
-=======
-        switch (view.getId()) {
-            case R.id.ll_home:
-                changeSelectState(0);
-                initWebSetting(mUrl);
-                break;
-            case R.id.ll_refresh:
-                changeSelectState(1);
-                mWebView.reload();  //刷新
-                break;
-            case R.id.ll_xianlu:
-                changeSelectState(2);
-                finish();
-                break;
-            case R.id.ll_fenxiang:
-                changeSelectState(3);
-                ShareUtils.shareText(MainWebviewActivity.this, "", "彩票分享", Basedata.share_url);
-                break;
-            case R.id.iv_back:
-                if (null == changeUrl) {
-                    if (mWebView.canGoBack()){
-                        mWebView.goBack();
-                    }else{
-                        finish();
-                    }
-                } else {
-                    initWebSetting(changeUrl);
->>>>>>> master
                 }
                 finish();
             } else {

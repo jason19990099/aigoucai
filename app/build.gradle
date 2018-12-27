@@ -4,17 +4,6 @@ apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-
-    signingConfigs {
-        ruiyinSign {
-            keyAlias 'key0'
-            keyPassword '775854'
-            storeFile file('D:/Signature/500cp.jks')
-            storePassword '775854'
-        }
-    }
-
-
     compileSdkVersion 26
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
@@ -38,7 +27,6 @@ android {
 
     }
 
-
     lintOptions {
         //解除application黄色报警
         disable 'GoogleAppIndexingWarning'
@@ -50,31 +38,12 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.ruiyinSign
         }
     }
 
-//    android.applicationVariants.all { variant ->
-//        variant.outputs.all {
-//            outputFileName = "${variant.productFlavors[0].name}-${defaultConfig.versionName}-${defaultConfig.versionCode}" +
-//                    "-${releaseTime()}-${variant.buildType.name}.apk"
-//        }
-//    }
-//
-//    // 打包的渠道
-//    productFlavors {
-//        aigoucai {}
-//    }
-}
-//获取当前打包的时间
-def static releaseTime() {
-    return new Date().format("yyyyMMdd-HHmmss")
-}
-
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7"
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.tonystark.android:socket:1.2.3'
@@ -99,4 +68,5 @@ dependencies {
     implementation 'cn.jiguang.sdk:jcore:1.1.9'  // 此处以JCore 1.1.9 版本为例。
     implementation'com.wang.avi:library:1.0.0'
     implementation'com.nineoldandroids:library:2.4.0'
+}
 }

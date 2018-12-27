@@ -31,11 +31,9 @@ public class SocketUtil {
     public static String ip_bei = "";
     private static int index = 0;
     private static int net_port=1985;
-<<<<<<< HEAD
     private static List urllist;
-=======
     private Context context;
->>>>>>> master
+
 
 
     /**
