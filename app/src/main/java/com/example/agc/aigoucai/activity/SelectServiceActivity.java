@@ -10,8 +10,8 @@ import android.widget.TextView;
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.R2;
 import com.example.agc.aigoucai.adapter.ChatAdapter;
+import com.example.agc.aigoucai.bean.Basedata;
 import com.example.agc.aigoucai.bean.ChatBean;
-import com.example.agc.aigoucai.bean.base;
 import com.example.agc.aigoucai.util.Apputil;
 import com.example.agc.aigoucai.util.LogUtil;
 import com.example.agc.aigoucai.util.ShareUtil;
@@ -64,7 +64,7 @@ public class SelectServiceActivity extends Activity {
             listvie_id.setAdapter(chatAdapter);
             chatAdapter.notifyDataSetChanged();
         }
-        if (base.ifgetService) {
+        if (Basedata.ifgetService) {
             getChatdata();
         }
 
@@ -93,7 +93,7 @@ public class SelectServiceActivity extends Activity {
                                 }
                             })
                             .build();
-                    String url = "https://appv1.whsurpass.com/appinfo/contact/" + base.appid + "?date=" + createdate;
+                    String url = "https://appv1.whsurpass.com/appinfo/contact/" + Basedata.appid + "?date=" + createdate;
                     Request request = new Request.Builder()
                             .url(url)//请求接口。如果需要传参拼接到接口后面。
                             .build();//创建Request 对象
@@ -132,7 +132,7 @@ public class SelectServiceActivity extends Activity {
         }).start();
 
         //设为false，不让重复请求/
-        base.ifgetService = false;
+        Basedata.ifgetService = false;
     }
 
     @Override

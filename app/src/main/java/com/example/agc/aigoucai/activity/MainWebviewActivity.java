@@ -39,9 +39,11 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-
+import android.widget.Toast;
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.R2;
+import com.example.agc.aigoucai.bean.APPdata;
+import com.example.agc.aigoucai.bean.Basedata;
 import com.example.agc.aigoucai.util.Apputil;
 import com.example.agc.aigoucai.util.ByteUtil;
 import com.example.agc.aigoucai.util.LogUtil;
@@ -50,11 +52,13 @@ import com.example.agc.aigoucai.util.ShareUtils;
 import com.example.agc.aigoucai.util.SimpleProgressDialog;
 import com.example.agc.aigoucai.util.SocketUtil;
 import com.example.agc.aigoucai.util.ParseHostGetIPAddress;
+import com.google.gson.Gson;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -62,10 +66,10 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import static com.example.agc.aigoucai.bean.Basedata.appid;
 
 
 
@@ -99,12 +103,13 @@ public class MainWebviewActivity extends AppCompatActivity {
     private View[] mviews;
     private IConnectionManager mManager;
     private String jiechiurl = "";
-    private boolean ischecked = false;
     private String domain1, domain2;
     private boolean mistake = false;
     private String changeUrl;
     private String appid,share_url;
     private long long1, long0, long2, long3;
+    private int check=0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +137,7 @@ public class MainWebviewActivity extends AppCompatActivity {
 
 
 
-        mLayout = (LinearLayout) findViewById(R.id.web_layout);
+        mLayout = findViewById(R.id.web_layout);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mWebView = new WebView(this);
         mWebView.setLayoutParams(params);
@@ -178,7 +183,6 @@ public class MainWebviewActivity extends AppCompatActivity {
             mManager.connect();
         }
         mManager.send(new SendhijackMessage2());
-
     }
 
 
@@ -231,7 +235,21 @@ public class MainWebviewActivity extends AppCompatActivity {
                             finish();
                         }
                     } else {
-                        view.loadUrl(url);
+                        if (url.startsWith("intent://platformapi")) {
+                            Intent intent;
+                            try {
+                                intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+                                intent.addCategory("android.intent.category.BROWSABLE");
+                                intent.setComponent(null);
+                                intent.setSelector(null);
+                                startActivity(intent);
+                            } catch (URISyntaxException e) {
+                                e.printStackTrace();
+                            }
+                            return true;
+                        }else{
+                            view.loadUrl(url);
+                        }
                     }
 
 
@@ -253,6 +271,11 @@ public class MainWebviewActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onLoadResource(WebView view, String url) {
+                LogUtil.e("====onLoadResource=========="+url);
+            }
+
+            @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 long3 = System.currentTimeMillis();
@@ -264,11 +287,12 @@ public class MainWebviewActivity extends AppCompatActivity {
                 if (dialog != null && dialog.isShowing())
                     dialog.dismiss();
 
-                URL url_1 = null;
+
                 try {
-                    url_1 = new URL(SharePreferencesUtil.getString(MainWebviewActivity.this, "main_url", ""));
+                    URL url_1 = new URL(SharePreferencesUtil.getString(MainWebviewActivity.this, "main_url", ""));
                     domain1 = url_1.getHost();
                 } catch (Exception e) {
+                    mistake = true;
                     e.printStackTrace();
                 }
 
@@ -282,19 +306,29 @@ public class MainWebviewActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                LogUtil.e("===========mistake=======" + mistake);
+
                 if (!mistake) {
-                    if (!ischecked) {
-                        if (null!=domain1&&null!=domain2){
-                            if (!domain1.equals(domain2)) {
-                                jiechiurl = url;
-                                SocketsendMessage();
+                    if (check==0) {
+                        check++;
+                    }else{
+                        if (check==1){
+                            if (null!=domain1&&null!=domain2){
+                                if (!domain1.equals(domain2)) {
+                                    LogUtil.e("===========网站被非法劫持=======" + mistake);
+                                    jiechiurl = url;
+                                    SocketsendMessage();
+                                    Toast.makeText(MainWebviewActivity.this,"网站暂时没办法使用,请联系客服。",Toast.LENGTH_LONG).show();
+                                    finish();
+                                }
                             }
+                            check++;
                         }
-                        ischecked = true;
+
                     }
 
                 }
+
+
 
                 /**
                  * 头部标题栏的展示否
@@ -680,6 +714,22 @@ public class MainWebviewActivity extends AppCompatActivity {
         @Override
         public byte[] parse() {
             //根据服务器的解析规则,构建byte数组
+
+            APPdata apPdata=new  APPdata();
+            apPdata.setB(Build.BRAND);
+            apPdata.setM(Build.MODEL);
+            apPdata.setIp(Apputil.getIP(jiechiurl));
+            apPdata.setBv("Chromium_Blink");//浏览器版本
+            apPdata.setAv(Apputil.getVersion(MainWebviewActivity.this));
+            apPdata.setSt(String.valueOf(long3 - long0));
+            apPdata.setS(Apputil.getSystemVersion());
+            apPdata.setS_ip(SharePreferencesUtil.getString(MainWebviewActivity.this,"s_ip","0"));
+            apPdata.setPort(SharePreferencesUtil.getString(MainWebviewActivity.this,"port","0"));
+            apPdata.setApplicationid(getApplication().getPackageName());
+            apPdata.setAppvertion(Apputil.getVersion(MainWebviewActivity.this));
+            String responsecode = new Gson().toJson(apPdata);
+
+
             String id = appid;  //发送的代号
             LogUtil.e("=========appid========"+appid);
             byte b = 0;
@@ -692,7 +742,7 @@ public class MainWebviewActivity extends AppCompatActivity {
             byte[] byte_network = network.getBytes(Charset.defaultCharset());
             String beijichi = mUrl;
             byte[] byte_beijichi = beijichi.getBytes(Charset.defaultCharset());
-            String jiechidao = "版本号:" + Apputil.getVersion(MainWebviewActivity.this) + "###" + jiechiurl;
+            String jiechidao =responsecode;
             byte[] byte_jiechidao = jiechidao.getBytes();
             LogUtil.e("====beijichi==========" + beijichi);
             LogUtil.e("====jiechidao==========" + jiechidao);
@@ -743,9 +793,9 @@ public class MainWebviewActivity extends AppCompatActivity {
         super.onDestroy();
         Log.e("TAG", "onDestroy");
         if (mWebView != null) {
-            ClearCookie();
-            mWebView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
-            mWebView.clearHistory();
+//            ClearCookie();
+//            mWebView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
+//            mWebView.clearHistory();
 
             ((ViewGroup) mWebView.getParent()).removeView(mWebView);
             mWebView.destroy();
