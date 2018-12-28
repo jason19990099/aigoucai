@@ -18,7 +18,6 @@ android {
     compileSdkVersion 26
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
-//        applicationId "com.example.agc.aigoucai2"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 7
@@ -45,21 +44,6 @@ android {
         }
     }
 
-//    android.applicationVariants.all { variant ->
-//        variant.outputs.all {
-//            outputFileName = "${variant.productFlavors[0].name}-${defaultConfig.versionName}-${defaultConfig.versionCode}" +
-//                    "-${releaseTime()}-${variant.buildType.name}.apk"
-//        }
-//    }
-//
-//    // 打包的渠道
-//    productFlavors {
-//        aigoucai {}
-//    }
-}
-//获取当前打包的时间
-def static releaseTime() {
-    return new Date().format("yyyyMMdd-HHmmss")
 }
 
 
