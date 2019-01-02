@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
 
-    <application
+    <MyApplication
 
 
         android:allowBackup="true"
@@ -58,6 +58,6 @@
                 <category android:name="com.example.agc.aigoucai" />
             </intent-filter>
         </receiver>
-    </application>
+    </MyApplication>
 
 </manifest>

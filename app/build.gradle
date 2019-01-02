@@ -2,6 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'maven-publish'
+
 
 android {
 
@@ -49,28 +51,69 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation 'com.tonystark.android:socket:1.2.3'
-    implementation 'com.just.agentweb:agentweb:2.0.1'
-    implementation 'org.greenrobot:eventbus:3.1.1' //EventBus事件分发器
-    implementation 'com.alibaba:fastjson:1.2.12' //json解析
-    implementation 'com.loopj.android:android-async-http:1.4.9' //async网络请求
-    implementation('com.android.support:design:23.1.0') {
+    compile"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.tonystark.android:socket:1.2.3'
+    compile 'com.just.agentweb:agentweb:2.0.1'
+    compile 'org.greenrobot:eventbus:3.1.1' //EventBus事件分发器
+    compile 'com.alibaba:fastjson:1.2.12' //json解析
+    compile 'com.loopj.android:android-async-http:1.4.9' //async网络请求
+    compile('com.android.support:design:23.1.0') {
         exclude module: 'support-v4'
         exclude module: 'appcompat-v7'
     }
     //加入下面这两行代码
-    implementation 'com.jakewharton:butterknife:8.5.1'
+    compile 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor  'com.jakewharton:butterknife-compiler:8.5.1'
 
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
-    implementation 'com.squareup.okio:okio:1.14.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-    implementation 'cn.jiguang.sdk:jpush:3.1.1'  // 此处以JPush 3.1.1 版本为例。
-    implementation 'cn.jiguang.sdk:jcore:1.1.9'  // 此处以JCore 1.1.9 版本为例。
-    implementation'com.wang.avi:library:1.0.0'
-    implementation'com.nineoldandroids:library:2.4.0'
+    compile 'com.squareup.okhttp3:okhttp:3.10.0'
+    compile 'com.squareup.okio:okio:1.14.0'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'cn.jiguang.sdk:jpush:3.1.1'  // 此处以JPush 3.1.1 版本为例。
+    compile 'cn.jiguang.sdk:jcore:1.1.9'  // 此处以JCore 1.1.9 版本为例。
+    compile'com.wang.avi:library:1.0.0'
+    compile'com.nineoldandroids:library:2.4.0'
+}
+
+
+
+task sourceJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier "sources"
+}
+
+publishing {
+    publications {
+        aar(MavenPublication) {
+            //记住一下规则,等会导入时注意, 举例compile 'com.dz.bleota:bleota:1.0.0'
+            groupId 'com.aigoucai'//包名
+            artifactId 'aars'
+            version '1.0.6'//版本
+            // Tell maven to prepare the generated "*.aar" file for publishing
+            artifact(sourceJar)
+            artifact("$buildDir/outputs/aar/${project.getName()}-release.aar")
+           //同时记录该依赖库所依赖的其他远程依赖
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
+                //Iterate over the compile dependencies (we don't want the test ones), adding a <dependency> node for each
+                configurations.compile.allDependencies.each {
+                    if(it.group != null && (it.name != null || "unspecified".equals(it.name)) && it.version != null)
+                    {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            //仓库存放在项目根目录
+            url("file://"+project.rootDir.absolutePath+"/repository")
+        }
+    }
 }
