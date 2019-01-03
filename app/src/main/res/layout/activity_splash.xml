@@ -29,7 +29,7 @@
 
 
 
-    //https://blog.csdn.net/qq_35244415/article/details/60377673
+    <!--//https://blog.csdn.net/qq_35244415/article/details/60377673-->
     <com.wang.avi.AVLoadingIndicatorView
         android:layout_marginBottom="20dp"
         android:layout_gravity="bottom|center_horizontal"
