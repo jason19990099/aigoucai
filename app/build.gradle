@@ -7,14 +7,14 @@ apply plugin: 'maven'
 
 android {
 
-    signingConfigs {
-        ruiyinSign {
-            keyAlias 'key0'
-            keyPassword '775854'
-            storeFile file('D:/Signature/500cp.jks')
-            storePassword '775854'
-        }
-    }
+//    signingConfigs {
+//        ruiyinSign {
+//            keyAlias 'key0'
+//            keyPassword '775854'
+//            storeFile file('D:/Signature/500cp.jks')
+//            storePassword '775854'
+//        }
+//    }
 
 
     compileSdkVersion 26
@@ -23,7 +23,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 7
-        versionName "1.25"
+        versionName "1.01"
         flavorDimensions "8"
 //        ndk {
 //            //选择要添加的对应cpu类型的.so库（不需要的删除即可）。
@@ -50,7 +50,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.ruiyinSign
+//            signingConfig signingConfigs.ruiyinSign
         }
     }
 
