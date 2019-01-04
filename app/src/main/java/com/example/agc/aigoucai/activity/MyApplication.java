@@ -4,7 +4,7 @@ import android.app.Application;
 import com.example.agc.aigoucai.util.Apputil;
 import com.xuhao.android.libsocket.sdk.OkSocket;
 
-import cn.jpush.android.api.JPushInterface;
+//import cn.jpush.android.api.JPushInterface;
 
 /**
  * Created by Administrator on 2018/3/26 0026.
@@ -21,8 +21,8 @@ public class MyApplication extends Application {
 //        如果需要开启Socket调试日志,请配置
         OkSocket.initialize(this, true);
 
-        JPushInterface.setDebugMode(true);
-        JPushInterface.init(this);
+//        JPushInterface.setDebugMode(true);
+//        JPushInterface.init(this);
     }
 
 
