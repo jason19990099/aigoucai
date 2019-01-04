@@ -25,16 +25,16 @@ android {
         versionCode 7
         versionName "1.25"
         flavorDimensions "8"
-        ndk {
-            //选择要添加的对应cpu类型的.so库（不需要的删除即可）。
-            abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
-        }
-
-        manifestPlaceholders = [
-                JPUSH_PKGNAME: "com.example.agc.aigoucai2",
-                JPUSH_APPKEY : "75be422869412f48a88e9d9e", //JPush上注册的包名对应的appkey（*换成你的*）
-                JPUSH_CHANNEL: "aigoucai", //暂时填写默认值即可.
-        ]
+//        ndk {
+//            //选择要添加的对应cpu类型的.so库（不需要的删除即可）。
+//            abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+//        }
+//
+//        manifestPlaceholders = [
+//                JPUSH_PKGNAME: "com.example.agc.aigoucai2",
+//                JPUSH_APPKEY : "75be422869412f48a88e9d9e", //JPush上注册的包名对应的appkey（*换成你的*）
+//                JPUSH_CHANNEL: "aigoucai", //暂时填写默认值即可.
+//        ]
 
 
     }
