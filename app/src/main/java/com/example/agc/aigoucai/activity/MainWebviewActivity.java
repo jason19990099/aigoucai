@@ -135,6 +135,8 @@ public class MainWebviewActivity extends AppCompatActivity {
     private String call;
     private CustomPopWindow mCustomPopWindow;
     private String onPageFinishedUrl;
+    private String CookieStr;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -312,7 +314,6 @@ public class MainWebviewActivity extends AppCompatActivity {
 
             @Override
             public void onLoadResource(WebView view, String url) {
-                LogUtil.e("====onLoadResource==========" + url);
             }
 
             @Override
@@ -399,6 +400,13 @@ public class MainWebviewActivity extends AppCompatActivity {
 //                }
                 onPageFinishedUrl=url;
                 mWebView.setVisibility(View.VISIBLE);
+
+                //获取cookie
+                CookieManager cookieManager = CookieManager.getInstance();
+                 CookieStr = cookieManager.getCookie(url);
+                LogUtil.e("====CookieStr===pagefinish===="+CookieStr);
+                SharePreferencesUtil.addString(MainWebviewActivity.this,"CookieStr",CookieStr);
+
             }
 
             @Override
@@ -407,6 +415,10 @@ public class MainWebviewActivity extends AppCompatActivity {
             }
         });
 
+         String CookieStr=SharePreferencesUtil.getString(MainWebviewActivity.this,"CookieStr",null);
+         LogUtil.e("====CookieStr====loadUrl==="+CookieStr);
+         if (null!=CookieStr)
+        syncCookie(MainWebviewActivity.this,url,CookieStr);
         mWebView.loadUrl(url);
     }
 
@@ -910,7 +922,6 @@ public class MainWebviewActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e("TAG", "onDestroy");
         if (mWebView != null) {
 //            ClearCookie();
 //            mWebView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
@@ -933,4 +944,23 @@ public class MainWebviewActivity extends AppCompatActivity {
         mWebView.getSettings().setJavaScriptEnabled(false);
         mWebView.clearCache(true);
     }
+
+
+
+
+    public static void syncCookie(Context context,String url,String CookieStr) {
+        LogUtil.e("=====syncCookie=====CookieStr==="+CookieStr);
+       CookieSyncManager.createInstance(context);
+       CookieManager cookieManager=CookieManager.getInstance();
+       cookieManager.setAcceptCookie(true);
+       cookieManager.removeSessionCookie();//移除  
+//       cookieManager.setCookie(url,CookieStr);//cookies是在HttpClient中获得的cookie   一次性加上不可以
+        String[]  strs=CookieStr.split(";");
+        for(int i=0,len=strs.length;i<len;i++){
+            cookieManager.setCookie(url,strs[i].toString());
+            LogUtil.e("=====CookieStr====strs[i].toString()======"+strs[i].toString());
+        }
+       CookieSyncManager.getInstance().sync();
+    }
+
 }
