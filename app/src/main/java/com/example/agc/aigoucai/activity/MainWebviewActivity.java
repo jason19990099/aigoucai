@@ -56,6 +56,8 @@ import com.example.agc.aigoucai.util.ShareUtils;
 import com.example.agc.aigoucai.util.SimpleProgressDialog;
 import com.example.agc.aigoucai.util.SocketUtil;
 import com.example.zhouwei.library.CustomPopWindow;
+import com.example.agc.aigoucai.util.ParseHostGetIPAddress;
+import com.example.agc.aigoucai.util.UrlUtil;
 import com.google.gson.Gson;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
@@ -954,11 +956,14 @@ public class MainWebviewActivity extends AppCompatActivity {
        CookieManager cookieManager=CookieManager.getInstance();
        cookieManager.setAcceptCookie(true);
        cookieManager.removeSessionCookie();//移除  
-//       cookieManager.setCookie(url,CookieStr);//cookies是在HttpClient中获得的cookie   一次性加上不可以
+//       cookieManager.setCookie(url,CookieStr);//cookies是在HttpClient中获得的cookie  
         String[]  strs=CookieStr.split(";");
         for(int i=0,len=strs.length;i<len;i++){
-            cookieManager.setCookie(url,strs[i].toString());
             LogUtil.e("=====CookieStr====strs[i].toString()======"+strs[i].toString());
+            //游客是，0結尾的，游客的状态不保存。
+            if (!UrlUtil.getURLDecoderString(strs[i]).contains(",0")){
+                cookieManager.setCookie(url,strs[i].toString());
+            }
         }
        CookieSyncManager.getInstance().sync();
     }
