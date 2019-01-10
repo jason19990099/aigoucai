@@ -218,7 +218,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                             text_id_sp.setText(s + "s" + " " + ms + "ms");
                         }
                         if (Integer.valueOf(s) == 0) {
-                            text_id_sp.setTextColor(Color.parseColor("#FF277E42"));
+                            text_id_sp.setTextColor(Color.parseColor("#21bc15"));
                             text_id_sp.setText(ms + "ms");
                         } else {
                             text_id_sp.setTextColor(Color.parseColor("#FFFF4081"));

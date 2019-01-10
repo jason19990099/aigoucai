@@ -80,7 +80,7 @@ public class ChatAdapter extends BaseAdapter {
             }
 
             if (userList.get(position).getCode().equals("web")) {
-                holder.iv_img.setImageResource(R.mipmap.kefu);
+                holder.iv_img.setImageResource(R.mipmap.kefu1);
                 holder.text_id_sp.setTextColor(Color.parseColor("#ffffff"));
             }
             holder.iv_img.setVisibility(View.VISIBLE);

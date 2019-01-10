@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/select_bg"
+    android:background="@mipmap/bg"
     android:orientation="vertical">
 
     <FrameLayout
@@ -48,14 +48,14 @@
         android:background="#00000000"
         android:drawablePadding="5dp"
         android:text="在线客服"
-        android:drawableLeft="@mipmap/icom_line"
+        android:drawableLeft="@mipmap/kefu"
         android:id="@+id/be_selectservice"
         android:layout_marginBottom="10dp"
         android:layout_gravity="center_horizontal"
         android:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#3ccbff"
+        android:textColor="#ffffff"
         android:textSize="15sp" />
 
     <LinearLayout
