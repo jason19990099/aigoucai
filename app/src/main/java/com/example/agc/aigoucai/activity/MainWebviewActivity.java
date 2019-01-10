@@ -52,6 +52,7 @@ import com.example.agc.aigoucai.util.ShareUtils;
 import com.example.agc.aigoucai.util.SimpleProgressDialog;
 import com.example.agc.aigoucai.util.SocketUtil;
 import com.example.agc.aigoucai.util.ParseHostGetIPAddress;
+import com.example.agc.aigoucai.util.UrlUtil;
 import com.google.gson.Gson;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
@@ -838,6 +839,10 @@ public class MainWebviewActivity extends AppCompatActivity {
         for(int i=0,len=strs.length;i<len;i++){
             cookieManager.setCookie(url,strs[i].toString());
             LogUtil.e("=====CookieStr====strs[i].toString()======"+strs[i].toString());
+            LogUtil.e("=====CookieStr====strs[i].toString()======"+UrlUtil.getURLDecoderString(strs[i]));
+            if (UrlUtil.getURLDecoderString(strs[i]).contains(",0")){
+
+            }
         }
        CookieSyncManager.getInstance().sync();
     }
