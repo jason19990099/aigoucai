@@ -18,6 +18,7 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -348,6 +349,25 @@ public class MainWebviewActivity extends AppCompatActivity {
                     }
                 }
                 mWebView.setVisibility(View.VISIBLE);
+
+                if (Basedata.appid.equals("agc_lzx168")){
+                    /**
+                     *  500地推專用包使用一下代碼
+                     */
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            final  String call = "javascript:document.getElementsByTagName(\"ion-slide\")[0].children[0].children[0].setAttribute(\"src\", \"/static/images/slide/m2.png\");";
+                            mWebView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mWebView.loadUrl(call);
+
+                                }});
+                        }
+                    },1000);
+                }
+
             }
 
             @Override
