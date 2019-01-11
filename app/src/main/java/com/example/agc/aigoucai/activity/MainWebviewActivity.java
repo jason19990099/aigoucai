@@ -945,12 +945,13 @@ public class MainWebviewActivity extends AppCompatActivity {
         mWebView.setWebViewClient(null);
         mWebView.getSettings().setJavaScriptEnabled(false);
         mWebView.clearCache(true);
+        SharePreferencesUtil.addString(MainWebviewActivity.this,"CookieStr",null);
     }
 
 
 
 
-    public static void syncCookie(Context context,String url,String CookieStr) {
+    public  void syncCookie(Context context,String url,String CookieStr) {
         LogUtil.e("=====syncCookie=====CookieStr==="+CookieStr);
        CookieSyncManager.createInstance(context);
        CookieManager cookieManager=CookieManager.getInstance();
@@ -959,10 +960,10 @@ public class MainWebviewActivity extends AppCompatActivity {
 //       cookieManager.setCookie(url,CookieStr);//cookies是在HttpClient中获得的cookie  
         String[]  strs=CookieStr.split(";");
         for(int i=0,len=strs.length;i<len;i++){
-            LogUtil.e("=====CookieStr====strs[i].toString()======"+strs[i].toString());
+            LogUtil.e("=====CookieStr====strs[i].toString()======"+strs[i]);
             //游客是，0結尾的，游客的状态不保存。
             if (!UrlUtil.getURLDecoderString(strs[i]).contains(",0")){
-                cookieManager.setCookie(url,strs[i].toString());
+                cookieManager.setCookie(url,strs[i]);
             }
         }
        CookieSyncManager.getInstance().sync();
