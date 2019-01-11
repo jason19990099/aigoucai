@@ -137,7 +137,7 @@ public class MainWebviewActivity extends AppCompatActivity {
     private String call;
     private CustomPopWindow mCustomPopWindow;
     private String onPageFinishedUrl;
-    private String CookieStr;
+
 
 
     @Override
@@ -396,19 +396,14 @@ public class MainWebviewActivity extends AppCompatActivity {
                     }
                 }
 
-//                if (url.contains("/payment/deposit?orderNo")){
-//                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-//                    startActivity(intent);
-//                }
                 onPageFinishedUrl=url;
                 mWebView.setVisibility(View.VISIBLE);
 
                 //获取cookie
                 CookieManager cookieManager = CookieManager.getInstance();
-                 CookieStr = cookieManager.getCookie(url);
+                String   CookieStr = cookieManager.getCookie(url);
                 LogUtil.e("====CookieStr===pagefinish===="+CookieStr);
                 SharePreferencesUtil.addString(MainWebviewActivity.this,"CookieStr",CookieStr);
-
             }
 
             @Override
@@ -510,6 +505,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                             mWebView.loadUrl(call);
                         }});
                 }
+
                 break;
             case R.id.iv_back:
                 if (null == changeUrl) {
@@ -925,9 +921,12 @@ public class MainWebviewActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (mWebView != null) {
+
 //            ClearCookie();
 //            mWebView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
 //            mWebView.clearHistory();
+
+
 
             ((ViewGroup) mWebView.getParent()).removeView(mWebView);
             mWebView.destroy();
@@ -952,21 +951,20 @@ public class MainWebviewActivity extends AppCompatActivity {
 
 
     public  void syncCookie(Context context,String url,String CookieStr) {
-        LogUtil.e("=====syncCookie=====CookieStr==="+CookieStr);
-       CookieSyncManager.createInstance(context);
-       CookieManager cookieManager=CookieManager.getInstance();
-       cookieManager.setAcceptCookie(true);
-       cookieManager.removeSessionCookie();//移除  
-//       cookieManager.setCookie(url,CookieStr);//cookies是在HttpClient中获得的cookie  
+        CookieSyncManager.createInstance(context);
+        CookieManager cookieManager=CookieManager.getInstance();
+        cookieManager.setAcceptCookie(true);
+        cookieManager.removeSessionCookie();//移除  
+        LogUtil.e("=======syncCookie==="+url);
         String[]  strs=CookieStr.split(";");
         for(int i=0,len=strs.length;i<len;i++){
-            LogUtil.e("=====CookieStr====strs[i].toString()======"+strs[i]);
             //游客是，0結尾的，游客的状态不保存。
             if (!UrlUtil.getURLDecoderString(strs[i]).contains(",0")){
                 cookieManager.setCookie(url,strs[i]);
+                LogUtil.e("=====CookieStr====strs[i].toString()======"+strs[i]);
             }
         }
-       CookieSyncManager.getInstance().sync();
+        CookieSyncManager.getInstance().sync();
     }
 
 }
