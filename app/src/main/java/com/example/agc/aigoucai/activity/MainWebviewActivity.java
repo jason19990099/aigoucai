@@ -837,11 +837,10 @@ public class MainWebviewActivity extends AppCompatActivity {
 //       cookieManager.setCookie(url,CookieStr);//cookies是在HttpClient中获得的cookie   一次性加上不可以
         String[]  strs=CookieStr.split(";");
         for(int i=0,len=strs.length;i<len;i++){
-            cookieManager.setCookie(url,strs[i].toString());
             LogUtil.e("=====CookieStr====strs[i].toString()======"+strs[i].toString());
-            LogUtil.e("=====CookieStr====strs[i].toString()======"+UrlUtil.getURLDecoderString(strs[i]));
-            if (UrlUtil.getURLDecoderString(strs[i]).contains(",0")){
-
+            //游客是，0結尾的，游客的状态不保存。
+            if (!UrlUtil.getURLDecoderString(strs[i]).contains(",0")){
+                cookieManager.setCookie(url,strs[i].toString());
             }
         }
        CookieSyncManager.getInstance().sync();
