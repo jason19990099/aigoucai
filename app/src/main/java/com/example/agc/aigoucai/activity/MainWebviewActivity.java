@@ -356,11 +356,11 @@ public class MainWebviewActivity extends AppCompatActivity {
                 }
                 mWebView.setVisibility(View.VISIBLE);
 
-                //获取cookie
-                CookieManager cookieManager = CookieManager.getInstance();
-                 CookieStr = cookieManager.getCookie(url);
-                LogUtil.e("====CookieStr===pagefinish===="+CookieStr);
-                SharePreferencesUtil.addString(MainWebviewActivity.this,"CookieStr",CookieStr);
+//                //获取cookie
+//                CookieManager cookieManager = CookieManager.getInstance();
+//                 CookieStr = cookieManager.getCookie(url);
+//                LogUtil.e("====CookieStr===pagefinish===="+CookieStr);
+//                SharePreferencesUtil.addString(MainWebviewActivity.this,"CookieStr",CookieStr);
 
             }
 
@@ -370,10 +370,10 @@ public class MainWebviewActivity extends AppCompatActivity {
             }
         });
 
-         String CookieStr=SharePreferencesUtil.getString(MainWebviewActivity.this,"CookieStr",null);
-         LogUtil.e("====CookieStr====loadUrl==="+CookieStr);
-         if (null!=CookieStr)
-        syncCookie(MainWebviewActivity.this,url,CookieStr);
+//         String CookieStr=SharePreferencesUtil.getString(MainWebviewActivity.this,"CookieStr",null);
+//         LogUtil.e("====CookieStr====loadUrl==="+CookieStr);
+//         if (null!=CookieStr)
+//        syncCookie(MainWebviewActivity.this,url,CookieStr);
         mWebView.loadUrl(url);
     }
 
@@ -829,18 +829,16 @@ public class MainWebviewActivity extends AppCompatActivity {
 
 
     public static void syncCookie(Context context,String url,String CookieStr) {
-        LogUtil.e("=====syncCookie=====CookieStr==="+CookieStr);
        CookieSyncManager.createInstance(context);
        CookieManager cookieManager=CookieManager.getInstance();
        cookieManager.setAcceptCookie(true);
        cookieManager.removeSessionCookie();//移除  
-//       cookieManager.setCookie(url,CookieStr);//cookies是在HttpClient中获得的cookie   一次性加上不可以
         String[]  strs=CookieStr.split(";");
         for(int i=0,len=strs.length;i<len;i++){
-            LogUtil.e("=====CookieStr====strs[i].toString()======"+strs[i].toString());
             //游客是，0結尾的，游客的状态不保存。
             if (!UrlUtil.getURLDecoderString(strs[i]).contains(",0")){
-                cookieManager.setCookie(url,strs[i].toString());
+                cookieManager.setCookie(url,strs[i]);
+                LogUtil.e("=====CookieStr====strs[i].toString()======"+strs[i]);
             }
         }
        CookieSyncManager.getInstance().sync();
