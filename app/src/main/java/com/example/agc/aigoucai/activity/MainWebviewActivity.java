@@ -350,9 +350,9 @@ public class MainWebviewActivity extends AppCompatActivity {
                 }
                 mWebView.setVisibility(View.VISIBLE);
 
-                if (Basedata.appid.equals("agc_lzx168")){
+                if (Basedata.appid.equals("agc_lzx168")||Basedata.appid.equals("agcdaili")){
                     /**
-                     *  500地推專用包使用一下代碼
+                     *  aigoucai地推專用包使用一下代碼
                      */
                     new Handler().postDelayed(new Runnable() {
                         @Override
