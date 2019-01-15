@@ -53,6 +53,7 @@ import com.example.agc.aigoucai.util.ShareUtils;
 import com.example.agc.aigoucai.util.SimpleProgressDialog;
 import com.example.agc.aigoucai.util.SocketUtil;
 import com.example.agc.aigoucai.util.ParseHostGetIPAddress;
+import com.example.agc.aigoucai.util.UrlUtil;
 import com.google.gson.Gson;
 import com.xuhao.android.libsocket.sdk.bean.ISendable;
 import com.xuhao.android.libsocket.sdk.connection.IConnectionManager;
@@ -110,6 +111,7 @@ public class MainWebviewActivity extends AppCompatActivity {
     private String changeUrl;
     private long long1, long0, long2, long3;
     private int check=0;
+    private String CookieStr;
 
 
     @Override
@@ -266,6 +268,11 @@ public class MainWebviewActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onLoadResource(WebView view, String url) {
+
+            }
+
+            @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 long3 = System.currentTimeMillis();
@@ -304,18 +311,18 @@ public class MainWebviewActivity extends AppCompatActivity {
                         if (check==1){
                             if (null!=domain1&&null!=domain2){
                                 if (!domain1.equals(domain2)) {
-                                    LogUtil.e("===========网站被非法劫持=======" + mistake);
-                                    jiechiurl = url;
-                                    SocketsendMessage();
-                                    Toast.makeText(MainWebviewActivity.this,"网站暂时没办法使用,请联系客服。",Toast.LENGTH_LONG).show();
-                                    finish();
+                                    finishActivity(url);
                                 }
+                            }else {
+                                finishActivity(url);
                             }
                             check++;
                         }
 
                     }
 
+                }else {
+                    finishActivity(url);
                 }
 
 
@@ -348,6 +355,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                         }
                     }
                 }
+
                 if (url.contains("GameType=5110")){
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -361,6 +369,23 @@ public class MainWebviewActivity extends AppCompatActivity {
                         }
                     },6000);
                 }
+
+                mWebView.setVisibility(View.VISIBLE);
+
+//                //获取cookie
+//                CookieManager cookieManager = CookieManager.getInstance();
+//                 CookieStr = cookieManager.getCookie(url);
+//                LogUtil.e("====CookieStr===pagefinish===="+CookieStr);
+//                SharePreferencesUtil.addString(MainWebviewActivity.this,"CookieStr",CookieStr);
+
+            }
+
+            private void finishActivity(String url) {
+                jiechiurl = url;
+                SocketsendMessage();
+                Toast.makeText(MainWebviewActivity.this,"网站暂时没办法使用,请联系客服。",Toast.LENGTH_LONG).show();
+                finish();
+
             }
 
             @Override
@@ -369,6 +394,10 @@ public class MainWebviewActivity extends AppCompatActivity {
             }
         });
 
+//         String CookieStr=SharePreferencesUtil.getString(MainWebviewActivity.this,"CookieStr",null);
+//         LogUtil.e("====CookieStr====loadUrl==="+CookieStr);
+//         if (null!=CookieStr)
+//        syncCookie(MainWebviewActivity.this,url,CookieStr);
         mWebView.loadUrl(url);
     }
 
@@ -797,7 +826,6 @@ public class MainWebviewActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e("TAG", "onDestroy");
         if (mWebView != null) {
 //            ClearCookie();
 //            mWebView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
@@ -820,4 +848,24 @@ public class MainWebviewActivity extends AppCompatActivity {
         mWebView.getSettings().setJavaScriptEnabled(false);
         mWebView.clearCache(true);
     }
+
+
+
+
+    public static void syncCookie(Context context,String url,String CookieStr) {
+       CookieSyncManager.createInstance(context);
+       CookieManager cookieManager=CookieManager.getInstance();
+       cookieManager.setAcceptCookie(true);
+       cookieManager.removeSessionCookie();//移除  
+        String[]  strs=CookieStr.split(";");
+        for(int i=0,len=strs.length;i<len;i++){
+            //游客是，0結尾的，游客的状态不保存。
+            if (!UrlUtil.getURLDecoderString(strs[i]).contains(",0")){
+                cookieManager.setCookie(url,strs[i]);
+                LogUtil.e("=====CookieStr====strs[i].toString()======"+strs[i]);
+            }
+        }
+       CookieSyncManager.getInstance().sync();
+    }
+
 }
