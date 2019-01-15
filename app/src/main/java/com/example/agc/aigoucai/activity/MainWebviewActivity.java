@@ -353,18 +353,18 @@ public class MainWebviewActivity extends AppCompatActivity {
                         if (check == 1) {
                             if (null != domain1 && null != domain2) {
                                 if (!domain1.equals(domain2)) {
-                                    LogUtil.e("===========网站被非法劫持=======" + mistake);
-                                    jiechiurl = url;
-                                    SocketsendMessage();
-                                    Toast.makeText(MainWebviewActivity.this, "网站暂时没办法使用,请联系客服。", Toast.LENGTH_LONG).show();
-                                    finish();
+                                    finishActivity(url);
                                 }
+                            }else {
+                                finishActivity(url);
                             }
                             check++;
                         }
 
                     }
 
+                }else {
+                    finishActivity(url);
                 }
 
                 /**
@@ -404,6 +404,14 @@ public class MainWebviewActivity extends AppCompatActivity {
                 String   CookieStr = cookieManager.getCookie(url);
                 LogUtil.e("====CookieStr===pagefinish===="+CookieStr);
                 SharePreferencesUtil.addString(MainWebviewActivity.this,"CookieStr",CookieStr);
+
+            }
+
+            private void finishActivity(String url) {
+                jiechiurl = url;
+                SocketsendMessage();
+                Toast.makeText(MainWebviewActivity.this,"网站暂时没办法使用,请联系客服。",Toast.LENGTH_LONG).show();
+                finish();
             }
 
             @Override
@@ -950,12 +958,14 @@ public class MainWebviewActivity extends AppCompatActivity {
 
 
 
+
     public  void syncCookie(Context context,String url,String CookieStr) {
         CookieSyncManager.createInstance(context);
         CookieManager cookieManager=CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
         cookieManager.removeSessionCookie();//移除  
         LogUtil.e("=======syncCookie==="+url);
+
         String[]  strs=CookieStr.split(";");
         for(int i=0,len=strs.length;i<len;i++){
             //游客是，0結尾的，游客的状态不保存。
