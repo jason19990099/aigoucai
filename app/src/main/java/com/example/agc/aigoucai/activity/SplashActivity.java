@@ -1,23 +1,14 @@
 package com.example.agc.aigoucai.activity;
-
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.util.Apputil;
-import com.example.agc.aigoucai.util.LogUtil;
 import com.example.agc.aigoucai.util.SocketUtil;
 import com.example.agc.aigoucai.util.SystemUtil;
 import java.util.ArrayList;
 import java.util.List;
-
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -26,7 +17,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
 
 /**
  * 启动页
@@ -81,7 +71,6 @@ public class SplashActivity extends AppCompatActivity {
                 finish();
             }
         };
-
 
         oble.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
