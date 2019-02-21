@@ -155,7 +155,7 @@ public class SocketUtil {
                 }
                 mInfo = new ConnectionInfo(SocketUtil.ip_bei, net_port);
                 mInfo.setBackupInfo(mInfo.getBackupInfo());
-                mManager.disConnect(new RedirectException());
+//                mManager.disConnect(new RedirectException());
                 new android.os.Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
