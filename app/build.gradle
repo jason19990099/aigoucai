@@ -77,7 +77,7 @@ dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation 'com.tonystark.android:socket:1.2.3'
+    implementation 'com.tonystark.android:socket:2.0.4'
     implementation 'com.just.agentweb:agentweb:2.0.1'
     implementation 'org.greenrobot:eventbus:3.1.1' //EventBus事件分发器
     implementation 'com.alibaba:fastjson:1.2.12' //json解析
@@ -97,4 +97,6 @@ dependencies {
     implementation 'cn.jiguang.sdk:jcore:1.1.9'  // 此处以JCore 1.1.9 版本为例。
     implementation'com.wang.avi:library:1.0.0'
     implementation'com.nineoldandroids:library:2.4.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.5'
 }
