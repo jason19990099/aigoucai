@@ -287,7 +287,7 @@ public class MainWebviewActivity extends AppCompatActivity {
 
                 try {
                     URL url_1 = new URL(SharePreferencesUtil.getString(MainWebviewActivity.this, "main_url", ""));
-                    domain1 = url_1.getHost();
+                    domain1 = url_1.getHost().replace("www.","");
                 } catch (Exception e) {
                     mistake = true;
                     e.printStackTrace();
@@ -297,7 +297,7 @@ public class MainWebviewActivity extends AppCompatActivity {
 
                 try {
                     URL url_2 = new URL(url);
-                    domain2 = url_2.getHost();
+                    domain2 = url_2.getHost().replace("www.","");
                 } catch (Exception e) {
                     mistake = true;
                     e.printStackTrace();
