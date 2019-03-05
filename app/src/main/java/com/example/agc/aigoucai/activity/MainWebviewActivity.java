@@ -222,6 +222,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                             || url.startsWith("https://messenger")  //聊天页
                             || url.startsWith("https://www.agcapp.me/app.apk")
                             || url.startsWith("upwrp://")   //银联云闪付
+                            || url.startsWith("weixin://wap/pay")   //微信支付
                             ) {
 
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
@@ -321,7 +322,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                     }
 
                 }else {
-                    finishActivity(url);
+//                    finishActivity(url);
                 }
 
 
