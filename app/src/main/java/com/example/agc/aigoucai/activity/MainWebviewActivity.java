@@ -252,7 +252,11 @@ public class MainWebviewActivity extends AppCompatActivity {
         settings.setAppCacheEnabled(true);
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         settings.setAllowFileAccess(true);
-        settings.setUserAgentString("xm-android-h5");
+        String userAgent = settings.getUserAgentString();
+        settings.setUserAgentString(userAgent+"/Client(xm-android-h5)");
+        String userAgent2 = settings.getUserAgentString();
+        LogUtil.e("======userAgent2===="+userAgent2);
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
