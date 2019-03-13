@@ -31,18 +31,6 @@ public class SplashActivity extends AppCompatActivity {
         Observable<List<String>> oble = Observable.create(new ObservableOnSubscribe<List<String>>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<List<String>> e) throws Exception {
-
-                List<String> ip_array = new ArrayList<>();
-                ip_array.clear();
-                String[] strings= Apputil.parseHostGetIPAddress("bobo.shyqyl.com");
-                if (null==strings){
-                    return;
-                }
-                int size=strings.length;
-                for (int i=0;i<size;i++){
-                    ip_array.add(strings[i]);
-                }
-                e.onNext(ip_array);
                 SystemClock.sleep(1500);
                 e.onComplete();
 
@@ -56,9 +44,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onNext(@NonNull List<String> s) {
-                SocketUtil socketUtil=new SocketUtil( s,1985,SplashActivity.this);
-                //调取方法开始连接
-                socketUtil.getSocketConection();
+
             }
 
             @Override
@@ -67,7 +53,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onComplete() {
-                startActivity(new Intent(SplashActivity.this, SelectLinesActivity.class));
+                startActivity(new Intent(SplashActivity.this, MainWebviewActivity.class));
                 finish();
             }
         };
