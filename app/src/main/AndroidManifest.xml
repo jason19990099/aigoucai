@@ -68,7 +68,7 @@
             android:name="com.aigoucai.lottery.makesure.AliasActivity"
             android:enabled="false"
             android:icon="@mipmap/icon500"
-            android:label="梨"
+            android:label="@string/cp500"
             android:targetActivity="com.example.agc.aigoucai.activity.MainWebviewActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
