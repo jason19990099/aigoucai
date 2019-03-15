@@ -76,7 +76,7 @@
 
         <activity-alias
             android:exported="true"
-            android:name="com.aigoucai.lottery.makesure.AliasActivity"
+            android:name="com.500CPActivity"
             android:enabled="false"
             android:icon="@mipmap/icon500"
             android:label="500彩票"
@@ -89,10 +89,10 @@
 
         <activity-alias
             android:exported="true"
-            android:name="com.aigoucai.lottery.makesure.AliasActivity2"
+            android:name="com.AigoucaiActivity"
             android:enabled="false"
             android:icon="@mipmap/icom_line"
-            android:label="香蕉"
+            android:label="爱购彩"
             android:targetActivity="com.example.agc.aigoucai.activity.Splash_yellowduckActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

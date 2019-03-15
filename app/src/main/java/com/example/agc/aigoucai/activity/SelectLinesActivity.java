@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -67,6 +68,8 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     TextView tvVertion;
     @BindView(R.id.be_selectservice)
     Button beSelectservice;
+    private ImageView ivBackground;
+
     private Adapter_url adapter_url = new Adapter_url();
     private CustomDialog.Builder ibuilder;
     private String[] url_array;
@@ -104,6 +107,43 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+
+        ivBackground=findViewById(R.id.ivbackground);
+        String  getintent=SharePreferencesUtil.getString(SelectLinesActivity.this,"getIntent","");
+        if(getintent.contains("com.500CPActivity")){
+            ivBackground.setImageDrawable(getResources().getDrawable(R.mipmap.backgroud_500cp));
+        }
+        if(getintent.contains("com.AigoucaiActivity")){
+            ivBackground.setImageDrawable(getResources().getDrawable(R.mipmap.background_aigoucai));
+        }
+        if(getintent.contains("com.k7Activity")){
+            ivBackground.setImageDrawable(getResources().getDrawable(R.mipmap.background_k7));
+        }
+        if(getintent.contains("com.ttActivity")){
+            ivBackground.setImageDrawable(getResources().getDrawable(R.mipmap.background_tt));
+        }
+        if(getintent.contains("com.678yuleActivity")){
+            ivBackground.setImageDrawable(getResources().getDrawable(R.mipmap.background_678));
+        }
+        if(getintent.contains("com.xpjActivity")){
+            ivBackground.setImageDrawable(getResources().getDrawable(R.mipmap.background_xpj));
+        }
+        if(getintent.contains("com.zzcActivity")){
+            ivBackground.setImageDrawable(getResources().getDrawable(R.mipmap.background_zzc));
+        }
+        if(getintent.contains("com.egoActivity")){
+            ivBackground.setImageDrawable(getResources().getDrawable(R.mipmap.background_egouwangtou));
+        }
+        if(getintent.contains("com.zxcActivity")){
+            ivBackground.setImageDrawable(getResources().getDrawable(R.mipmap.background_axc));
+        }
+        if(getintent.contains("com.8HaoActivity")){
+            ivBackground.setImageDrawable(getResources().getDrawable(R.mipmap.background_8hao));
+        }
+//        if(getintent.contains("com.pandaActivity")){
+//            ivBackground.setImageDrawable(getResources().getDrawable(R.mipmap.background_panda));
+//        }
+
 
         if (!Apputil.isNetConnection(SelectLinesActivity.this)) {
             ibuilder = new CustomDialog.Builder(SelectLinesActivity.this);

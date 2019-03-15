@@ -97,7 +97,7 @@ public class Splash_yellowduckActivity extends AppCompatActivity {
             startActivity(new Intent(this,SplashActivity.class));
             finish();
         } else {
-            Intent intent=new Intent(Splash_yellowduckActivity.this,Splash_yellowduckActivity.class);
+            Intent intent=new Intent(Splash_yellowduckActivity.this,MainWebviewActivity.class);
             startActivity(intent);
 
         }
