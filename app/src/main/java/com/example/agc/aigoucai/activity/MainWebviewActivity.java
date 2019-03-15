@@ -2,7 +2,6 @@ package com.example.agc.aigoucai.activity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ComponentName;
 import android.content.ContentUris;
@@ -41,7 +40,6 @@ import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.bean.Basedata;
 import com.example.agc.aigoucai.util.LogUtil;
 import com.example.agc.aigoucai.util.ShareUtils;
-import com.example.agc.aigoucai.util.SimpleProgressDialog;
 import com.example.agc.aigoucai.util.UrlUtil;
 import java.io.File;
 import java.net.URISyntaxException;
@@ -110,6 +108,12 @@ public class MainWebviewActivity extends AppCompatActivity {
 
 
         initWebSetting(mUrl);
+
+
+        List list=new ArrayList();
+        list.add("com.aigoucai.lottery.makesure.AliasActivity");
+        list.add("com.aigoucai.lottery.makesure.AliasActivity2");
+        changIconUtils.addmore(MainWebviewActivity.this,list);
     }
 
 
@@ -554,4 +558,10 @@ public class MainWebviewActivity extends AppCompatActivity {
        CookieSyncManager.getInstance().sync();
     }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
+    }
 }
