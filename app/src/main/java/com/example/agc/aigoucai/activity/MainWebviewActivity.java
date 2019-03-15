@@ -110,10 +110,6 @@ public class MainWebviewActivity extends AppCompatActivity {
         initWebSetting(mUrl);
 
 
-        List list=new ArrayList();
-        list.add("com.aigoucai.lottery.makesure.AliasActivity");
-        list.add("com.aigoucai.lottery.makesure.AliasActivity2");
-        changIconUtils.addmore(MainWebviewActivity.this,list);
     }
 
 

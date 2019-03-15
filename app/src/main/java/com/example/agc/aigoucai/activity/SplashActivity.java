@@ -1,16 +1,12 @@
 package com.example.agc.aigoucai.activity;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-
 import com.example.agc.aigoucai.R;
+import com.example.agc.aigoucai.util.Apputil;
+import com.example.agc.aigoucai.util.SocketUtil;
 import com.example.agc.aigoucai.util.SystemUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 import io.reactivex.Observable;
@@ -25,20 +21,28 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * 启动页
  */
-public class Splash_yellowduckActivity extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        SystemUtil.setfullScreen(Splash_yellowduckActivity.this);
+        SystemUtil.setfullScreen(SplashActivity.this);
 
         Observable<List<String>> oble = Observable.create(new ObservableOnSubscribe<List<String>>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<List<String>> e) throws Exception {
-                List list=new ArrayList();
-                list.add("com.aigoucai.lottery.makesure.AliasActivity");
-                list.add("com.aigoucai.lottery.makesure.AliasActivity2");
-                e.onNext(list);
+
+                List<String> ip_array = new ArrayList<>();
+                ip_array.clear();
+                String[] strings= Apputil.parseHostGetIPAddress("bobo.shyqyl.com");
+                if (null==strings){
+                    return;
+                }
+                int size=strings.length;
+                for (int i=0;i<size;i++){
+                    ip_array.add(strings[i]);
+                }
+                e.onNext(ip_array);
                 SystemClock.sleep(1500);
                 e.onComplete();
 
@@ -52,8 +56,9 @@ public class Splash_yellowduckActivity extends AppCompatActivity {
 
             @Override
             public void onNext(@NonNull List<String> s) {
-
-                changIconUtils.addmore(Splash_yellowduckActivity.this,s);
+                SocketUtil socketUtil=new SocketUtil( s,1985,SplashActivity.this);
+                //调取方法开始连接
+                socketUtil.getSocketConection();
             }
 
             @Override
@@ -62,45 +67,14 @@ public class Splash_yellowduckActivity extends AppCompatActivity {
 
             @Override
             public void onComplete() {
-
+                startActivity(new Intent(SplashActivity.this, SelectLinesActivity.class));
+                finish();
             }
         };
 
         oble.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(oser);
-
-
-
-
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-
-        ComponentName componentName = Splash_yellowduckActivity.this.getComponentName();
-        PackageManager pm = getPackageManager();
-        ActivityInfo activityInfo = null;
-        try {
-            activityInfo = pm.getActivityInfo (componentName, 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        Log.d ("ActivityLabel=====", activityInfo.loadLabel (pm).toString ());
-        Log.d("getIntent()======",getIntent().getComponent().getClassName());
-        if (getIntent().getComponent().getClassName().contains("AliasActivity")) {
-            // from AliasActivity
-            startActivity(new Intent(this,SplashActivity.class));
-            finish();
-        } else {
-            Intent intent=new Intent(Splash_yellowduckActivity.this,Splash_yellowduckActivity.class);
-            startActivity(intent);
-
-        }
     }
 
     @Override
@@ -108,5 +82,4 @@ public class Splash_yellowduckActivity extends AppCompatActivity {
         super.onStop();
         finish();
     }
-
 }

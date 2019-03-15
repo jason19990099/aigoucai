@@ -151,4 +151,10 @@ public class SelectServiceActivity extends Activity {
         }
         return ssfFactory;
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
+    }
 }

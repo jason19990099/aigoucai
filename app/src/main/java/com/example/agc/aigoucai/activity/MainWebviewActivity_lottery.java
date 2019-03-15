@@ -892,4 +892,10 @@ public class MainWebviewActivity_lottery extends AppCompatActivity {
        CookieSyncManager.getInstance().sync();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
+    }
+
 }

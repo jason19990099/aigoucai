@@ -201,7 +201,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                     Bundle bundleTab = new Bundle();
                     bundleTab.putString("url", url_array[i]);
                     SharePreferencesUtil.addString(SelectLinesActivity.this, "main_url", url_array[i]);
-                    IntentUtil.gotoActivity(SelectLinesActivity.this, MainWebviewActivity.class, bundleTab, false);
+                    IntentUtil.gotoActivity(SelectLinesActivity.this, MainWebviewActivity_lottery.class, bundleTab, false);
 
                 }
             });
@@ -482,6 +482,12 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
     }
 
 }
