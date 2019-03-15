@@ -4,10 +4,8 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import com.example.agc.aigoucai.R;
-import com.example.agc.aigoucai.util.Apputil;
-import com.example.agc.aigoucai.util.SocketUtil;
 import com.example.agc.aigoucai.util.SystemUtil;
-import java.util.ArrayList;
+
 import java.util.List;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -21,12 +19,12 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * 启动页
  */
-public class SplashActivity extends AppCompatActivity {
+public class Splash_yellowduckActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        SystemUtil.setfullScreen(SplashActivity.this);
+        SystemUtil.setfullScreen(Splash_yellowduckActivity.this);
 
         Observable<List<String>> oble = Observable.create(new ObservableOnSubscribe<List<String>>() {
             @Override
@@ -53,7 +51,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onComplete() {
-                startActivity(new Intent(SplashActivity.this, MainWebviewActivity.class));
+                startActivity(new Intent(Splash_yellowduckActivity.this, MainWebviewActivity.class));
                 finish();
             }
         };
