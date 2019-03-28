@@ -33,7 +33,7 @@ public class SplashActivity extends AppCompatActivity {
             public void subscribe(@NonNull ObservableEmitter<List<String>> e) throws Exception {
                 List<String> ip_array = new ArrayList<>();
                 ip_array.clear();
-                String[] strings= Apputil.parseHostGetIPAddress("bobo.shyqyl.com");
+                String[] strings= Apputil.parseHostGetIPAddress("bobo1.shyqyl.com");
                 if (null==strings){
                     return;
                 }
