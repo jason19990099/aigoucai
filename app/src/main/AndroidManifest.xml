@@ -16,7 +16,7 @@
         android:name="com.example.agc.aigoucai.activity.MyApplication"
         android:allowBackup="true"
         android:label="@string/app_name"
-        android:icon="@mipmap/logo_678"
+        android:icon="@mipmap/logo678"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
 
