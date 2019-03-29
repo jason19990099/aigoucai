@@ -1,8 +1,5 @@
 apply plugin: 'com.android.application'
 
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-
 android {
 
     signingConfigs {
@@ -21,9 +18,9 @@ android {
         applicationId "com.example.agc.cp500cc"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 18
-        versionName "1.36"
-        flavorDimensions "18"
+        versionCode 19
+        versionName "1.37"
+        flavorDimensions "19"
         ndk {
             //选择要添加的对应cpu类型的.so库（不需要的删除即可）。
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
@@ -74,7 +71,6 @@ def static releaseTime() {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.tonystark.android:socket:2.0.4'
