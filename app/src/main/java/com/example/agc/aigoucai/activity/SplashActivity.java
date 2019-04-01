@@ -5,6 +5,7 @@ import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.util.Apputil;
+import com.example.agc.aigoucai.util.LogUtil;
 import com.example.agc.aigoucai.util.SocketUtil;
 import com.example.agc.aigoucai.util.SystemUtil;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class SplashActivity extends AppCompatActivity {
                 int size=strings.length;
                 for (int i=0;i<size;i++){
                     ip_array.add(strings[i]);
+                    LogUtil.e("====從bobo.shyqyl.com获取的ip是======="+strings[i]);
                 }
 //                ip_array.add("47.104.156.66");
 //                ip_array.add("119.23.32.234");
