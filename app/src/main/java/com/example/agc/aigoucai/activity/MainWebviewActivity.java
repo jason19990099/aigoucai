@@ -134,6 +134,8 @@ public class MainWebviewActivity extends AppCompatActivity {
         if (null != bundle){
             mUrl = bundle.getString("url");
             ifFromService=bundle.getBoolean("ifFromService");
+            LogUtil.e("======url==========="+mUrl);
+            LogUtil.e("======ifFromService==========="+ifFromService);
         }
 
 
