@@ -111,6 +111,7 @@ public class MainWebviewActivity extends AppCompatActivity {
     private long long1, long0, long2, long3;
     private int check=0;
     private String CookieStr;
+    private boolean ifFromService;
 
 
     @Override
@@ -130,8 +131,13 @@ public class MainWebviewActivity extends AppCompatActivity {
 
         dialog = new SimpleProgressDialog(MainWebviewActivity.this, "请稍等...");
         Bundle bundle = this.getIntent().getExtras();
-        if (null != bundle)
+        if (null != bundle){
             mUrl = bundle.getString("url");
+            ifFromService=bundle.getBoolean("ifFromService");
+            LogUtil.e("======url==========="+mUrl);
+            LogUtil.e("======ifFromService==========="+ifFromService);
+        }
+
 
         mLayout = findViewById(R.id.web_layout);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -303,27 +309,30 @@ public class MainWebviewActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+                 if (!ifFromService){
+                     if (!mistake) {
+                         if (check==0) {
+                             check++;
+                         }else{
+                             if (check==1){
+                                 if (null!=domain1&&null!=domain2){
+                                     if (!domain1.equals(domain2)) {
+                                         finishActivity(url);
+                                     }
+                                 }else {
+                                     finishActivity(url);
+                                 }
+                                 check++;
+                             }
 
-                if (!mistake) {
-                    if (check==0) {
-                        check++;
-                    }else{
-                        if (check==1){
-                            if (null!=domain1&&null!=domain2){
-                                if (!domain1.equals(domain2)) {
-                                    finishActivity(url);
-                                }
-                            }else {
-                                finishActivity(url);
-                            }
-                            check++;
-                        }
+                         }
 
-                    }
-
-                }else {
+                     }else {
 //                    finishActivity(url);
-                }
+                     }
+                 }
+
+
 
 
 
