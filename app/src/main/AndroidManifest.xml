@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         tools:replace="android:icon, android:theme">
-        <activity android:name=".activity.MainActivity"></activity>
+
         <activity
             android:name=".activity.SplashActivity"
             android:screenOrientation="portrait"
