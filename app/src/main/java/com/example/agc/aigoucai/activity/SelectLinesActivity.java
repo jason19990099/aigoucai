@@ -200,6 +200,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
 
                     Bundle bundleTab = new Bundle();
                     bundleTab.putString("url", url_array[i]);
+                    bundleTab.putBoolean("ifFromService",false);
                     SharePreferencesUtil.addString(SelectLinesActivity.this, "main_url", url_array[i]);
                     IntentUtil.gotoActivity(SelectLinesActivity.this, MainWebviewActivity.class, bundleTab, false);
 
