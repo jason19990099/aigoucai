@@ -137,6 +137,8 @@ public class MainWebviewActivity extends AppCompatActivity {
     private String call;
     private CustomPopWindow mCustomPopWindow;
     private String onPageFinishedUrl;
+    private String CookieStr;
+    private boolean ifFromService;
 
 
 
@@ -152,8 +154,13 @@ public class MainWebviewActivity extends AppCompatActivity {
         changeSelectState(0);
         dialog = new SimpleProgressDialog(MainWebviewActivity.this, "请稍等...");
         Bundle bundle = this.getIntent().getExtras();
-        if (null != bundle)
+        if (null != bundle){
             mUrl = bundle.getString("url");
+            ifFromService=bundle.getBoolean("ifFromService");
+            LogUtil.e("======url==========="+mUrl);
+            LogUtil.e("======ifFromService==========="+ifFromService);
+        }
+
 
         mLayout = findViewById(R.id.web_layout);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -350,27 +357,31 @@ public class MainWebviewActivity extends AppCompatActivity {
                     mistake = true;
                     e.printStackTrace();
                 }
+                 if (!ifFromService){
+                     if (!mistake) {
+                         if (check==0) {
+                             check++;
+                         }else{
+                             if (check==1){
+                                 if (null!=domain1&&null!=domain2){
+                                     if (!domain1.equals(domain2)) {
+                                         finishActivity(url);
+                                     }
+                                 }else {
+                                     finishActivity(url);
+                                 }
+                                 check++;
+                             }
 
-                if (!mistake) {
-                    if (check == 0) {
-                        check++;
-                    } else {
-                        if (check == 1) {
-                            if (null != domain1 && null != domain2) {
-                                if (!domain1.equals(domain2)) {
-                                    finishActivity(url);
-                                }
-                            }else {
-                                finishActivity(url);
-                            }
-                            check++;
-                        }
+                         }
 
-                    }
-
-                }else {
+                     }else {
 //                    finishActivity(url);
-                }
+                     }
+                 }
+
+
+
 
                 /**
                  * 头部标题栏的展示否

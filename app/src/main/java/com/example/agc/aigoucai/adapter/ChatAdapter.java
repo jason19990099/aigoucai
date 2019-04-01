@@ -133,6 +133,7 @@ public class ChatAdapter extends BaseAdapter {
                     if (userList.get(position).getCode().equals("web")) {
                         Bundle bundleTab = new Bundle();
                         bundleTab.putString("url", userList.get(position).getValue());
+                        bundleTab.putBoolean("ifFromService", true);
                         Intent intent = new Intent();
                         intent.setClass(context, MainWebviewActivity.class);
                         intent.putExtras(bundleTab);
