@@ -5,6 +5,7 @@ import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import com.example.agc.aigoucai.R;
 import com.example.agc.aigoucai.util.Apputil;
+import com.example.agc.aigoucai.util.LogUtil;
 import com.example.agc.aigoucai.util.SocketUtil;
 import com.example.agc.aigoucai.util.SystemUtil;
 import java.util.ArrayList;
