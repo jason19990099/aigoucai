@@ -17,10 +17,10 @@ android {
     defaultConfig {
         applicationId "com.example.agc.aigoucai2"
         minSdkVersion 15
-        targetSdkVersion 22
-        versionCode 20
-        versionName "1.38"
-        flavorDimensions "20"
+        targetSdkVersion 26
+        versionCode 21
+        versionName "1.39"
+        flavorDimensions "21"
         ndk {
             //选择要添加的对应cpu类型的.so库（不需要的删除即可）。
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
