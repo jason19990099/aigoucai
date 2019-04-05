@@ -220,7 +220,7 @@ public class FormatTransfer {
      * 高字节数组转换为float
      *
      * @param b byte[]
-     * @return float
+     * @return float2
      */
     public static float hBytesToFloat(byte[] b) {
         int i = 0;
@@ -233,7 +233,7 @@ public class FormatTransfer {
      * 低字节数组转换为float
      *
      * @param b byte[]
-     * @return float
+     * @return float2
      */
     public static float lBytesToFloat(byte[] b) {
         int i = 0;
@@ -298,8 +298,8 @@ public class FormatTransfer {
     /**
      * 将float类型的值转换为字节序颠倒过来对应的float值
      *
-     * @param f float
-     * @return float
+     * @param f float2
+     * @return float2
      */
     public static float reverseFloat(float f) {
         float result = FormatTransfer.hBytesToFloat(FormatTransfer.toLH(f));
