@@ -17,7 +17,7 @@ android {
     defaultConfig {
         applicationId "com.example.agc.cp500cc"
         minSdkVersion 15
-        targetSdkVersion 22
+        targetSdkVersion 26
         versionCode 21
         versionName "1.39"
         flavorDimensions "21"
