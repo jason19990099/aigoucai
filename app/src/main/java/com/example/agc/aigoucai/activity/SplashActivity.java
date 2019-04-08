@@ -32,21 +32,20 @@ public class SplashActivity extends AppCompatActivity {
         Observable<List<String>> oble = Observable.create(new ObservableOnSubscribe<List<String>>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<List<String>> e) throws Exception {
-                List<String> ip_array = new ArrayList<>();
-                ip_array.clear();
-                String[] strings= Apputil.parseHostGetIPAddress("bobo1.shyqyl.com");
+                String[] strings= Apputil.parseHostGetIPAddress("bobo.shyqyl.com");
                 if (null==strings){
                     return;
                 }
-                int size=strings.length;
-                for (int i=0;i<size;i++){
-                    ip_array.add(strings[i]);
-                    LogUtil.e("====從bobo.shyqyl.com获取的ip是======="+strings[i]);
+                List<String> ip_array = new ArrayList<>();
+                ip_array.clear();
+                for (String s:strings) {
+                    ip_array.add(s);
+                    LogUtil.e("====从bobo.shyqyl.com获取的ip是======="+s);
                 }
 //                ip_array.add("47.104.156.66");
 //                ip_array.add("119.23.32.234");
                 e.onNext(ip_array);
-                SystemClock.sleep(1500);
+                SystemClock.sleep(2200);
                 e.onComplete();
             }
         });
