@@ -75,8 +75,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
     private String badurl;
     private long long1, long2;
     private String long3;
-    // 退出时间
-    private static long currentBackPressedTime = 0;
+    private static long currentBackPressedTime = 0;    // 退出时间
     private Handler hander = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -98,7 +97,6 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         tvVertion.setText("版本号:" + Apputil.getVersion(SelectLinesActivity.this));
-//        swipeLayout.setRefreshing(true);
         swipeContainer.setOnRefreshListener(this);
         swipeContainer.setColorSchemeResources(android.R.color.holo_orange_dark,
                 android.R.color.holo_green_light,
@@ -206,8 +204,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
 
                 }
             });
-
-//          text_id.setText(url_array[i]);
+            
             text_id.setText("线路" + (i + 1));//使用綫路123代表網址避免被劫持
             try {
                 if (!TextUtils.isEmpty(time_array[i])) {

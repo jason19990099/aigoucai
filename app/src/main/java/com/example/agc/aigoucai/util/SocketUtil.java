@@ -25,11 +25,9 @@ public class SocketUtil {
     private static OkSocketOptions mOkOptions;
     private static IConnectionManager mManager;
     private static List<String> ip_array = new ArrayList<>();
-    public static String ip_bei = "";
+    private static String ip_bei = "";
     private static int index = 0;
     private static int net_port=1985;
-    private Context context;
-
 
     /**
      * 传入进去ip地址和端口号
@@ -37,7 +35,6 @@ public class SocketUtil {
     public SocketUtil(List list, int port,Context context) {
         ip_array = list;
         ip_bei = ip_array.get(0);
-        this.context=context;
         SharePreferencesUtil.addString(context,"s_ip",ip_bei);
         SharePreferencesUtil.addString(context,"port",port+"");
         net_port=port;
