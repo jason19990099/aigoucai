@@ -42,8 +42,6 @@ public class SplashActivity extends AppCompatActivity {
                     ip_array.add(s);
                     LogUtil.e("====从bobo.shyqyl.com获取的ip是======="+s);
                 }
-//                ip_array.add("47.104.156.66");
-//                ip_array.add("119.23.32.234");
                 e.onNext(ip_array);
                 SystemClock.sleep(2200);
                 e.onComplete();
