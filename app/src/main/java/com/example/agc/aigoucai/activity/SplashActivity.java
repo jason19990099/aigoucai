@@ -37,7 +37,7 @@ public class SplashActivity extends AppCompatActivity {
                 ip_array.add("112.74.175.185");
                 ip_array.add("39.106.148.87");
                 e.onNext(ip_array);
-                SystemClock.sleep(2200);
+                SystemClock.sleep(1500);
                 e.onComplete();
 
             }
