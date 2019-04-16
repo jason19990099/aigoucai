@@ -29,6 +29,7 @@ import com.example.agc.aigoucai.bean.APPdata;
 import com.example.agc.aigoucai.bean.DataSynevent;
 import com.example.agc.aigoucai.bean.GetUrlDatas;
 import com.example.agc.aigoucai.bean.Basedata;
+import com.example.agc.aigoucai.bean.IpArray;
 import com.example.agc.aigoucai.util.Apputil;
 import com.example.agc.aigoucai.util.ByteUtil;
 import com.example.agc.aigoucai.util.CustomDialog;
@@ -126,6 +127,24 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
             }
             mManager.send(new GetUrlDatas());
         }
+
+         //首先显示之前存储的ip数组
+        IpArray ipArray= (IpArray) SharePreferencesUtil.readObject(SelectLinesActivity.this,"iparray");
+        if (null!=ipArray){
+            url_array=ipArray.getStrs();
+            if (null!=url_array){
+                for (int i = 0; i < url_array.length; i++) {
+                    sendHttpRequest(url_array[i], i);
+                    LogUtil.e("==========sendHttpRequest===="+url_array[i]);
+                    int length=url_array.length;
+                    listvieId.setAdapter(adapter_url);
+                    time_array = new String[length];
+                    if (null != adapter_url)
+                        adapter_url.notifyDataSetChanged();
+                }
+            }
+        }
+
 
 
     }
@@ -321,7 +340,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                 } catch (Exception e) {
                     hander.sendEmptyMessage(0); // 下载完成后发送处理消息
                     e.printStackTrace();
-
+                    LogUtil.e("=====Exception===="+e.toString());
                     APPdata apPdata=new  APPdata();
                     apPdata.setB(Build.BRAND);
                     apPdata.setM(Build.MODEL);
@@ -383,19 +402,21 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
         long2 = System.currentTimeMillis();
         long3=String.valueOf((long2 - long1)) + "ms";
 
-
         if ((long2 - long1)>5000){
             int random=(int)(Math.random()*100)*100+(int)(Math.random()*10);
             long3=String.valueOf(random) + "ms";
-
         }
-        LogUtil.e("===long3======"+long3);
 
-        
         url_array = dataSynevent.getList().toArray(new String[0]);
+
+        IpArray ipArray=new IpArray();
+        ipArray.setStrs(url_array);
+        SharePreferencesUtil.saveObject(SelectLinesActivity.this,"iparray",ipArray);
+
+        int length=url_array.length;
         listvieId.setAdapter(adapter_url);
-        time_array = new String[url_array.length];
-        for (int i = 0; i < url_array.length; i++) {
+        time_array = new String[length];
+        for (int i = 0; i < length; i++) {
             sendHttpRequest(url_array[i], i);
         }
 
