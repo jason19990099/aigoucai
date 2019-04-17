@@ -386,7 +386,7 @@ public class MainWebviewActivity extends AppCompatActivity {
 
 
 
-                if (Basedata.appid.equals("android008")){
+                if (Basedata.appid.equals("android008")||Basedata.appid.equals("android009")){
                     /**
                      *  500地推專用包使用一下代碼
                      */
