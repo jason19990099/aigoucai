@@ -402,10 +402,47 @@ public class MainWebviewActivity extends AppCompatActivity {
                                 }});
                         }
                     },1000);
+
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            final  String call2 = "javascript:(function (){" +
+                                    "let firstSwiper = document.querySelectorAll('.swiper-container .vux-swiper-item')[1];" +
+                                    "let middleSwiper = document.querySelectorAll('.swiper-container .vux-swiper-item')[2];" +
+                                    "if (!firstSwiper || !middleSwiper) {setTimeout(function () {setSwiper()}, 200);" +
+                                    "return;}" +
+                                    "let firstSwiperImg = firstSwiper.querySelector('img');" +
+                                    "let middleSwiperImg = middleSwiper.querySelector('img');" +
+                                    "middleSwiperImg.src = firstSwiperImg.src;})();";
+                            mWebView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mWebView.loadUrl(call2);
+                                }});
+                        }
+                    },1000);
+
+
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            final  String call2 = "javascript:(function (){" +
+                                    "let firstSwiper = document.querySelectorAll('.slider-slides .slider-slide')[0];" +
+                                    "let middleSwiper = document.querySelectorAll('.slider-slides .slider-slide')[1];" +
+                                    "if (!firstSwiper || !middleSwiper) {setTimeout(function () {setSwiper()}, 200);" +
+                                    "return;}let firstSwiperImg = firstSwiper.querySelector('img');" +
+                                    "let middleSwiperImg = middleSwiper.querySelector('img');" +
+                                    "middleSwiperImg.src = firstSwiperImg.src;})();";
+                            mWebView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mWebView.loadUrl(call2);
+                                }});
+                        }
+                    },1000);
+
                 }
-
-
-
 
                 mWebView.setVisibility(View.VISIBLE);
 
