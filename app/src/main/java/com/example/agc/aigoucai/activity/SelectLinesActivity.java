@@ -282,7 +282,7 @@ public class SelectLinesActivity extends Activity implements SwipeRefreshLayout.
                     final String date1 = dfs.format(new Date());// new Date()为获取当前系统时间，也可使用当前时间戳
                     connection.connect();
                     int responseCode = connection.getResponseCode();
-                    if (responseCode == 200) {
+                    if (responseCode == 200||responseCode == 999) {
                         date2 = dfs.format(new Date());// new Date()为获取当前系统时间，也可使用当前时间戳
                         Date begin = dfs.parse(date1);
                         Date end = dfs.parse(date2);
