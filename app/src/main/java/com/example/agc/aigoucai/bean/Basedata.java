@@ -13,4 +13,11 @@ public class Basedata {
 
     //       APPID agc9001
 //    public static final String share_url = "https://appv2.com/20190404.html";
+
+    //agc_69696969
+//        public static final String share_url = "https://www.appv2.com/agc69696969.html";
+
+
+
+
 }
