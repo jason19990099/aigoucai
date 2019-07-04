@@ -139,6 +139,7 @@ public class MainWebviewActivity extends AppCompatActivity {
     private String onPageFinishedUrl;
     private String CookieStr;
     private boolean ifFromService;
+    private String finish_url,finish_new_url;
 
 
 
@@ -322,7 +323,7 @@ public class MainWebviewActivity extends AppCompatActivity {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 long2 = System.currentTimeMillis();
-                LogUtil.e("=====握手時間========" + String.valueOf((long2 - long0)) + "ms");
+                LogUtil.e("=====握手時間========" + (long2 - long0) + "ms");
                 dialog.show();
             }
 
@@ -336,6 +337,11 @@ public class MainWebviewActivity extends AppCompatActivity {
                 long3 = System.currentTimeMillis();
                 LogUtil.e("=====加載時間=======" + (long3 - long0));
                 LogUtil.e("=========onPageFinished=======" + url);
+
+                finish_url=url;
+                finish_new_url=finish_url.replace("/#!home","").replace("/#!hall","")
+                .replace("#!money","").replace("/#!user","");
+
                 if (url.contains("mobile") && url.contains("bank")) {
                     changeUrl = url;
                 }
@@ -473,63 +479,77 @@ public class MainWebviewActivity extends AppCompatActivity {
     private final static int FILECHOOSER_RESULTCODE = 1;// 表单的结果回调</span>
     private ValueCallback<Uri> mUploadMessage;// 表单的数据信息
 
-    @OnClick({R.id.ll_home,R.id.iv_back,
-            R.id.ll_money, R.id.ll_mine,R.id.ll_betting})
+    @OnClick({R.id.ll_home,R.id.iv_back, R.id.ll_money, R.id.ll_mine,R.id.ll_betting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_home:
                 changeSelectState(0);
-                 if (!mistake&&!domain1.equals(domain2)||onPageFinishedUrl.contains("pc")){
-                     mWebView.loadUrl("http://"+domain1+"/h5/#/");
-                 }else {
-                     call = "javascript:RouterAction.backHome()";
-                     mWebView.post(new Runnable() {
-                         @Override
-                         public void run() {
-                             mWebView.loadUrl(call);
-                         }});
-                 }
+                if (finish_url.contains("/#!")){
+                    mWebView.loadUrl(finish_new_url+"/#!home");
+                }else{
+                    if (!mistake&&!domain1.equals(domain2)||onPageFinishedUrl.contains("pc")){
+                        mWebView.loadUrl("http://"+domain1+"/h5/#/");
+                    }else {
+                        call = "javascript:RouterAction.backHome()";
+                        mWebView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mWebView.loadUrl(call);
+                            }});
+                    }
+                }
                 break;
             case R.id.ll_betting:
                 changeSelectState(1);
-                if (!mistake&&!domain1.equals(domain2)||onPageFinishedUrl.contains("pc")){
-                    mWebView.loadUrl("http://"+domain1+"/h5/#/gameList");
+                if (finish_url.contains("/#!")){
+                    mWebView.loadUrl(finish_new_url+"/#!hall");
+                    LogUtil.e("=========ll_betting=========="+finish_new_url+"/#!hall");
                 }else{
-                    call = "javascript:RouterAction.gameList()";
-                    mWebView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mWebView.loadUrl(call);
-                        }});
+                    if (!mistake&&!domain1.equals(domain2)||onPageFinishedUrl.contains("pc")){
+                        mWebView.loadUrl("http://"+domain1+"/h5/#/gameList");
+                    }else{
+                        call = "javascript:RouterAction.gameList()";
+                        mWebView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mWebView.loadUrl(call);
+                            }});
+                    }
                 }
                 break;
             case R.id.ll_money:
                 changeSelectState(2);
-
-                if (!mistake&&!domain1.equals(domain2)||onPageFinishedUrl.contains("pc")){
-                    mWebView.loadUrl("http://"+domain1+"/h5/#/money/deposit");
+                if (finish_url.contains("/#!")){
+                    mWebView.loadUrl(finish_new_url+"/#!money");
                 }else{
-                    call = "javascript:RouterAction.fund()";
-                    mWebView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mWebView.loadUrl(call);
-                        }});
+                    if (!mistake&&!domain1.equals(domain2)||onPageFinishedUrl.contains("pc")){
+                        mWebView.loadUrl("http://"+domain1+"/h5/#/money/deposit");
+                    }else{
+                        call = "javascript:RouterAction.fund()";
+                        mWebView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mWebView.loadUrl(call);
+                            }});
+                    }
                 }
                 break;
             case R.id.ll_mine:
                 changeSelectState(3);
-                if (!mistake&&!domain1.equals(domain2)||onPageFinishedUrl.contains("pc")){
-                    mWebView.loadUrl("http://"+domain1+"/h5/#/userManage/index");
-                }else {
-                    call = "javascript:RouterAction.userCenter()";
-                    mWebView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mWebView.loadUrl(call);
-                        }});
+                if (finish_url.contains("/#!")){
+                    mWebView.loadUrl(finish_new_url+"/#!user");
+                }else{
+                    if (!mistake&&!domain1.equals(domain2)||onPageFinishedUrl.contains("pc")){
+                        mWebView.loadUrl("http://"+domain1+"/h5/#/userManage/index");
+                    }else {
+                        call = "javascript:RouterAction.userCenter()";
+                        mWebView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                mWebView.loadUrl(call);
+                            }});
+                    }
                 }
-
                 break;
             case R.id.iv_back:
                 if (null == changeUrl) {
