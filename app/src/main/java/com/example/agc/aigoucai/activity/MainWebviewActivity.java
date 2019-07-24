@@ -289,13 +289,13 @@ public class MainWebviewActivity extends AppCompatActivity {
                     changeUrl = url;
                 }
 
-//                //解决TT的支付问题。
-//                if (url.contains("mcenter")){
-//                    if(url.contains("payqrcode")||url.contains("payphone")){
-//                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-//                        startActivity(intent);
-//                    }
-//                }
+                //解决TT的支付问题。
+                if (url.contains("mcenter")){
+                    if(url.contains("payqrcode")||url.contains("payphone")){
+                        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        startActivity(intent);
+                    }
+                }
 
 
                 if (dialog != null && dialog.isShowing())
