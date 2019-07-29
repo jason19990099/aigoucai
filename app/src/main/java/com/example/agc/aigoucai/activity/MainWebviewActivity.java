@@ -275,7 +275,7 @@ public class MainWebviewActivity extends AppCompatActivity {
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 long2 = System.currentTimeMillis();
-                LogUtil.e("=====握手時間========" + String.valueOf((long2 - long0)) + "ms");
+                LogUtil.e("=====握手時間========" + (long2 - long0) + "ms");
                 dialog.show();
             }
 
