@@ -16,11 +16,12 @@ android {
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
         applicationId "com.example.agc.tt"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 26
-        versionCode 24
-        versionName "1.42"
-        flavorDimensions "24"
+        versionCode 25
+        versionName "1.43"
+        flavorDimensions "25"
+
         ndk {
             //选择要添加的对应cpu类型的.so库（不需要的删除即可）。
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
