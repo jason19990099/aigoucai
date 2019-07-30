@@ -20,9 +20,10 @@
 
 
         <LinearLayout
+            android:padding="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="230dp"
+            android:layout_marginTop="250dp"
             android:orientation="vertical">
 
 
