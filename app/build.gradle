@@ -15,13 +15,8 @@ android {
     compileSdkVersion 26
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
-<<<<<<< HEAD
         applicationId "com.example.agc.yule678"
-        minSdkVersion 15
-=======
-        applicationId "com.example.agc.aigoucai2"
         minSdkVersion 16
->>>>>>> master
         targetSdkVersion 26
         versionCode 25
         versionName "1.43"
