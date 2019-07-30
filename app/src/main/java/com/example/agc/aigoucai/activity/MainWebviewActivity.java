@@ -340,7 +340,7 @@ public class MainWebviewActivity extends AppCompatActivity {
                          }
 
                      }else {
-//                    finishActivity(url);
+                    finishActivity(url);
                      }
                  }
 
