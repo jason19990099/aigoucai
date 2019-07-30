@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import com.example.agc.aigoucai.R;
+import com.example.agc.aigoucai.bean.Basedata;
 import com.example.agc.aigoucai.util.Apputil;
 import com.example.agc.aigoucai.util.LogUtil;
 import com.example.agc.aigoucai.util.SocketUtil;
@@ -66,7 +67,7 @@ public class SplashActivity extends AppCompatActivity {
                 finish();
             }
         };
-
+         LogUtil.e("======Baseid======="+ Basedata.appid);
         oble.subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(oser);
