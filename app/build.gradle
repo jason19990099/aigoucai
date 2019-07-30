@@ -15,12 +15,17 @@ android {
     compileSdkVersion 26
     useLibrary 'org.apache.http.legacy'
     defaultConfig {
+<<<<<<< HEAD
         applicationId "com.example.agc.yule678"
         minSdkVersion 15
+=======
+        applicationId "com.example.agc.aigoucai2"
+        minSdkVersion 16
+>>>>>>> master
         targetSdkVersion 26
-        versionCode 22
-        versionName "1.40"
-        flavorDimensions "22"
+        versionCode 25
+        versionName "1.43"
+        flavorDimensions "25"
         ndk {
             //选择要添加的对应cpu类型的.so库（不需要的删除即可）。
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
