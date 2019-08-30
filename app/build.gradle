@@ -5,9 +5,9 @@ android {
     signingConfigs {
         ruiyinSign {
             keyAlias 'key0'
-            keyPassword '775854'
+            keyPassword '123456'
             storeFile file('D:/Signature/550cp.jks')
-            storePassword '775854'
+            storePassword '123456'
         }
     }
 
