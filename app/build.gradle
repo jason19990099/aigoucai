@@ -6,7 +6,7 @@ android {
         ruiyinSign {
             keyAlias 'key0'
             keyPassword '775854'
-            storeFile file('D:/Signature/500cp.jks')
+            storeFile file('D:/Signature/550cp.jks')
             storePassword '775854'
         }
     }
