@@ -5,9 +5,9 @@ android {
     signingConfigs {
         ruiyinSign {
             keyAlias 'key0'
-            keyPassword '775854'
-            storeFile file('D:/Signature/500cp.jks')
-            storePassword '775854'
+            keyPassword '123456'
+            storeFile file('D:/Signature/550cp.jks')
+            storePassword '123456'
         }
     }
 
@@ -18,9 +18,9 @@ android {
         applicationId "com.example.agc.xiongmao"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 25
-        versionName "1.43"
-        flavorDimensions "25"
+        versionCode 26
+        versionName "1.44"
+        flavorDimensions "26"
         ndk {
             //选择要添加的对应cpu类型的.so库（不需要的删除即可）。
             abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a', 'x86', 'x86_64', 'mips', 'mips64'
